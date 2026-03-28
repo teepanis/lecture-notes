@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CLT Demo (Final)</title>
+<style>
+body Arial; margin: 20px; }
+canvas { border: 1px solid #ccc; }
+.controls { margin-bottom: 15px; }
+</style>
+</head>
+<body>
+<h2>Central Limit Theorem Demo</h2>
+<h4>Teepanis Chachiyo<br>
+Department of Physics, Faculty of Science, Naresuan University</h4>
+
+<div class="controls">
+<label>Distribution ω(s): </label>
+<select id="dist">
+  <option value="binary">±1</option>
+  <option value="uniformSym">Uniform [-√3, +√3]</option>
+  <option value="uniformShift">Uniform [0, 2√3]</option>
+  <option value="twoPoint">Two-point {0, 2}</option>
+</select>
+<br><br>
+
+<label>Number of samples:</label>
+<input type="number" id="nSample" value="10000">
+<br><br>
+
+<label>N:</label>
+<input type="range" id="Nslider" min="0" value="0" style="width:600px;">
+<span id="Nvalue">1</span>
+<br><br>
+
+<label>Bin width (in units of σ):</label>
+<input type="number" id="binSigma" value="0.5" step="0.1" min="0.1">
+<br><br>
+
+<label>
+<input type="checkbox" id="useZ">
+Use normalized variable z = (x − μ)/σ
+</label>
+<br><br>
+
+<label>Axis range:</label>
+<select id="axisMode">
+  <option value="adaptive">Adaptive</option>
+  <option value="fixed">Fixed</option>
+</select>
+</div>
+
+<canvas id="canvas" width="900" height="450"></canvas>
+
+<script>
+const N_values = [
+  1,2,3,4,5,6,7,8,9,
+  10,11,12,13,14,15,16,17,18,19,
+  20,21,22,23,24,25,26,27,28,29,
+  30,31,32,33,34,35,36,37,38,39,
+  40,50,60,70,80,90,
+  100,200,300,400
+];
+
+const slider = document.getElementById("Nslider");
+slider.max = N_values.length - 1;
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+// -------- Sampling --------
+function sample(dist) {
+  switch(dist) {
+    case "binary":
+      return Math.random() < 0.5 ? -1 : 1;
+    case "uniformSym":
+      return (2*Math.random() - 1) * Math.sqrt(3);
+    case "uniformShift":
+      return 2*Math.random() * Math.sqrt(3);
+    case "twoPoint":
+      return Math.random() < 0.5 ? 0 : 2;
+  }
+}
+
+// -------- Generate data --------
+function generateData(N, nSample, dist) {
+  let data = [];
+  for (let j = 0; j < nSample; j++) {
+    let sum = 0;
+    for (let i = 0; i < N; i++) {
+      sum += sample(dist);
+    }
+    data.push(sum);
+  }
+  return data;
+}
+
+// -------- Moments --------
+function getMoments(dist) {
+  switch(dist) {
+    case "binary":
+      return {mu: 0, sigma: 1};
+    case "uniformSym":
+      return {mu: 0, sigma: 1};
+    case "uniformShift":
+      return {mu: Math.sqrt(3), sigma: 1};
+    case "twoPoint":
+      return {mu: 1, sigma: 1};
+  }
+}
+
+// -------- Histogram (σ-based) --------
+function computeHistogramSigma(data, mean, sigma, binSigma) {
+  let L = 4 * sigma;
+  let width = binSigma * sigma;
+  let bins = Math.floor((2 * L) / width);
+  if (bins % 2 === 0) bins += 1;
+
+  let xMin = mean - (bins * width) / 2;
+  let xMax = mean + (bins * width) / 2;
+  let hist = new Array(bins).fill(0);
+
+  data.forEach(x => {
+    let i = Math.floor((x - xMin) / width);
+    if (i >= 0 && i < bins) hist[i]++;
+  });
+
+  let total = data.length;
+  hist = hist.map(h => h / (total * width));
+  return {hist, xMin, xMax, width, bins};
+}
+
+// -------- Histogram with fixed x-range, bins centered on x = 0 --------
+function computeHistogramFixedCentered(data, xMin, xMax, width) {
+  // Make bin centers: ..., -2w, -w, 0, +w, +2w, ...
+  let firstCenter = Math.ceil(xMin / width) * width;
+  let lastCenter  = Math.floor(xMax / width) * width;
+
+  let bins = Math.round((lastCenter - firstCenter) / width) + 1;
+  let hist = new Array(bins).fill(0);
+  let centers = [];
+
+  for (let i = 0; i < bins; i++) {
+    centers.push(firstCenter + i * width);
+  }
+
+  data.forEach(x => {
+    let i = Math.round((x - firstCenter) / width);
+    if (i >= 0 && i < bins) {
+      let c = centers[i];
+      if (x >= c - width/2 && x < c + width/2) {
+        hist[i]++;
+      }
+    }
+  });
+
+  let total = data.length;
+  hist = hist.map(h => h / (total * width));
+
+  return {hist, xMin, xMax, width, bins, centers};
+}
+
+// -------- Histogram with fixed x-range --------
+function computeHistogramFixedRange(data, xMin, xMax, binCount) {
+  let width = (xMax - xMin) / binCount;
+  let hist = new Array(binCount).fill(0);
+
+  data.forEach(x => {
+    let i = Math.floor((x - xMin) / width);
+    if (i >= 0 && i < binCount) hist[i]++;
+  });
+
+  let total = data.length;
+  hist = hist.map(h => h / (total * width));
+  return {hist, xMin, xMax, width, bins: binCount};
+}
+
+// -------- Gaussian --------
+function gaussian(x, mean, sigma) {
+  let d = x - mean;
+  return (1/(sigma*Math.sqrt(2*Math.PI))) *
+         Math.exp(-(d*d)/(2*sigma*sigma));
+}
+
+// -------- Observed stats --------
+function getObservedStats(data) {
+  let n = data.length;
+  let mean = data.reduce((a, b) => a + b, 0) / n;
+  let variance = data.reduce((a, b) => a + (b - mean) * (b - mean), 0) / n;
+  let sigma = Math.sqrt(variance);
+  return { mean, sigma };
+}
+
+
+// -------- Draw --------
+function draw() {
+  const dist = document.getElementById("dist").value;
+  const nSample = parseInt(document.getElementById("nSample").value);
+  const sliderIndex = parseInt(document.getElementById("Nslider").value);
+  const N = N_values[sliderIndex];
+  const binSigma = parseFloat(document.getElementById("binSigma").value);
+  const useZ = document.getElementById("useZ").checked;
+  const axisMode = document.getElementById("axisMode").value;
+
+  document.getElementById("Nvalue").innerText = N;
+
+  let rawData = generateData(N, nSample, dist);
+  let {mu, sigma: sigma1} = getMoments(dist);
+  let mean = N * mu;
+  let sigma = Math.sqrt(N) * sigma1;
+
+  let data = useZ ? rawData.map(x => (x - mean) / sigma) : rawData;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  let hist, xMin, xMax, width, finalBins, centers = null;
+  let yMax;
+
+  if (axisMode === "adaptive") {
+    if (useZ) {
+      ({hist, xMin, xMax, width, bins: finalBins} =
+        computeHistogramSigma(data, 0, 1, binSigma));
+    } else {
+      ({hist, xMin, xMax, width, bins: finalBins} =
+        computeHistogramSigma(data, mean, sigma, binSigma));
+    }
+
+    let gaussianPeak = useZ
+      ? 1 / Math.sqrt(2 * Math.PI)
+      : 1 / (sigma * Math.sqrt(2 * Math.PI));
+
+    yMax = gaussianPeak * 1.2;
+  } else {
+    // Fixed mode: x-range fixed, but bins centered on x = 0
+    xMin = -16;
+    xMax = 40;
+    yMax = 0.5;
+
+    let fixedWidth = useZ ? binSigma : (binSigma * sigma);
+
+    ({hist, xMin, xMax, width, bins: finalBins, centers} =
+      computeHistogramFixedCentered(data, xMin, xMax, fixedWidth));
+  }
+
+  let marginBottom = 40;
+  let plotH = canvas.height - marginBottom;
+  let W = canvas.width;
+
+  // Histogram
+  ctx.fillStyle = "rgba(100,150,255,0.7)";
+  for (let i = 0; i < finalBins; i++) {
+    let xLeft, xRight;
+
+    if (centers) {
+      xLeft = centers[i] - width / 2;
+      xRight = centers[i] + width / 2;
+    } else {
+      xLeft = xMin + i * width;
+      xRight = xLeft + width;
+    }
+
+    let pxLeft = (xLeft - xMin) / (xMax - xMin) * W;
+    let pxRight = (xRight - xMin) / (xMax - xMin) * W;
+    let barWidthPx = pxRight - pxLeft;
+
+    let h = hist[i] / yMax * plotH;
+    ctx.fillRect(pxLeft, plotH - h, barWidthPx, h);
+  }
+
+  // Gaussian
+  ctx.beginPath();
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 2;
+  for (let px = 0; px < W; px++) {
+    let xVal = xMin + (px / W) * (xMax - xMin);
+    let yVal = useZ ? gaussian(xVal, 0, 1) : gaussian(xVal, mean, sigma);
+    let y = plotH - (yVal / yMax) * plotH;
+    if (px === 0) ctx.moveTo(px, y);
+    else ctx.lineTo(px, y);
+  }
+  ctx.stroke();
+
+  // Text
+    ctx.fillStyle = "black";
+    ctx.font = "22px Arial";
+
+    let theoreticalMean = useZ ? 0 : mean;
+    let theoreticalSigma = useZ ? 1 : sigma;
+
+    //ctx.fillText("Theoretical: " + theoreticalMean.toFixed(2) + " ± " + theoreticalSigma.toFixed(2), 10, 30);
+    ctx.fillText("Theoretical: ", 10, 30);
+    ctx.fillText("  Mean ≈ " + theoreticalMean.toFixed(2), 10, 60);
+    ctx.fillText("  σ ≈ " + theoreticalSigma.toFixed(2), 10, 90);
+
+    // blank line here
+    let observed = getObservedStats(data);
+    ctx.fillText("Observed:", 10, 150);
+    ctx.fillText("  Mean ≈ " + observed.mean.toFixed(2), 10, 180);
+    ctx.fillText("  σ ≈ " + observed.sigma.toFixed(2), 10, 210);
+
+    //ctx.fillText("Reported:", 10, 270);
+    //ctx.fillText("  " + observed.mean.toFixed(2) + " ± " + observed.sigma.toFixed(2), 10, 300);
+    ctx.fillText("Report: " + observed.mean.toFixed(2) + " ± " + observed.sigma.toFixed(2), 10, 270);
+
+
+
+  // Axes
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 1.5;
+
+  // X-axis
+  ctx.beginPath();
+  ctx.moveTo(0, plotH - 1);
+  ctx.lineTo(W, plotH - 1);
+  ctx.stroke();
+
+  // Y-axis at x = 0 (or x = mean in raw mode if you prefer)
+  let xAxisMean = useZ ? 0 : mean;
+  if (xAxisMean >= xMin && xAxisMean <= xMax) {
+    let pxMean = (xAxisMean - xMin) / (xMax - xMin) * W;
+    ctx.beginPath();
+    ctx.moveTo(pxMean, 0);
+    ctx.lineTo(pxMean, plotH);
+    ctx.stroke();
+
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "black";
+
+    let yTicks;
+    if (axisMode === "adaptive") {
+      let gaussianPeak = useZ
+        ? 1 / Math.sqrt(2 * Math.PI)
+        : 1 / (sigma * Math.sqrt(2 * Math.PI));
+      let y1 = 0.5 * gaussianPeak;
+      let y2 = 0.5 * (gaussianPeak + yMax);
+      yTicks = [y1, y2];
+    } else {
+      yTicks = [0.1, 0.2, 0.3, 0.4, 0.5];
+    }
+
+    yTicks.forEach(yVal => {
+      let py = plotH - (yVal / yMax) * plotH;
+      ctx.beginPath();
+      ctx.moveTo(pxMean - 5, py);
+      ctx.lineTo(pxMean + 5, py);
+      ctx.stroke();
+      ctx.fillText(yVal.toFixed(3), pxMean + 8, py + 5);
+    });
+  }
+
+  // X-axis ticks
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "black";
+
+  if (axisMode === "adaptive") {
+    for (let k = -4; k <= 4; k++) {
+      let xVal = useZ ? k : (mean + k * sigma);
+      let px = (xVal - xMin) / (xMax - xMin) * W;
+      if (px >= 0 && px <= W) {
+        ctx.beginPath();
+        ctx.moveTo(px, plotH);
+        ctx.lineTo(px, plotH - 8);
+        ctx.stroke();
+        ctx.textAlign = "center";
+        ctx.fillText(xVal.toFixed(0), px, plotH + 20);
+      }
+    }
+  } else {
+    for (let xVal = -40; xVal <= 40; xVal += 8) {
+      let px = (xVal - xMin) / (xMax - xMin) * W;
+      ctx.beginPath();
+      ctx.moveTo(px, plotH);
+      ctx.lineTo(px, plotH - 8);
+      ctx.stroke();
+      ctx.textAlign = "center";
+      ctx.fillText(xVal.toFixed(0), px, plotH + 20);
+    }
+  }
+
+  ctx.textAlign = "start";
+}
+
+// -------- Events --------
+document.getElementById("Nslider").addEventListener("input", draw);
+document.getElementById("dist").addEventListener("change", draw);
+document.getElementById("nSample").addEventListener("change", draw);
+document.getElementById("binSigma").addEventListener("input", draw);
+document.getElementById("useZ").addEventListener("change", draw);
+document.getElementById("axisMode").addEventListener("change", draw);
+
+// initial draw
+draw();
+</script>
+</body>
+</html>
