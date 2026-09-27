@@ -14630,7 +14630,7 @@ $$<p>สมการ (\ref{eq:newtonlaw}) สามารถจัดรูป�
 $$
 \begin{equation}
 \boxed{
-m \frac{dู^2}{dt^2} x(t) + \beta \frac{d}{dt} x(t) + k x(t) = 0 
+m \frac{d^2}{dt^2} x(t) + \beta \frac{d}{dt} x(t) + k x(t) = 0 
 } \label{eq:physode}
 \end{equation}
 $$<p>ซึ่งเราจะเทียบเคียงกับรูปแบบมาตรฐาน ที่เห็นได้ทั่วไปดังนี้</p>
@@ -14639,6 +14639,7 @@ $$
 a y'' + b y' + c y = 0 \label{eq:mathode}
 \end{equation}
 $$<p>โดยเราจะแก้สมการและแจกแจงผลเฉลยของสมการ (\ref{eq:mathode}) เสียก่อน จึงจะวกลับมาเทียบเคียงกับสมการ (\ref{eq:physode}) ในทางฟิสิกส์ ในภายหลัง</p>
+<br>
 
 </div>
 </div>
@@ -14656,7 +14657,7 @@ $$
 \text{Ansatz: } \quad y(t) = e^{rt} \label{eq:ansatz1}
 \end{equation}
 $$<p>ทั้งนี้หากเราสามารถทำให้สมการ (\ref{eq:mathode}) เป็นจริงได้ ด้วยสมมุติฐานข้อนี้ จึงเป็นว่า สมมุติฐานถูกต้อง และเป็นคำตอบของสมการอนุพันธ์</p>
-<p>แทนสมุมติฐานในสมการ (\ref{eq:ansatz1}) ในสมการอนุพันธ์ (\ref{eq:mathode}) จะได้</p>
+<p>แทนสมมุติฐานในสมการ (\ref{eq:ansatz1}) ในสมการอนุพันธ์ (\ref{eq:mathode}) จะได้</p>
 $$
 \begin{equation}
 a r^2 e^{r t} + b r e^{r t} + c e^{rt} = 0
@@ -14685,7 +14686,7 @@ $$
  b^2 - 4 a c \ne 0: \qquad y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t} }
 \end{equation}
 $$<ol start="3">
-<li>กรณี $b^2-4 a c = 0$ จะทำให้มีรากเพียงตัวเดียวคือ $r_{1,2} = -\frac{b}{2 a}$ แต่คำตอบที่เป็นไปได้ <strong>กลับมีรูปแบบพิเศษเพิ่มขึ้นมาอีก</strong></li>
+<li>กรณี $b^2-4 a c = 0$ จะทำให้มีรากเพียงตัวเดียวคือ $r_{1,2} = -\frac{b}{2 a}$ แต่คำตอบที่เป็นไปได้ <u>กลับมีรูปแบบพิเศษเพิ่มขึ้นมาอีก</u></li>
 </ol>
 <p>เพื่อเข้าใจในประเด็นนี้ ลองแทนค่า $c = \frac{b^2}{4 a}$ ซึ่งเป็นเงื่อนไขเฉพาะในกรณีพิเศษนี้ กลับเข้าไปในสมการอนุพันธ์ (\ref{eq:mathode})</p>
 $$
@@ -14719,7 +14720,8 @@ $$
 \boxed{
 b^2 - 4 a c = 0: \qquad y(t) = C_1 e^{r t} + C_2 t e^{r t} }
 \end{equation}
-$$
+$$<br>
+
 </div>
 </div>
 </div>
@@ -14730,13 +14732,14 @@ $$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="-%E0%B8%84%E0%B8%B3%E0%B8%95%E0%B8%AD%E0%B8%9A%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9F%E0%B8%B4%E0%B8%AA%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C"><font color="green"> &#3588;&#3635;&#3605;&#3629;&#3610;&#3607;&#3634;&#3591;&#3615;&#3636;&#3626;&#3636;&#3585;&#3626;&#3660;</font><a class="anchor-link" href="#-%E0%B8%84%E0%B8%B3%E0%B8%95%E0%B8%AD%E0%B8%9A%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9F%E0%B8%B4%E0%B8%AA%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C">&#182;</a></h2><p>การจะนำผลเฉลยทางคณิตศาสตร์มาประยุกต์เป็นคำตอบของฟิสิกส์สมการ (3) มีความซับซ้อนอยู่บ้าง เพราะค่าคงที่ $C_1, C_2$ และการที่ $r_{1,2}$ มีความเป็นไปได้หลายรูปแบบ บางครั้ง อาจเป็นถึงจำนวนเชิงซ้อน ซึ่งเราจะได้แจกแจงต่อไปนี้</p>
+<h2 id="-%E0%B8%84%E0%B8%B3%E0%B8%95%E0%B8%AD%E0%B8%9A%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9F%E0%B8%B4%E0%B8%AA%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C"><font color="green"> &#3588;&#3635;&#3605;&#3629;&#3610;&#3607;&#3634;&#3591;&#3615;&#3636;&#3626;&#3636;&#3585;&#3626;&#3660;</font><a class="anchor-link" href="#-%E0%B8%84%E0%B8%B3%E0%B8%95%E0%B8%AD%E0%B8%9A%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%9F%E0%B8%B4%E0%B8%AA%E0%B8%B4%E0%B8%81%E0%B8%AA%E0%B9%8C">&#182;</a></h2><p>การจะนำผลเฉลยทางคณิตศาสตร์มาประยุกต์เป็นคำตอบของฟิสิกส์สมการ (\ref{eq:physode}) มีความซับซ้อนอยู่บ้าง เพราะค่าคงที่ $C_1, C_2$ และการที่ $r_{1,2}$ มีความเป็นไปได้หลายรูปแบบ บางครั้ง อาจเป็นถึงจำนวนเชิงซ้อน ซึ่งเราจะได้แจกแจงต่อไปนี้</p>
 <h3 id="%E0%B9%80%E0%B8%87%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B9%84%E0%B8%82%E0%B9%80%E0%B8%A3%E0%B8%B4%E0%B9%88%E0%B8%A1%E0%B8%95%E0%B9%89%E0%B8%99">&#3648;&#3591;&#3639;&#3656;&#3629;&#3609;&#3652;&#3586;&#3648;&#3619;&#3636;&#3656;&#3617;&#3605;&#3657;&#3609;<a class="anchor-link" href="#%E0%B9%80%E0%B8%87%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B9%84%E0%B8%82%E0%B9%80%E0%B8%A3%E0%B8%B4%E0%B9%88%E0%B8%A1%E0%B8%95%E0%B9%89%E0%B8%99">&#182;</a></h3><p>ก่อนอื่น เรากำหนดเงื่อนไขเริ่มต้นทางฟิสิกส์เสียก่อน คือ</p>
 $$
 \begin{equation}
 \text{at } t = 0: \quad x(0) = x_0, \; v(0) = v_0
 \end{equation}
-$$<h3 id="%E0%B8%9C%E0%B8%A5%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%A2%E0%B9%83%E0%B8%99-3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5">&#3612;&#3621;&#3648;&#3593;&#3621;&#3618;&#3651;&#3609; 3 &#3585;&#3619;&#3603;&#3637;<a class="anchor-link" href="#%E0%B8%9C%E0%B8%A5%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%A2%E0%B9%83%E0%B8%99-3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5">&#182;</a></h3><p>เราเปลี่ยนผลเฉลยทางคณิตศาสตร์ที่เขียนในรูป $y(t)$ และค่าคงที่ $(a,b,c)$ มาเป็นพิกัดทางฟิสิกส์ $x(t)$ และปริมาณทางฟิสิกส์ คือ มวล สัมประสิทธิ์แรงต้าน และค่านิจสปริง $(m,\beta,k)$</p>
+$$<br>
+<h3 id="%E0%B8%9C%E0%B8%A5%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%A2%E0%B9%83%E0%B8%99-3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5">&#3612;&#3621;&#3648;&#3593;&#3621;&#3618;&#3651;&#3609; 3 &#3585;&#3619;&#3603;&#3637;<a class="anchor-link" href="#%E0%B8%9C%E0%B8%A5%E0%B9%80%E0%B8%89%E0%B8%A5%E0%B8%A2%E0%B9%83%E0%B8%99-3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5">&#182;</a></h3><p>เราเปลี่ยนผลเฉลยทางคณิตศาสตร์ที่เขียนในรูป $y(t)$ และค่าคงที่ $(a,b,c)$ มาเป็นพิกัดทางฟิสิกส์ $x(t)$ และปริมาณทางฟิสิกส์ คือ มวล สัมประสิทธิ์แรงต้าน และค่านิจสปริง $(m,\beta,k)$</p>
 <h4 id="1-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3E-0$">1 &#3585;&#3619;&#3603;&#3637; $\beta^2 - 4 m k &gt; 0$<a class="anchor-link" href="#1-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3E-0$">&#182;</a></h4><p>จากสมการ (\ref{eq:math_roots}) นี้เป็นกรณีที่วิเคราะ์ง่ายที่สุด เพราะรากมีค่าเป็นจำนวนจริง จากรูปทั่วไปของผลเฉลยทางคณิตศาสตร์ เราเขียนคำตอบในทางฟิสิกส์ได้เป็น</p>
 $$
 \begin{equation}
@@ -14759,19 +14762,35 @@ $$<p>แทน $C_1, C_2$ กลับเข้าไปในผลเฉลย
 $$
 \begin{equation}
 \boxed{
-\beta^2 &gt; 4 m k: \quad x(t) = \frac{x_0 r_2 - v_0}{r_2 - r_1} e^{r_1 t} + \frac{v_0 - x_0 r_1}{r_2 - r_1} e^{r_2 t}, \; r_{1,2} = \frac{-\beta \pm \sqrt{\beta^2 - 4 m k}}{2 m} }
+\begin{aligned}
+\underline{\beta^2 &gt; 4 m k}: &amp; \quad x(t) = \frac{x_0 r_2 - v_0}{r_2 - r_1} e^{r_1 t} + \frac{v_0 - x_0 r_1}{r_2 - r_1} e^{r_2 t}, \\ 
+ &amp; \quad r_{1,2} = \frac{-\beta \pm \sqrt{\beta^2 - 4 m k}}{2 m}
+\end{aligned}
+}
 \end{equation}
-$$<h4 id="2-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-=-0$">2 &#3585;&#3619;&#3603;&#3637; $\beta^2 - 4 m k = 0$<a class="anchor-link" href="#2-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-=-0$">&#182;</a></h4><p>นี้เป็นกรณี $r_1 = r_2 = - \frac{\beta}{2 m}$ ซึ่งเมื่อแทนเข้าไปในผลเฉลยทั่วไป จะได้ว่า</p>
+$$<br>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="2-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-=-0$">2 &#3585;&#3619;&#3603;&#3637; $\beta^2 - 4 m k = 0$<a class="anchor-link" href="#2-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-=-0$">&#182;</a></h4><p>นี้เป็นกรณี $r_1 = r_2 = - \frac{\beta}{2 m}$ ซึ่งเมื่อแทนเข้าไปในผลเฉลยทั่วไป จะได้ว่า</p>
 $$
 \begin{equation}
 x(t) = C_1 e^{-\frac{\beta t}{2 m}} + C_2 t e^{-\frac{\beta t}{2 m}} \label{eq:phys_critical}
 \end{equation}
-$$<p>ซึ่งเมื่อหาอนุพันธ์อันดับหนึ่ง $\frac{dx}{dt} = v(t)$ เพื่อเขียนเป็นความเร็ว กลายเป็น</p>
+$$<p>ซึ่งเมื่อหาอนุพันธ์อันดับหนึ่ง $\frac{dx}{dt} = v(t)$ เมื่อเขียนเป็นความเร็ว กลายเป็น</p>
 $$
 \begin{equation}
  v(t) = -\frac{\beta}{2 m } C_1 e^{-\frac{\beta t}{2 m}} - \frac{\beta}{2 m} C_2 t e^{-\frac{\beta t}{2 m}} + C_2 e^{-\frac{\beta t}{2 m}}
 \end{equation}
-$$<p>เราสามารถใช้ $x(t)$ และ $v(t)$ ประกอบกับเงื่อนไงเริ่มต้น $x_0, \; v_0$ เพื่อหาค่าคงที่ $C_1, C_2$ ได้โดยแทน $t = 0$ ดังนี้</p>
+$$<p>เราสามารถใช้ $x(t)$ และ $v(t)$ ประกอบกับเงื่อนไขเริ่มต้น $x_0, \; v_0$ เพื่อหาค่าคงที่ $C_1, C_2$ ได้โดยแทน $t = 0$ ดังนี้</p>
 $$
 \begin{equation}
 \begin{aligned}
@@ -14785,7 +14804,19 @@ $$
 \boxed{
 \beta^2 = 4 m k: \quad x(t) = x_0 e^{-\frac{\beta t}{2 m}} + (v_0 + \frac{\beta}{2 m} x_0) t e^{-\frac{\beta t}{2 m}} }
 \end{equation}
-$$<h4 id="3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3C-0$">3 &#3585;&#3619;&#3603;&#3637; $\beta^2 - 4 m k &lt; 0$<a class="anchor-link" href="#3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3C-0$">&#182;</a></h4><p>นี้เป็นกรณ๊ ที่มีความซับซ้อนในทางคณิตศาสตร์ เพราะจากราก $r_{1,2}$ ในสมการ (\ref{eq:math_roots}) เป็นจำนวนเชิงซ้อน คือ มีทั้งส่วนจริง และจินตภาพ ดังเขียนให้ชัดเจนขึ้น ต่อไปนี้</p>
+$$<br>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3C-0$">3 &#3585;&#3619;&#3603;&#3637; $\beta^2 - 4 m k &lt; 0$<a class="anchor-link" href="#3-%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B8%B5-$%5Cbeta%5E2---4-m-k-%3C-0$">&#182;</a></h4><p>นี้เป็นกรณ๊ ที่มีความซับซ้อนในทางคณิตศาสตร์ เพราะจากราก $r_{1,2}$ ในสมการ (\ref{eq:math_roots}) เป็นจำนวนเชิงซ้อน คือ มีทั้งส่วนจริง และจินตภาพ ดังเขียนให้ชัดเจนขึ้น ต่อไปนี้</p>
 $$
 \begin{equation}
 r_{1,2} = -\frac{\beta}{2 m} \pm i\frac{\sqrt{4 m k - \beta^2}}{2 m}
@@ -14794,9 +14825,12 @@ $$<p>จะเห็นว่า ส่วนจริงเป็น $-\frac{\b
 <p>แทนรากทั้งสองข้างต้น เข้าในผลเฉลยรูปทั่วไป</p>
 $$
 \begin{equation}
-x(t) = C_1 e^{-\frac{\beta t}{2 m}} e^{+i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} + C_2 e^{-\frac{\beta t}{2 m}} e^{-i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} = \left[ C_1 e^{+i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} + C_2 e^{-i\frac{\sqrt{4 m k - \beta^2}}{2 m} t}  \right] e^{-\frac{\beta t}{2 m}}
+\begin{aligned}
+ x(t) &amp;= C_1 e^{-\frac{\beta t}{2 m}} e^{+i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} + C_2 e^{-\frac{\beta t}{2 m}} e^{-i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} \\
+  &amp;= \left[ C_1 e^{+i\frac{\sqrt{4 m k - \beta^2}}{2 m} t} + C_2 e^{-i\frac{\sqrt{4 m k - \beta^2}}{2 m} t}  \right] e^{-\frac{\beta t}{2 m}}
+\end{aligned}
 \end{equation}
-$$<p>สังเกตว่า กรณีนี้เรามีฟังก์ชัน $e^{i x}$ เมื่อ $x = \pm \frac{\sqrt{4 m k - \beta^2}}{2 m} t$ เทคนิคที่จะกัดการตรงนี้ คือ ใช้เอกลักษณ์ของ Euler ที่ว่า</p>
+$$<p>สังเกตว่า กรณีนี้เรามีฟังก์ชัน $e^{i x}$ เมื่อ $x = \pm \frac{\sqrt{4 m k - \beta^2}}{2 m} t$ เทคนิคที่จะจัดการตรงนี้ คือ ใช้เอกลักษณ์ของ Euler ที่ว่า</p>
 $$
 \begin{equation}
 e^{i x} = \cos x + i \sin x
@@ -14804,21 +14838,32 @@ e^{i x} = \cos x + i \sin x
 $$<p>แทนเอกลักษณ์ Euler ข้างต้นเข้าไปในผลเฉลย $x(t)$ จะได้ว่า</p>
 $$
 \begin{equation}
-x(t) =  \left[ C_1 \cos \omega t + i C_1  \sin \omega t + C_2 \cos \omega t - i C_2 \sin \omega t \right] e^{-\frac{\beta t}{2 m}}, \quad \omega \equiv \frac{\sqrt{4 m k - \beta^2}}{2 m}
+\begin{aligned}
+ x(t) = &amp; \left[ C_1 \cos \omega t + i C_1  \sin \omega t + C_2 \cos \omega t - i C_2 \sin \omega t \right] e^{-\frac{\beta t}{2 m}}, \\
+      &amp; \omega \equiv \frac{\sqrt{4 m k - \beta^2}}{2 m}
+\end{aligned}
 \end{equation}
 $$<p>สมการข้างต้น มี 2 ประเด็นที่น่าสนใจ ก่อนที่เราจะทำการหา $C_1, C_2$ ที่สอดคล้องกับเงื่อนไขเริ่มต้น $x_0, v_0$</p>
 <ol>
 <li>$C_1, C_2$ เป็นจำนวนเชิงซ้อน เพราะว่าตัวสมการข้างต้น มีจำนวนเชิงซ้อนเข้ามาเกี่ยวข้อง</li>
-<li>ทางซ้ายมือ $x(t)$ เป็นจำนวนจริง ดังนั้น ส่วนจินตภาพด้านขวามือ ต้องเป็นศูนย์ สมมุติให้ $C_1 = a + i b, \, C_2 = c + id$ ภายในวงเล็บกลายเป็น</li>
+<li>ทางซ้ายมือ $x(t)$ เป็นจำนวนจริง ดังนั้น ส่วนจินตภาพด้านขวามือ <u>ต้องเป็นศูนย์</u> สมมุติให้ $C_1 = a + i b, \, C_2 = c + id$ ภายในวงเล็บกลายเป็น</li>
 </ol>
 $$
 \begin{equation}
 \begin{aligned}
- \left[ \cdots \right]  &amp; = \left[ a \cos \omega t + i b \cos \omega t + i a \sin \omega t - b \sin \omega t  + c \cos \omega t + i d \cos \omega t - i c \sin \omega t + d \sin \omega t \right] \\
-         &amp; = \left[ a \cos \omega t - b \sin \omega t  + c \cos \omega t + d \sin \omega t \right] + i \left[   b \cos \omega t +  a \sin \omega t  +  d \cos \omega t -  c \sin \omega t  \right]
+ \left[ \cdots \right]   =  \big[ &amp; (a+ib) \cos \omega t + i(a+ib)\sin \omega t +  \\
+  &amp; (c+id) \cos \omega t - i (c+id) \sin \omega t\big]
 \end{aligned}
 \end{equation}
-$$<p>เพื่อที่ส่วนจินตภาพจะเห็นศูนย์ ทุกช่วงเวลา $t$ แต่ละส่วน $\cos \omega t$ และ $\sin \omega t$ จะต้องเป็นศูนย์ (สืบค้นเพิ่มเติมหัวข้อ Linearly Independent) ดังนั้น $a = c$ และ $b = -d$ หรือ $C_1 = \overline{C_2}$ กล่าวคือ มันเป็น Complex Conjugate ของกันและกัน</p>
+$$<p>กระจาย และจัดกลุ่ม ให้จำนวนจริงอยู่ด้วยกัน และจำนวนจินตภาพอยู่ด้วยกัน</p>
+$$
+\begin{equation}
+\begin{aligned}
+ \left[ \cdots \right] = &amp; \phantom{i} \left[ a \cos \omega t - b \sin \omega t  + c \cos \omega t + d \sin \omega t \right] + \\
+ &amp; i \underbrace{ \left[   b \cos \omega t +  a \sin \omega t  +  d \cos \omega t -  c \sin \omega t  \right] }_{\text{must equal to zero}}
+\end{aligned}
+\end{equation}
+$$<p>เพื่อที่ส่วนจินตภาพเป็นศูนย์ ทุกช่วงเวลา $t$    ทั้ง $\cos \omega t$ และ $\sin \omega t$ จะต้องเป็นศูนย์ทั้งคู่ (สืบค้นเพิ่มเติมหัวข้อ Linearly Independent)    ดังนั้น $a = c$ และ $b = -d$ หรือ $C_1 = \overline{C_2}$ กล่าวคือ มันเป็น Complex Conjugate ของกันและกัน</p>
 <p>ด้วยเงื่อนไขตรงนี้ ทำให้ส่วนจำนวนจริง</p>
 $$
 \begin{equation}
@@ -14834,7 +14879,7 @@ $$
 \begin{equation}
 v(t) = - 2 \omega \left( a \sin \omega t + b \cos \omega t \right) - \frac{\beta}{m} \left( a \cos \omega t - b \sin \omega t  \right)
 \end{equation}
-$$<p>เช่นเคย เราใช้รูปสมการ $x(t), v(t)$ และเงื่อนไงเริ่มต้น $x_0, v_0$ เพื่อหาค่าคงที่ $a, b$ ดังนี้</p>
+$$<p>เช่นเคย เราใช้รูปสมการ $x(t), v(t)$ และเงื่อนไขเริ่มต้น $x_0, v_0$ เพื่อหาค่าคงที่ $a, b$ ดังนี้</p>
 $$
 \begin{equation}
 \begin{aligned}
@@ -14846,9 +14891,13 @@ $$<p>แทน $a, b$ เข้าในสมการ (\ref{eq:phys_under}) �
 $$
 \begin{equation}
 \boxed{
-x(t) = \left[ x_0 \cos \omega t + \frac{1}{\omega} (v_0 + \frac{\beta}{2 m }x_0)\sin \omega t \right] e^{-\frac{\beta}{2 m }t}, \quad \omega \equiv \frac{\sqrt{4 m k - \beta^2}}{2 m}  }
+\begin{aligned}
+&amp; \underline{\beta^2 &lt; 4 m k}: &amp;&amp; x(t) = \left[ x_0 \cos \omega t + \frac{1}{\omega} (v_0 + \frac{\beta}{2 m }x_0)\sin \omega t \right] e^{-\frac{\beta}{2 m }t}, \\
+&amp;                  &amp;&amp; \omega \equiv \frac{\sqrt{4 m k - \beta^2}}{2 m} 
+\end{aligned} }
 \end{equation}
-$$
+$$<br>
+
 </div>
 </div>
 </div>
@@ -14859,7 +14908,7 @@ $$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="-%E0%B8%A7%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B2%E0%B8%9F%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-Python"><font color="green"> &#3623;&#3634;&#3604;&#3585;&#3619;&#3634;&#3615;&#3604;&#3657;&#3623;&#3618; Python</font><a class="anchor-link" href="#-%E0%B8%A7%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B2%E0%B8%9F%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-Python">&#182;</a></h2><p>จากราฟแสดงตัวอย่างโค้ดไพทอน โดยกำหนดให้ มวล $m = 1~\text{kg}$ และ $k = 4~\text{N/m}$ โดยทำการปรับค่า $\beta$ ใน 3 ลักษณะด้วยกัน</p>
+<h2 id="-%E0%B8%A7%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B2%E0%B8%9F%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-Python"><font color="green"> &#3623;&#3634;&#3604;&#3585;&#3619;&#3634;&#3615;&#3604;&#3657;&#3623;&#3618; Python</font><a class="anchor-link" href="#-%E0%B8%A7%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B2%E0%B8%9F%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-Python">&#182;</a></h2><p>จากกราฟแสดงตัวอย่างโค้ดไพทอน โดยกำหนดให้ มวล $m = 1~\text{kg}$ และ $k = 4~\text{N/m}$ โดยทำการปรับค่า $\beta$ ใน 3 ลักษณะด้วยกัน</p>
 
 </div>
 </div>
@@ -14966,6 +15015,8 @@ $$
 \end{aligned}
 \end{equation}
 $$<p>จะเห็นว่าผลลัพธ์การคำนวณ สอดคล้องกันเป็นอย่างดี กับวิธีวิเคราะห์ด้วยการแก้สมการออกมาโดยตรง</p>
+<p>วิธีเชิงคำนวณ (Numerical) ลักษณะนี้ใช้งานได้ง่าย เพราะไม่จำเป็นต้องแก้สมการใดทั้งสิ้น อีกทั้งยังใข้ได้ทั่วไกับแรงแบบใดก็ได้ เพียงแต่กำหนด $\sum F$ ที่แตกต่างออกไปตามที่ต้องการ และคงส่วนอื่นของโค้ดไว้คงเดิม</p>
+<br>
 
 </div>
 </div>
