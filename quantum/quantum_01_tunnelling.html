@@ -742,7 +742,16 @@
         document.getElementById('btnReset').addEventListener('click', resetSimulation);
         inputs.dx.addEventListener('change', resetSimulation);
         inputs.dt.addEventListener('change', resetSimulation);
-        
+
+        // Detect mobile/tablets by checking for touch capability or small screens
+        const isTouchScreen = (navigator.maxTouchPoints > 0) || window.matchMedia("(pointer: coarse)").matches;
+
+        if (isTouchScreen || window.innerWidth <= 950) {
+            inputs.dt.value = "0.0005"; 
+            inputs.steps.value = "100"; // Lower steps keeps the animation speed normal
+        }
+        // -------------------------------
+
         buildPotential();
         animate();
 
