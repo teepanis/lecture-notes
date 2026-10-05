@@ -100,6 +100,8 @@
             align-items: center;
             position: relative;
         }
+
+        /*
         .gun-container {
             width: 60px;
             height: 550px;
@@ -113,6 +115,23 @@
             border-bottom-left-radius: 8px;
             position: relative;
         }
+        */
+
+        .gun-container {
+            width: 60px;
+            height: auto; /* Changed from 550px */
+            align-self: stretch; /* Stretches to match whatever height the canvas is */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0f12;
+            border: 1px solid #333;
+            border-right: none;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            position: relative;
+        }
+
         
         /* Sci-Fi Gun SVG Styling */
         .sci-fi-gun { width: 100%; height: 120px; }
@@ -128,12 +147,54 @@
             100% { filter: drop-shadow(0 0 15px #00ffcc); opacity: 1.0; }
         }
 
+        /*
         canvas {
             background-color: #050608;
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
             border: 1px solid #333;
         }
+        */
+
+        canvas {
+            background-color: #050608;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border: 1px solid #333;
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 800 / 550; /* Tells browser to keep the physics proportions */
+        }
+
+        @media (max-width: 950px) {
+            .container {
+                flex-direction: column; /* Stacks the controls under the animation */
+                padding: 15px;
+            }
+            .simulation-area {
+                width: 100%;
+            }
+            .controls {
+                width: 100%;
+                min-width: 100%;
+                box-sizing: border-box;
+            }
+            .gun-container {
+                width: 40px; /* Make the gun a bit thinner on phones */
+            }
+            .legend {
+                /* Shrink the legend so it doesn't block the physics on small screens */
+                font-size: 11px;
+                padding: 6px;
+                top: 5px;
+                right: 5px;
+            }
+            .legend-color {
+                width: 10px;
+                margin-right: 5px;
+            }
+        }
+
         
         .legend {
             position: absolute;
@@ -401,7 +462,7 @@
 
         <p>จงกลับไปทบทวนเพื่อเราจะได้ศึกษาควอนตัม ให้ลึกในระดับวิศกรรม ในระดับนักฟิสิกส์ เพื่ออะไร? ก็เพื่อสร้างสิ่งที่มีคุณค่า 
         ให้ชีวิตเราดีขึ้น ชีวิตคนที่เรารักดีขึ้น และหากแม้ในท้ายที่สุดแล้วชีวิตของเธอก็ยื้อไว้ไม่ได้อยู่ดี ศึกษาให้เราเข้าใจ 
-        และส่งผ่านความเข้าใจ มอบให้คนรุ่นหลังยังไงเล่า ไอ้เด็กโง่</p>
+        และส่งผ่านความเข้าใจ มอบให้คนรุ่นหลังยังไงเล่า เจ้าเด็กโง่</p>
         <br>
 
         <p><u>ข้อมูลทางเทคนิคเฉพาะผู้เชี่ยวชาญ</u></p>
