@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Wave Introduction</title>
+
+    <!-- Import Thai-friendly Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- MathJax Configuration & Script -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams' /* Enables automatic equation numbering */
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #0d0f12;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { 
+            margin-top: 0; 
+            margin-bottom: 15px; 
+            font-weight: 400; 
+            letter-spacing: 0.5px; 
+            color: #ffffff; 
+            text-align: center;
+            font-family: 'Sarabun', sans-serif; /* Clean modern sci-fi header look */
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2); /* Optional subtle quantum glow */
+        }
+
+        .content-panel {
+            /* background: #171a21; */
+            background: #ffffff; /* Changed to solid white */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7); 
+            /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Softened shadow for light box */
+            max-width: 1250px;
+            width: 100%;
+            margin-top: 20px;
+            box-sizing: border-box; /* Ensures padding doesn't widen the box */
+            line-height: 1.6;
+            font-size: 18px;
+            font-family: 'Sarabun', sans-serif; 
+            /* color: #e0e0e0; */
+            color: #111111; /* Changed to almost black for high readability */
+        }
+        .content-panel p {
+            margin-bottom: 15px;
+        }
+
+        .content-panel h2 {
+            color: #0078d7; 
+            margin-top: 30px; /* Gives space if it's below a paragraph */
+            margin-bottom: 15px;
+            font-weight: 600; /* Makes it nicely bold */
+            border-bottom: 2px solid #eeeeee; /* Optional: adds a clean textbook-style underline */
+            padding-bottom: 8px;
+        }
+
+        h2 { margin-top: 0; margin-bottom: 15px; font-weight: 300; letter-spacing: 1px; color: #fff; }
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            background: #171a21;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            max-width: 1250px;
+            width: 100%;
+        }
+        
+        /* Particle Gun & Canvas Layout */
+        .simulation-area {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: relative;
+        }
+        .gun-container {
+            width: 60px;
+            height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0f12;
+            border: 1px solid #333;
+            border-right: none;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            position: relative;
+        }
+        
+        /* Sci-Fi Gun SVG Styling */
+        .sci-fi-gun { width: 100%; height: 120px; }
+        .gun-body { fill: #2a2d35; stroke: #4a4f5c; stroke-width: 2; }
+        .gun-accent { fill: #1c1e24; }
+        .gun-glow {
+            fill: #00ffcc;
+            filter: drop-shadow(0 0 8px #00ffcc);
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 5px #00ffcc); opacity: 0.8; }
+            100% { filter: drop-shadow(0 0 15px #00ffcc); opacity: 1.0; }
+        }
+
+        canvas {
+            background-color: #050608;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .legend {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid #444;
+            backdrop-filter: blur(4px);
+        }
+        .legend div { display: flex; align-items: center; margin-bottom: 5px; }
+        .legend div:last-child { margin-bottom: 0; }
+        .legend-color { width: 15px; height: 3px; margin-right: 10px; }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 270px;
+        }
+        .control-group {
+            background: #232730;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border: 1px solid #333;
+        }
+        .control-group label {
+            font-size: 13px;
+            color: #aaa;
+            display: flex;
+            justify-content: space-between;
+        }
+        .control-group input[type="range"] { width: 100%; cursor: pointer; }
+        .control-group input[type="number"] {
+            background: #121212; color: #fff; border: 1px solid #444;
+            padding: 4px; border-radius: 4px; width: 80px; font-size: 13px;
+        }
+        
+        /* Potential Panel Selectors */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #ccc;
+        }
+        .radio-group label { justify-content: flex-start; gap: 5px; cursor: pointer; }
+        
+        .buttons { display: flex; gap: 10px; margin-top: 5px; }
+        button {
+            flex: 1; padding: 10px; border: none; border-radius: 6px;
+            font-weight: bold; cursor: pointer; transition: background 0.2s;
+            background: #3a3f4c; color: white; font-size: 14px;
+        }
+        button:hover { background: #4a5060; }
+        button.primary { background: #0078d7; }
+        button.primary:hover { background: #005a9e; }
+        button.danger { background: #d32f2f; }
+        button.danger:hover { background: #9a0007; }
+
+        .status-box {
+            font-family: monospace;
+            font-size: 14px;
+            color: #00ffcc;
+            background: #121212;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            text-align: right;
+            min-width: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>เรียนควอนตัมจากสมการ Schrödinger</h1>
+    <div class="container">
+        <div class="simulation-area">
+            <!-- Sci-Fi Particle Gun -->
+            <div class="gun-container">
+                <svg class="sci-fi-gun" viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">
+                    <path class="gun-body" d="M -10 20 L 30 20 L 45 40 L 45 80 L 30 100 L -10 100 Z" />
+                    <rect class="gun-accent" x="10" y="35" width="15" height="50" rx="3" />
+                    <path class="gun-body" d="M 45 45 L 55 45 L 55 75 L 45 75 Z" />
+                    <!-- Glowing Emitter Surface -->
+                    <rect class="gun-glow" x="55" y="47" width="5" height="26" rx="2" />
+                </svg>
+            </div>
+            
+            <canvas id="simCanvas" width="800" height="550"></canvas>
+            
+            <div class="legend">
+                <div><div class="legend-color" style="background: #2196F3;"></div> Re(Ψ)</div>
+                <div><div class="legend-color" style="background: #FF9800;"></div> Im(Ψ)</div>
+                <div><div class="legend-color" style="background: #00ffcc; box-shadow: 0 0 8px #ffffff; height: 4px;"></div> |Ψ|²</div>
+                <div><div class="legend-color" style="background: #111; border-top: 2px dashed #E02010; height:0;"></div> Potential V(x)</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="buttons">
+                <button id="btnPlay" class="primary">Pause</button>
+                <button id="btnReset" class="danger">Reset</button>
+            </div>
+
+            <div class="control-group">
+                <label><span>Incoming Energy (E)</span> <span id="valE">1.0</span></label>
+                <input type="range" id="inputE" min="0.01" max="5.0" step="0.01" value="1.0">
+            </div>
+
+            <div class="control-group">
+                <label><span>Mass (m)</span> <span id="valM">1.0</span></label>
+                <input type="range" id="inputM" min="0.1" max="5.0" step="0.1" value="1.0">
+            </div>
+
+            <!-- Combined Potential Panel -->
+            <div class="control-group">
+                <div style="font-size: 13px; color: #fff; margin-bottom: 5px; border-bottom: 1px solid #444; padding-bottom: 5px;">Potential Barrier V(x,t)</div>
+                
+                <div class="radio-group">
+                    <label><input type="radio" name="potShape" value="square"> Square</label>
+                    <label><input type="radio" name="potShape" value="triangle" checked> Triangle</label>
+                </div>
+
+                <label><span>Height</span> <span id="valVHeight">1.5</span></label>
+                <input type="range" id="inputVHeight" min="-2.0" max="5.0" step="0.1" value="1.5">
+                
+                <label style="margin-top: 5px;"><span>Width (Bohr)</span> <span id="valVWidth">2.0</span></label>
+                <input type="range" id="inputVWidth" min="0.1" max="5.0" step="0.1" value="2.0">
+            </div>
+            
+            <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <label style="margin:0;">dx</label>
+                <input type="number" id="inputDx" value="0.025" step="0.005">
+            </div>
+
+            <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <label style="margin:0;">dt</label>
+                <input type="number" id="inputDt" value="0.000025" step="0.000005"> 
+            </div>
+
+            <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <label style="margin:0;">Steps / Frame</label>
+                <input type="number" id="inputSteps" value="1000" step="100">
+            </div>
+
+            <!-- Transmission Status Box -->
+            <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center; border-color: #4CAF50;">
+                <label style="margin:0; color: #00ffcc;">|Ψ|² (right edge)</label>
+                <div id="statusPsiRight" class="status-box">0.000</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW MathJax Content Panel -->
+    <div class="content-panel">
+
+        <p>โดย รศ.ดร.ทีปานิส ชาชิโย <teepanisc@nu.ac.th><br>
+        ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร<br>
+        🛜 Facebook: https://web.facebook.com/teepanis.chachiyo
+        </p>
+
+        <h2>บทนำ</h2>
+
+        <p>คาบแรก เราจะเรียนควอนตัมแบบใหม่ เริ่มด้วยภาพที่ชัดเจน สร้างแนวคิด แล้วค่อยแก้สมการ</p>
+
+        <p>สวัสดีครับ วิชานี้เข้าใจยาก ก็เพราะเราสอนควอนตัม ผิดจากธรรมชาติของคนที่เรียนรู้ฟิสิกส์ </p>
+
+        <p>ธรรมชาติของการเรียนรู้ ต้องเห็นปรากฏการณ์ก่อน สร้างความเข้าใจคร่าว ๆ  แล้วค่อยเอาสมการมาคิดให้แม่นยำขึ้น &nbsp; เป็นวิธีที่เราเรียนพื้นลาดพื้นเอียง 
+        เรียนระยะทาง ความเร็ว ความเร่ง การตกอิสระ ซึ่งใช้ได้ผลดีมาก ในวิชากลศาสตร์คลาสสิก</p>
+
+        <p>แต่ตำราควอนตัม ทั้งในระบบการเรียนของตะวันตก และภาษาไทย เราต้องแก้สมการก่อน ได้คำตอบเป็นภาษาคณิตศาสตร์ แล้วค่อยตีความ (ถ้ามีเวลา) &nbsp; 
+            การออกแบบลำดับเนื้อหาเช่นนี้ กว่าถั่วจะสุกงาก็ไหม้ กล่าวคือ ความเข้าใจได้ถูกทำลายจนหมดสิ้น จากความซับซ้อนทางคณิตศาสตร์ของการแก้สมการ</p>
+
+        <p>ระบบจำลองข้างบน เป็นการแก้สมการหลักของควอนตัมออกมาโดยตรง ผลลัพธ์ที่ได้ ตัวเลข กราฟและการเคลื่อนไหว ล้วนแม่นยำราวกับเราแก้สมการด้วยตนเอง &nbsp;
+        ในภายหลังที่พลัง Kung-fu เราเข้มแข็งกว่านี้ จะสามารถคำนวณและเทียบผลลัพธ์เหล่านี้ได้โดยตรง
+        </p>
+
+        <p>แต่ก่อนอื่น เราจะใช้มันเป็นเครื่องมือแม่นยำ ให้เรา<u>เห็น</u>ปรากฎการณ์ควอนตัม และสร้างเป็นแนวคิดเบื้องต้น 
+        เป็นความเข้าใจ ที่อยู่บนฐานของคณิตศาสตร์ที่รัดกุม และแม่นยำ
+        </p>
+
+        <h2>ภาพมุมสูงของโลกควอนตัม</h2>
+
+        <p>โลกแห่งควอนตัมถูกกำหนดด้วยสมการ Schrödinger ดังต่อไปนี้</p>
+        
+        \begin{equation}
+        i \hbar \frac{\partial}{\partial t}\Psi(x,t) = \left[ -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + V(x,t) \right] \Psi(x,t)
+        \end{equation}
+    
+        <p>ตัวแปรที่สำคัญ และเข้าใจง่ายที่สุดของสมการข้างต้น คือ $m, x, t, \Psi(x,t)$</p>
+
+        <p>ในชีวิตประจำวัน เราเห็นวัตถุมีมวล $m$ เคลื่อนที่ไปตำแหน่ง $x$ ต่าง ๆ ณ เวลา $t$ ที่ผ่านไป นี้เป็นตัวแปรพื้นฐานของฟิสิกส์
+        ที่ทุกคนเข้าใจดี คราวนี้มาดูสิ่งที่พิเศษในทางควอนตัม คือ $\Psi(x,t)$</p>
+
+        <p>ในทางควอนตัม เราไม่ทราบวัตถุอยู่ไหนกันแน่ เพราะตำแหน่งของมันไม่แน่นอน เราสร้างฟังก์ชันทางคณิตศาสตร์แทนด้วยสัญลักษณ์ 
+        $\Psi$ อ่านตามตัวอักษรว่า พะ-ซาย &nbsp; ในตอนต้นของการกำเนิดทฤษฎีควอนตัมเมื่อราว 100 ปีก่อน 
+        เรายังไม่ทราบความหมายที่ชัดเจน ก็ต่อเมื่อนักฟิสิกส์ชื่อ Max Born ตีความมันออกมาได้ ดังนี้</p>
+
+        \begin{equation}
+            |\Psi(x,t)|^2 \propto \text{Probability}
+        \end{equation}
+
+        <p>มันคือ ความน่าจะเป็น ที่จะพบอนุภาค ณ​ ตำแหน่ง $x$ และเวลา $t$ &nbsp; <u>ท่องให้ขึ้นใจ</u> ถ้าคุณจะเรียนควอนตัม </p>
+
+        <p>ยังมีสัญลักษณ์อื่น ๆ ที่ยังไม่ได้กล่าวถึง นั่นเป็นตัวประกอบที่เราจะได้ทำความรู้จัก ตามลำดับเนื้อหาที่จะตามมาในภายหลัง 
+        แต่สิ่งที่คุณจะต้องท่องให้ขึ้นใจก็คือ ตัวแปรสำคัญที่สุดของควอนตัมเขียนด้วย $\Psi(x,t)$ และเมื่อเรายกกำลังสอง 
+        มันบอกเราว่าอนุภาคที่เรากำลังศึกษาอยู่นี้ มีความน่าจะเป็นสักกี่มากน้อย ที่จะอยู่ ณ​ พิกัด $x$ และ เวลา $t$</p>
+
+        <h2>ปรากฎการณ์ 1 − ควอนตัมของการทะลุทะลวง (Tunnelling)</h2>
+        
+        <p>ในระบบจำลองข้างบน กดปุ่ม <b>Reset</b> สังเกตกราฟสีเขียวเรืองแสง นักเรียนเห็นอะไรบ้าง?</p>
+
+        <p>ทางซ้ายมือ มีเครื่องยิงลำอนุภาคเข้ามาในบริเวณ &nbsp; แต่ละอนุภาคมวล $m$ และพลังงาน $E=1$ หน่วย &nbsp; 
+        เมื่อเคลื่อนมาทางขวาโดยปราศจากการรบกวนได้สักพัก มันพบกับกำแพงศักย์ (เส้นประสีแดง) $V(x)$</p>
+
+        <p>จินตนาการ ระบบฟิสิกส์แบบคลาสสิก อนุภาควิ่งบนผิวเรียบ แล้วมาพบกับ <u>พื้นเอียงสูงขึ้นเรื่อย ๆ</u> &nbsp;
+        นี้เองคือฟังก์ชันพลังงานศักย์ $V(x)$ มันบอกเราว่า อนุภาคต้องเจอกับแรงหรืออันตรกิริยาดึงดูดหริอผลักแบบใดบ้าง
+        ระหว่างการเคลื่อนที่</p>
+
+        <p>แต่เดี๋ยวก่อน สังเกตความสูงของกำแพง ที่แป้นข้อมูลด้านขวามือ มันบอกว่า Potential Height = $1.5$ หน่วย !?</p>
+
+        <p>ในทางฟิสิกส์คลาสสิก อนุภาคไม่สามารถข้ามพื้นเอียงไปได้เลย &nbsp; มันอาจจะเคลื่อนสูงขึ้นได้ระยะหนึ่ง แต่สุดท้ายแล้ว
+        พลังงาน $E = 1$ หน่วย ในตอนแรกจะถูกถ่ายเทเป็นพลังงานศักย์ทั้งหมด มันจะหยุดนิ่ง และก็ไถลกลับลงมา</p>
+
+        <p>แต่ผลเฉลยของสมการ Schrödinger ไม่เป็นแบบนั้น &nbsp; สังเกตค่าของ $|\Psi|^2$ 
+        ทางด้านหลังของพื้นเอียง มันมีค่าไม่เป็นศูนย์ จากแป้นข้อมูลด้านขวามือ มันมีค่า $|\Psi|^2 \text{(right edge)} = 0.5$ เสียด้วยซ้ำ</p>
+
+        <p>หมายถึง 50% ของอนุภาคที่มาจากเครื่องยิงตั้งแต่แรก ทะลุผ่านกำแพงศักย์ ทั้งที่พลังงานของมัน ตามหลักฟิสิกส์คลาสสิกแล้ว ไม่มีทางข้ามกำแพงได้</p>
+
+        <p>นี่คือ <u>ภาพจำ</u> ข้อแรก ที่นักเรียนควรรู้จักกับควอนตัมฟิสิกส์ มันเป็นโลกที่อนุภาคไม่มีตำแหน่งที่แน่นอน 
+            กระจายไปอยู่ในบริเวณต้องห้ามในทางคลาสสิก เมื่อพลังงานไม่พอที่จะข้ามกำแพงศักย์ไปได้ มันทะลุไปก็ได้
+            มันเป็นโลกที่เราไม่เคยเห็น และตามประวัติศาสตร์ใช้เวลาเกือบ 300 ปี นับจากที่ Newton 
+            สร้างระบบทางฟิสิกส์คลาสสิกขึ้นมา จนกว่าจะค้นพบข้อเท็จริงของควอนตัม ที่ซุกซ่อนอยูในโลกที่มีขนาดเล็กมาก เช่น อะตอม</p>
+
+        <h2>แอบมองโลกควอนตัม</h2>
+
+        <p>แม้ในชีวิตประจำวัน เราไม่เคยเห็นการทะลวงผ่าน ดังแบบจำลองนี้ แต่ด้วยอุปกรณ์เครื่องมือที่เรามีและสิ่งประดิษจ์ที่เราสร้างขึ้น
+        (สืบค้น STM: Scanning Tunneling Microscope) นักฟิสิกส์การันดีได้ว่า ผลเฉลยของสมการ Schrödinger
+        ดังแสดงในภาพเคลื่อนไหวนั้น คือ สิ่งที่เกิดขึ้นจริง ในโลกควอนตัม</p>
+
+        <p>เราจะใช้ผลเฉลยของสมการนี้ เรียนรู้เพิ่มเติมสักเล็กน้อย</p>
+
+        <ul>
+            <li>1. บรรจงปรับกำแพงศักย์ให้สูงขึ้นมาก เช่น Height = 5 </li>
+            <li>2. ปรับกำแพงศักย์ให้เหลือศูนย์</li>
+            <li>3. อย่าลืมกด <b>Reset</b> เพื่อเริ่มการคำนวณใหม่ </li>
+        </ul>
+
+        <p>เธอเห็นอะไรกับแบบฝึกหัด 3 ข้อนี้ &nbsp; เมื่อสังเกตเส้นกราฟ $|\Psi|^2$ ทางด้านหลังจะพบว่า
+        การทะลุผ่านในทางควอนตัมมีข้อจำกัด หากกำแพงศักย์สูงมาก มันก็ไม่อาจผ่านไปได้ และถ้าไม่มีกำแพงเลย (ศักย์เป็นศูนย์) 
+        ทุกอนุภาคก็ผ่านไปได้ 100%</p>
+
+        <h2>เธอพร้อมหรือยัง</h2>
+
+        <p>การเรียนควอนตัมใช้คณิตศาสตร์ที่เธอเรียนในมัธยมปลาย เช่น จำนวนจินตภาพ $i \equiv \sqrt{-1}$ &nbsp; 
+        การหาอนุพันธ์ $\frac{dy}{dx}$ &nbsp; เอกลักษณ์ของ Euler $e^{i x} = \cos x + i \sin x$ และการบวกลบคูณหาร
+        อีกส่วนหนึ่ง</p>
+
+        <p>จงกลับไปทบทวนเพื่อเราจะได้ศึกษาควอนตัม ให้ลึกในระดับวิศกรรม ในระดับนักฟิสิกส์ เพื่ออะไร? ก็เพื่อสร้างสิ่งที่มีคุณค่า 
+        ให้ชีวิตเราดีขึ้น ชีวิตคนที่เรารักดีขึ้น และหากแม้ในท้ายที่สุดแล้วชีวิตของเธอก็ยื้อไว้ไม่ได้อยู่ดี ศึกษาให้เราเข้าใจ 
+        และส่งผ่านความเข้าใจ มอบให้คนรุ่นหลังยังไงเล่า ไอ้เด็กโง่</p>
+        <br>
+
+        <p><u>ข้อมูลทางเทคนิคเฉพาะผู้เชี่ยวชาญ</u></p>
+
+        <p>แบบจำลองแก้สมการ Diffusion ด้วยวิธี Crank-Nicolson โดยให้ค่าคงที่ของการแพร่เป็นจำนวนจินตภาพ &nbsp;
+        การอัพเดทอยู่ในรูป Unitary Matrix ดังนั้นเราการันตีโคยคณิตศาสตร์ว่าความน่าจะเป็นโดยรวมจะไม่ลู่เข้าอนันต์ 
+        </p>
+
+        <p>ภายใน เป็นการแก้สมการ Schrödinger ที่ขึ้นกับเวลา แบบตรงไปตรงมาโดยไม่มีข้อกำหนดใดทั้งสิ้น &nbsp; 
+        ขอบภายนอก (Boundary Condition) ด้านซ้ายมือกำหนดให้เป็น $\Psi = e^{ikx-i\omega t} + B e^{-ikx-i \omega t }$ 
+        และขอบทางขวามือ $\Psi = C e^{i kx - i \omega t}$ &nbsp; แต่ค่าคงที่ $B, C$ เป็นระบบสมการเผยออกมาเอง
+        โดยไม่ได้กำกับไว้ก่อน ตั้งแต่แรก</p>
+
+        <p>ผู้แต่งกำหนดระบบสมการ การทดสอบผลเฉลยกับ Transmission Coefficients ของระบบกำแพงศักย์สี่เหลี่ยม แล้วให้ 
+        Gemini Pro/Extended (ฟรี) ออบแบบ HTML5-CSS-Javascript เบื้องต้น เพื่อให้ผู้แต่งปรับแก้ค่าพารามิเตอร์ ที่เหมาะสม
+        ในการแสดงผล ตลอดจนประพันธ์บทความและสมการ LaTex ในบทความชิ้นนี้</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); 
+
+        const N = 400;
+        const N_sys = N - 2; 
+        const hbar = 1.0;
+        
+        let Re1 = new Float64Array(N);
+        let Im1 = new Float64Array(N);
+        let Re2 = new Float64Array(N);
+        let Im2 = new Float64Array(N);
+        let V = new Float64Array(N);
+
+        let R_r = new Float64Array(N_sys);
+        let R_i = new Float64Array(N_sys);
+        let Cp_r = new Float64Array(N_sys);
+        let Cp_i = new Float64Array(N_sys);
+        let Dp_r = new Float64Array(N_sys);
+        let Dp_i = new Float64Array(N_sys);
+        
+        let t = 0.0;
+        let isPlaying = true;
+        let animationId;
+
+        const inputs = {
+            E: document.getElementById('inputE'),
+            m: document.getElementById('inputM'),
+            VHeight: document.getElementById('inputVHeight'),
+            VWidth: document.getElementById('inputVWidth'),
+            dx: document.getElementById('inputDx'),
+            dt: document.getElementById('inputDt'),
+            steps: document.getElementById('inputSteps')
+        };
+        const displays = {
+            E: document.getElementById('valE'),
+            m: document.getElementById('valM'),
+            VHeight: document.getElementById('valVHeight'),
+            VWidth: document.getElementById('valVWidth')
+        };
+        const shapeRadios = document.querySelectorAll('input[name="potShape"]');
+        const statusPsiRight = document.getElementById('statusPsiRight');
+
+        // Event Listeners
+        Object.keys(displays).forEach(key => {
+            inputs[key].addEventListener('input', () => {
+                displays[key].innerText = inputs[key].value;
+                if(key === 'VHeight' || key === 'VWidth' || key === 'dx') buildPotential();
+            });
+        });
+        shapeRadios.forEach(r => r.addEventListener('change', buildPotential));
+
+        function buildPotential() {
+            const height = parseFloat(inputs.VHeight.value);
+            const width = parseFloat(inputs.VWidth.value);
+            const dx = parseFloat(inputs.dx.value);
+            const shape = document.querySelector('input[name="potShape"]:checked').value;
+            
+            const center_x = (N * dx) / 2.0;
+            const halfWidth = width / 2.0;
+            const x_start = center_x - halfWidth;
+            const x_end = center_x + halfWidth;
+            
+            for (let i = 0; i < N; i++) {
+                const x = i * dx;
+                // T.C. more accurate result than using
+                // if (x >= x_start && x <= x_end) {
+                if (x > x_start && x < x_end) {
+                    if (shape === 'square') {
+                        V[i] = height;
+                    } else if (shape === 'triangle') {
+                        // Right angle facing right edge (0 at start, 'height' at end)
+                        V[i] = height * ((x - x_start) / width);
+                    }
+                } else {
+                    V[i] = 0.0;
+                }
+            }
+        }
+
+        function resetSimulation() {
+            Re1.fill(0); Im1.fill(0);
+            Re2.fill(0); Im2.fill(0);
+            t = 0.0;
+            buildPotential();
+        }
+
+        function physicsStep() {
+            const m = parseFloat(inputs.m.value);
+            const E = parseFloat(inputs.E.value);
+            const dx = parseFloat(inputs.dx.value);
+            const dt = parseFloat(inputs.dt.value);
+            const steps = parseInt(inputs.steps.value);
+
+            const k = Math.sqrt(2 * m * E) / hbar;
+            const omega = (hbar * k * k) / (2 * m);
+            
+            const C = (hbar * dt) / (4 * m * dx * dx); 
+            const denomAlpha = 1 + (k * dx) * (k * dx);
+            const alpha_r = 1 / denomAlpha;
+            const alpha_i = (k * dx) / denomAlpha;
+
+            for (let it = 0; it < steps; it++) {
+                const t_next = t + dt;
+
+                const rightTheta = k * dx - omega * dt;
+                const cosR = Math.cos(rightTheta);
+                const sinR = Math.sin(rightTheta);
+                Re2[N-1] = Re1[N-2] * cosR - Im1[N-2] * sinR;
+                Im2[N-1] = Im1[N-2] * cosR + Re1[N-2] * sinR;
+
+                const num1 = 2 * k * k * dx * dx * Math.cos(omega * t_next);
+                const num2 = 2 * k * dx * Math.sin(omega * t_next);
+                const num3 = 2 * k * k * dx * dx * Math.sin(omega * t_next);
+                const num4 = 2 * k * dx * Math.cos(omega * t_next);
+                const S_r = (num1 - num2) / denomAlpha;
+                const S_i = (-num3 - num4) / denomAlpha;
+
+                for (let j = 0; j < N_sys; j++) {
+                    const idx = j + 1;
+                    const W_idx = 2 * C + (dt / (2 * hbar)) * V[idx];
+                    R_r[j] = Re1[idx] + W_idx * Im1[idx] - C * (Im1[idx-1] + Im1[idx+1]);
+                    R_i[j] = Im1[idx] - W_idx * Re1[idx] + C * (Re1[idx-1] + Re1[idx+1]);
+                }
+
+                R_r[0] = R_r[0] - C * S_i;
+                R_i[0] = R_i[0] + C * S_r;
+                R_r[N_sys-1] = R_r[N_sys-1] - C * Im2[N-1];
+                R_i[N_sys-1] = R_i[N_sys-1] + C * Re2[N-1];
+
+                const W_1 = 2 * C + (dt / (2 * hbar)) * V[1];
+                const diag0_r = 1 + C * alpha_i;
+                const diag0_i = W_1 - C * alpha_r;
+                
+                let den = diag0_r * diag0_r + diag0_i * diag0_i;
+                Cp_r[0] = (-C * diag0_i) / den;
+                Cp_i[0] = (-C * diag0_r) / den;
+                Dp_r[0] = (R_r[0] * diag0_r + R_i[0] * diag0_i) / den;
+                Dp_i[0] = (R_i[0] * diag0_r - R_r[0] * diag0_i) / den;
+
+                for (let j = 1; j < N_sys; j++) {
+                    const W_idx = 2 * C + (dt / (2 * hbar)) * V[j+1];
+                    const denom_r = 1 - C * Cp_i[j-1];
+                    const denom_i = W_idx + C * Cp_r[j-1];
+                    
+                    den = denom_r * denom_r + denom_i * denom_i;
+                    Cp_r[j] = (-C * denom_i) / den;
+                    Cp_i[j] = (-C * denom_r) / den;
+                    
+                    const R_new_r = R_r[j] - C * Dp_i[j-1];
+                    const R_new_i = R_i[j] + C * Dp_r[j-1];
+                    Dp_r[j] = (R_new_r * denom_r + R_new_i * denom_i) / den;
+                    Dp_i[j] = (R_new_i * denom_r - R_new_r * denom_i) / den;
+                }
+
+                Re2[N-2] = Dp_r[N_sys-1];
+                Im2[N-2] = Dp_i[N_sys-1];
+                
+                for (let j = N_sys - 2; j >= 0; j--) {
+                    const idx = j + 1; 
+                    const sub_r = Cp_r[j] * Re2[idx+1] - Cp_i[j] * Im2[idx+1];
+                    const sub_i = Cp_r[j] * Im2[idx+1] + Cp_i[j] * Re2[idx+1];
+                    Re2[idx] = Dp_r[j] - sub_r;
+                    Im2[idx] = Dp_i[j] - sub_i;
+                }
+
+                Re2[0] = alpha_r * Re2[1] - alpha_i * Im2[1] + S_r;
+                Im2[0] = alpha_r * Im2[1] + alpha_i * Re2[1] + S_i;
+
+                for (let i = 0; i < N; i++) {
+                    Re1[i] = Re2[i]; 
+                    Im1[i] = Im2[i];
+                }
+                t = t_next;
+            }
+        }
+
+        function mapX(i) { return (i / (N - 1)) * canvas.width; }
+        function mapY(val) {
+            const yMin = -2.0; 
+            const yMax = 4.0;
+            return canvas.height - ((val - yMin) / (yMax - yMin)) * canvas.height;
+        }
+
+        function drawPath(dataY, color, isDashed = false, lineWidth = 2) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            if (isDashed) ctx.setLineDash([5, 5]);
+            else ctx.setLineDash([]);
+            
+            ctx.shadowBlur = 0;
+
+            for (let i = 0; i < N; i++) {
+                const px = mapX(i);
+                const py = mapY(dataY(i));
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+
+        function drawGlowingPath(dataY) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#00ffcc'; // Green core line
+            ctx.lineWidth = 3.0; // Thicker than the 1.5 Re/Im lines
+            ctx.setLineDash([]);
+            
+            // White Halo Glow
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#ffffff';
+
+            for (let i = 0; i < N; i++) {
+                const px = mapX(i);
+                const py = mapY(dataY(i));
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0; // Reset
+        }
+
+        function render() {
+            ctx.fillStyle = '#050608';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Axis
+            ctx.beginPath(); ctx.strokeStyle = '#222'; ctx.lineWidth = 1;
+            ctx.moveTo(0, mapY(0)); ctx.lineTo(canvas.width, mapY(0)); ctx.stroke();
+
+            // Render Potential
+            // color '#666' too dim
+            drawPath(i => V[i] * 2, '#E02010', true, 2);
+            
+            // Render Wavefunctions
+            drawPath(i => Re1[i], '#2196F3', false, 1.5);
+            drawPath(i => Im1[i], '#FF9800', false, 1.5);
+            
+            // Render Probability Density with White Glow
+            drawGlowingPath(i => (Re1[i]*Re1[i] + Im1[i]*Im1[i]));
+            
+            // Update Right Edge Status Text
+            const rightProb = Re1[N-1]*Re1[N-1] + Im1[N-1]*Im1[N-1];
+            statusPsiRight.innerText = rightProb.toFixed(3);
+        }
+
+        function animate() {
+            if (isPlaying) physicsStep();
+            render();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Setup Controls
+        document.getElementById('btnPlay').addEventListener('click', (e) => {
+            isPlaying = !isPlaying;
+            e.target.innerText = isPlaying ? "Pause" : "Play";
+            e.target.className = isPlaying ? "primary" : "";
+        });
+        document.getElementById('btnReset').addEventListener('click', resetSimulation);
+        inputs.dx.addEventListener('change', resetSimulation);
+        inputs.dt.addEventListener('change', resetSimulation);
+        
+        buildPotential();
+        animate();
+
+    </script>
+
+</body>
+</html>
