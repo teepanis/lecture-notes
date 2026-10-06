@@ -119,6 +119,7 @@
 
         .gun-container {
             width: 60px;
+            min-width: 40px;
             height: auto; /* Changed from 550px */
             align-self: stretch; /* Stretches to match whatever height the canvas is */
             display: flex;
@@ -181,6 +182,7 @@
             }
             .gun-container {
                 width: 40px; /* Make the gun a bit thinner on phones */
+                min-width: 40px;
             }
             .legend {
                 /* Shrink the legend so it doesn't block the physics on small screens */
@@ -339,12 +341,12 @@
 
             <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center;">
                 <label style="margin:0;">dt</label>
-                <input type="number" id="inputDt" value="0.000025" step="0.000005"> 
+                <input type="number" id="inputDt" value="0.0005" step="0.00005"> 
             </div>
 
             <div class="control-group" style="flex-direction: row; justify-content: space-between; align-items: center;">
                 <label style="margin:0;">Steps / Frame</label>
-                <input type="number" id="inputSteps" value="1000" step="100">
+                <input type="number" id="inputSteps" value="100" step="10">
             </div>
 
             <!-- Transmission Status Box -->
@@ -358,9 +360,9 @@
     <!-- NEW MathJax Content Panel -->
     <div class="content-panel">
 
-        <p>โดย รศ.ดร.ทีปานิส ชาชิโย <teepanisc@nu.ac.th><br>
+        <p>โดย รศ.ดร.ทีปานิส ชาชิโย − Teepanis Chachiyo &lt;teepanisc@nu.ac.th&gt;<br>
         ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร<br>
-        🛜 Facebook: https://web.facebook.com/teepanis.chachiyo
+        🛜 Facebook: <a href="https://web.facebook.com/teepanis.chachiyo">https://web.facebook.com/teepanis.chachiyo</a>
         </p>
 
         <h2>บทนำ</h2>
@@ -369,7 +371,7 @@
 
         <p>สวัสดีครับ วิชานี้เข้าใจยาก ก็เพราะเราสอนควอนตัม ผิดจากธรรมชาติของคนที่เรียนรู้ฟิสิกส์ </p>
 
-        <p>ธรรมชาติของการเรียนรู้ ต้องเห็นปรากฏการณ์ก่อน สร้างความเข้าใจคร่าว ๆ  แล้วค่อยเอาสมการมาคิดให้แม่นยำขึ้น &nbsp; เป็นวิธีที่เราเรียนพื้นลาดพื้นเอียง 
+        <p>ธรรมชาติของการเรียนรู้ ต้องเห็นปรากฏการณ์ก่อน สร้างความเข้าใจคร่าว ๆ  แล้วค่อยเอาสมการมาคิดให้แม่นยำขึ้น &nbsp; เป็นวิธีที่เราเรียนพื้นลาด พื้นเอียง 
         เรียนระยะทาง ความเร็ว ความเร่ง การตกอิสระ ซึ่งใช้ได้ผลดีมาก ในวิชากลศาสตร์คลาสสิก</p>
 
         <p>แต่ตำราควอนตัม ทั้งในระบบการเรียนของตะวันตก และภาษาไทย เราต้องแก้สมการก่อน ได้คำตอบเป็นภาษาคณิตศาสตร์ แล้วค่อยตีความ (ถ้ามีเวลา) &nbsp; 
@@ -460,7 +462,7 @@
         การหาอนุพันธ์ $\frac{dy}{dx}$ &nbsp; เอกลักษณ์ของ Euler $e^{i x} = \cos x + i \sin x$ และการบวกลบคูณหาร
         อีกส่วนหนึ่ง</p>
 
-        <p>จงกลับไปทบทวนเพื่อเราจะได้ศึกษาควอนตัม ให้ลึกในระดับวิศกรรม ในระดับนักฟิสิกส์ เพื่ออะไร? ก็เพื่อสร้างสิ่งที่มีคุณค่า 
+        <p>จงกลับไปทบทวนเพื่อเราจะได้ศึกษาควอนตัม ให้ลึกในระดับวิศวกรรม ในระดับนักฟิสิกส์ เพื่ออะไร? ก็เพื่อสร้างสิ่งที่มีคุณค่า 
         ให้ชีวิตเราดีขึ้น ชีวิตคนที่เรารักดีขึ้น และหากแม้ในท้ายที่สุดแล้วชีวิตของเธอก็ยื้อไว้ไม่ได้อยู่ดี ศึกษาให้เราเข้าใจ 
         และส่งผ่านความเข้าใจ มอบให้คนรุ่นหลังยังไงเล่า เจ้าเด็กโง่</p>
         <br>
@@ -478,7 +480,7 @@
 
         <p>ผู้แต่งกำหนดระบบสมการ การทดสอบผลเฉลยกับ Transmission Coefficients ของระบบกำแพงศักย์สี่เหลี่ยม แล้วให้ 
         Gemini Pro/Extended (ฟรี) ออบแบบ HTML5-CSS-Javascript เบื้องต้น เพื่อให้ผู้แต่งปรับแก้ค่าพารามิเตอร์ ที่เหมาะสม
-        ในการแสดงผล ตลอดจนประพันธ์บทความและสมการ LaTex ในบทความชิ้นนี้</p>
+        ในการแสดงผล ตลอดจนประพันธ์บทความและสมการ LaTex ด้วยตนเอง</p>
     </div>
 
     <script>
@@ -743,6 +745,7 @@
         inputs.dx.addEventListener('change', resetSimulation);
         inputs.dt.addEventListener('change', resetSimulation);
 
+        /*
         // Detect mobile/tablets by checking for touch capability or small screens
         const isTouchScreen = (navigator.maxTouchPoints > 0) || window.matchMedia("(pointer: coarse)").matches;
 
@@ -750,7 +753,7 @@
             inputs.dt.value = "0.0005"; 
             inputs.steps.value = "100"; // Lower steps keeps the animation speed normal
         }
-        // -------------------------------
+        // ------------------------------- */
 
         buildPotential();
         animate();
