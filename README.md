@@ -3,6 +3,6 @@ Over the years I have taught many courese. These are the course materials I for 
 
 1. Clasical Mechanics
 2. Electronic Structure Theory
-3. Quantum Mechanics
+3. [Quantum Mechanics](quantum)
 4. Statistical Mechanics
 
