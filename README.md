@@ -1,4 +1,4 @@
-Over the years I have taught many courese. These are the course materials I for my students.
+Over the years I have taught many physics courses. These are the course materials I for my students.
 
 
 1. Clasical Mechanics
