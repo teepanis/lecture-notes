@@ -7,8 +7,8 @@
 1. ฟิสิกส์คลาสสิก กลายเป็น ควอนตัม อย่างไร? [Classic](quantum_01_classic.html)
 2. รู้จักปรากฎการณ์ ทะลุทะลวงเชิงควอนตัม และสมการ Time Dependent Schrödinger [Tunnelling](quantum_01_tunnelling.html) 
 3. ทบทวน Complex Number - Integer, Rational, Irrational, Imaginary, Complex, Euler Identity, Absolute Value, Examples
-4. ตัวอย่างใช้ AI เป็นผู้ช่วยสร้างสื่อการสอน - [Prompt](quantum_01.md)
-5. Complex Plane Wave $e^{ikx - i \omega t}$ - [Python Code](quantum_01.md)
+4. ตัวอย่างใช้ AI เป็นผู้ช่วยสร้างสื่อการสอน - [Prompt](https://github.com/teepanis/lecture-notes/blob/main/quantum/quantum_01.md)
+5. Complex Plane Wave $e^{ikx - i \omega t}$ - [Python Code](https://github.com/teepanis/lecture-notes/blob/main/quantum/quantum_01.md)
 
 ## คาบสอง (13 ตุลาคม 2569)
 1. สถานะคงตัว (Steady State, Eigen State)
