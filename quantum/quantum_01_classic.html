@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WPF8ZSY4NQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WPF8ZSY4NQ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 01 Classical</title>
+    
+    <!-- Import Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- MathJax Configuration & Script -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams' /* Enables automatic equation numbering */
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <style>
+        body {
+            font-family: 'Sarabun', 'Segoe UI', Tahoma, sans-serif;
+            background-color: #0d0f12;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { 
+            margin-top: 0; 
+            margin-bottom: 15px; 
+            font-weight: 400; 
+            letter-spacing: 0.5px; 
+            color: #ffffff; 
+            text-align: center;
+            font-family: 'Sarabun', sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+
+        .content-panel {
+            /* background: #171a21; */
+            background: #ffffff; /* Changed to solid white */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7); 
+            /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Softened shadow for light box */
+            max-width: 1250px;
+            width: 100%;
+            margin-top: 20px;
+            box-sizing: border-box; /* Ensures padding doesn't widen the box */
+            line-height: 1.6;
+            font-size: 18px;
+            font-family: 'Sarabun', sans-serif; 
+            /* color: #e0e0e0; */
+            color: #111111; /* Changed to almost black for high readability */
+        }
+        .content-panel p {
+            margin-bottom: 15px;
+        }
+
+        .content-panel h2 {
+            color: #0078d7; 
+            margin-top: 30px; /* Gives space if it's below a paragraph */
+            margin-bottom: 15px;
+            font-weight: 600; /* Makes it nicely bold */
+            border-bottom: 2px solid #eeeeee; /* Optional: adds a clean textbook-style underline */
+            padding-bottom: 8px;
+        }
+
+        .math-overlay {
+            position: absolute;
+            top: 48px; /* ตำแหน่ง Y = 48 */
+            left: 50%; /* กึ่งกลางแกน X */
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none; /* เพื่อไม่ให้บังการคลิกบน Canvas */
+            font-size: 1.3em;
+            /* เอฟเฟกต์เรืองแสงสีขาว */
+            /* filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1.0));*/
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            background: #171a21;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        /* รองรับหน้าจอขนาดเล็ก */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; align-items: center; }
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #232730;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        
+        /* Headers */
+        .header-classic {
+            color: #0078d7;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 8px;
+        }
+        .header-quantum {
+            color: #00ffcc;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 8px;
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+            width: 100%;
+            aspect-ratio: 4/3.5;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        canvas {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: #050608;
+            border-radius: 8px;
+            border: 1px solid #333;
+            box-sizing: border-box;
+        }
+        
+        /* Overlay ปิดฝั่ง Quantum */
+        .quantum-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(23, 26, 33, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            text-align: center;
+            font-size: 1.2em;
+            color: #00ffcc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Controls */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: #3a3f4c;
+            color: white;
+            font-size: 14px;
+            max-width: 120px;
+        }
+        button:hover { background: #4a5060; }
+        button.primary { background: #0078d7; }
+        button.primary:hover { background: #005a9e; }
+        button.danger { background: #d32f2f; }
+        button.danger:hover { background: #9a0007; }
+        
+        .label-scale {
+            font-size: 1.2em;
+            color: #aaa;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        
+        .footer-quantum {
+            color: #00ffcc;
+            font-size: 1.1em;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>คลาสสิก กลายเป็น ควอนตัม</h1>
+
+    <div class="container">
+        <!-- Classical Panel -->
+        <div class="panel" id="panel-classic">
+            <div class="header-classic">Classic</div>
+            
+            <div class="canvas-container">
+                <!-- V(x) MathJax overlay -->
+                <div class="math-overlay">$\color{#E02010}{V(x) = \frac{1}{2}kx^2}$</div>
+                <canvas id="canvas-classic"></canvas>
+            </div>
+            
+            <div class="controls-row">
+                <button id="btn-play">Play</button>
+                <button id="btn-reset" class="danger">Reset</button>
+            </div>
+            
+            <div class="controls-row">
+                <button id="btn-zoom-out">Zoom Out</button>
+                <button id="btn-zoom-in">Zoom In</button>
+            </div>
+            
+            <div class="label-scale" id="scale-label">A ≅ 1 meter</div>
+        </div>
+
+        <!-- Quantum Panel -->
+        <div class="panel" id="panel-quantum">
+            <div class="header-quantum">Quantum</div>
+            
+            <div class="canvas-container">
+                <div id="quantum-overlay" class="quantum-overlay">
+                    รอจนกว่าระดับการซูมของ Classic<br>จะเป็น A < 1 nanometer
+                </div>
+                <canvas id="canvas-quantum"></canvas>
+            </div>
+            
+            <div class="controls-row">
+                <button id="btn-avg">Show Average</button>
+            </div>
+            
+            <div class="footer-quantum">
+                How do we find |&Psi;|² ?
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW MathJax Content Panel -->
+    <div class="content-panel">
+        <p>โดย รศ.ดร.ทีปานิส ชาชิโย − Teepanis Chachiyo &lt;teepanisc@nu.ac.th&gt;<br>
+        ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร<br>
+        🛜 Facebook: <a href="https://web.facebook.com/teepanis.chachiyo">https://web.facebook.com/teepanis.chachiyo</a>
+        </p>
+
+        <h2>บทนำ</h2>
+
+        <p>ฟิสิกส์คลาสสิก คือ สิ่งที่เราพบเห็นในชีวิตประจำวัน &nbsp; พิจารณาอนุภาคบนพื้นปราศจากแรงเสียดทาน 
+            โค้งเป็นรูปถ้วย มีความสูงเป็นทรงพาราโบลา มันจึงเคลื่อนที่อยู่ภายใต้พลังงานศักย์ $V(x) = \frac{1}{2} k x^2$ ดังภาพ</p>
+
+        <p>คลิก Play &nbsp; โดยไม่ต้องแก้สมการทั้งสิ้น เราพอเข้าใจได้ว่า วัตถุย่อมไถลซ้ายขวา โดยมีอัตราเร็วสูงสุด เมื่อมันมาอยู่ที่ก้นของถ้วย 
+        เพราะจุดนี้ มันเปลี่ยนพลังงานศักย์ทั้งหมดที่มีอยู่ ให้อยู่ในรูปของพลังงานจลน์</p>
+
+        <p>ที่สำคัญ คือ ในมุมมองของฟิสิกส์คลาสสิก อนุภาคมีตำแหน่งที่แน่นอน <u>มันคือจุดคมชัดสีขาว</u> ที่ในอุดมคติ 
+        เราทราบได้ชัดเจนว่า ตำแหน่งของมัน ณ​ เวลาใด ๆ มีฟังก์ชันทางคณิตศาสตร์ที่ชัดเจน และในกรณีตัวอย่างนี้ $x(t) = A \sin(\omega t)$</p>
+
+
+        <h2>โลกคลาสสิก</h2>
+        
+        <p>หัวใจสำคัญที่สุดของฟิสิกส์คลาสสิก และเป็นสมการที่กำหนดการเคลื่อนที่ของมวลบนพื้นโลก เม็ดทราย ผุ่น การโคจรของโลก ก็คือสมการการเคลื่อนที่ของนิวตัน ใน 1 มิติ เราเขียนได้ว่า</p>
+
+        \begin{equation}
+        \Sigma F = ma \label{eq:newton}
+        \end{equation}
+
+        <p>ทางซ้ายมือของสมการ (\ref{eq:newton}) คือ แรงลัพธ์ ซึ่งถ้าจะปรับให้เข้ากับกรณีตัวอย่างอันนี้ เราใช้ความเชื่อมโยงระหว่าง แรง และ พลังงานศักย์ 
+        คือ $F = -\frac{dV}{dx}$ ซึ่งจาก $V(x) = \frac{1}{2} k x^2$ เราบอกได้ว่า $F = - \frac{d}{dx}[\frac{1}{2} k x^2] = - k x$ &nbsp; กล่าวคือ เป็นแรงแบบสปริง นั่นเอง </p>
+
+        <p>ดังนั้น สมการการเคลื่อนที่ของนิวตัน สามารถเขียนให้อยู่ในรูปทั่วไป ได้อีกอย่างหนึ่งคือ</p>
+
+        \begin{equation}
+        \boxed{
+        -\frac{dV}{dx} = m \frac{d^2 x}{d t^2} } \label{eq:newton_potential}
+        \end{equation}
+
+        <p>นี้เอง คือ สมการที่ควบคุมการเคลื่อนที่ของทุกสิ่งที่อยู่รอบตัวเรา ตราบเท่าที่ความเร็วไม่สูงมากนัก พลังงานไม่สูงมากนั้น ซึ่งไม่ต้องใช้ฟิสิกส์ในสภาวะพิเศษ &nbsp; 
+        มันคือ กลศาสตร์คลาสสิก ที่เกิดขึ้นราว 450 ปีก่อน ซึ่งอยู่ในรูปของสมการทางแคลคูลัส และถ้าเราแก้โจทย์นี้ออกมาได้ มันบอกตำแหน่งของอนุภาค ณ​ เวลาใด ๆ</p>
+
+        \begin{equation}
+            V(x) = \frac{1}{2} k x^2 \; \Longrightarrow \; x(t) = A \sin(\omega t)
+        \end{equation}
+
+        <p>ในอุดมคติแล้ว คำตอบ $x(t) = A \sin(\omega t)$ เสมอ ไม่ว่าระบบของเราจะสั่นด้วย แอมปลิจูด $A$ เล็กเท่าใดก็ตาม</p>
+
+        <p>คลิก Zoom In เพื่อปรับขนาดให้เล็กลงเรื่อย ๆ จาก 🚗 $\to$ 🦋 $\to$ 🔬 $\to$ 🧬 &nbsp; กล่าวคือ ขนาดประมาณรถยนต์ ผีเสื้อ เซลล์ และ ดีเอ็นเอ</p> 
+
+        <h2>โลกควอนตัม</h2>
+
+        <p>เมื่อ 100 ปีก่อน นักฟิสิกส์พบว่า ในระบบขนาดเล็ก เช่น $A < 1 \text{ nanometer}$ ฟิสิกส์คลาสสิกให้ผลทำนายผิดพลาด &nbsp; 
+        ในระยะทางช่วงนี้ คุณจะเห็นกล่องแสดงผลทางขวา Quantum ปรากฎขึ้น</p>
+
+        <p>คลิก Pause และ Reset เพื่อปรับให้เห็นภาพนิ่ง ณ​ เวลา เริ่มต้น &nbsp; ในโลกของควอนตัม อนุภาคไม่มีตำแหน่งที่แน่นอนอีกต่อไป 
+        แต่มีความน่าจะเป็นที่จะไปอยู่ตำแหน่งต่าง ๆ มากบ้าง น้อยบ้าง แทนด้วยเส้นกราฟสีเขียวเรืองแสง $|\Psi|^2$</p>
+
+        <p>คลิก Show Average เราจะเห็นค่าเฉลี่ยของความน่าจะเป็นตรงนี้ ซึ่ง ณ​ เวลาเริ่มต้น $t=0$ มันคือ ตรงกลางพอดี &nbsp; 
+        นี้เองคือสิ่งที่ฟิสิกส์ควอนตัมบอกเราได้ เพียงค่าเฉลี่ย เพราะ โดยแนวคิดของทฤษฎีแล้ว <u>อนุภาคสามารถไปอยู่ตรงไหนก็ได้</u> ด้วยความน่าจะเป็น ที่แตกต่างกัน</p>
+
+        <p>คลิก Play อีกครั้ง คุณจะเห็นพลวัต (Dynamics) ของการเคลื่อนที่จากทั้งสองทฤษฎี &nbsp; กล่าวได้ว่า สิ่งที่เราเคยเชื่อในทางกลศาสตร์คลาสสิก
+        ที่ว่าวัตถุมีพิกัดที่ชัดเจนนั้น แท้จริงแล้ว เป็นเพียงค่าเฉลี่ย ของความเป็นไปได้ทั้งหมด ที่อาจจะเกิดขึ้น</p>
+
+        <p>คำถามก็คือ ในทางฟิสิกส์ควอนตัม เราจะคำนวณ $|\Psi|^2$ นี้อย่างไร? </p>
+
+        <p>Erwin Schrödinger นักฟิสิกส์ชาวออสเตรีย ได้ตีพิมพ์สมการในปี ค.ศ. 1926 คือ</p>
+
+        \begin{equation}
+        \boxed{
+        -i \hbar\frac{\partial}{\partial t} \Psi(x,t) = -\frac{\hbar^2}{2 m} \frac{\partial^2}{\partial x^2} \Psi(x,t) + V(x,t)\Psi(x,t) } \label{eq:Schrodinger}
+        \end{equation}
+
+        <p>สมการ (\ref{eq:newton_potential}) และ (\ref{eq:Schrodinger}) คือ 2 มุมมองในทางคลาสสิกและควอนตัม ที่เหมือนและต่างกันในบางประเด็น &nbsp; 
+        ที่เหมือนกันคือทั้งคู่พยายามอธิบายธรรมชาติการเคลื่อนที่ของวัตถุ ด้วยภาษาทางแคลคูลัส ที่สามารถคำนวณออกมาได้ชัดเจน &nbsp; ที่ต่างกันคือในทางคลาสสิก มีผลเฉลยเป็นฟังกชัน $x(t)$ ที่บอกตำแหน่งชัดเจนของอนุภาค ในขณะที่ควอนตัม มีผลเฉลยเป็น $\Psi(x,t)$
+         และเมื่อนำมายกกำลังสอง $|\Psi(x,t)|^2$ บอกได้แต่เพียงว่า มันมีโอกาสที่จะไปอยู่ตำแหน่งต่าง ๆ เท่าใดบ้าง</p>
+    </div>
+
+<script>
+    // Constants & State
+    const scales = ['A ≅ 1 meter 🚗', 'A ≅ 1 centimeter 🦋', 'A ≅ 1 micrometer 🔬', 'A < 1 nanometer 🧬'];
+    let currentScaleIdx = 0;
+    
+    let isPlaying = false;
+    let time = 0;
+    let showAverage = false;
+    let animationId;
+
+    // Elements
+    const scaleLabel = document.getElementById('scale-label');
+    const btnPlay = document.getElementById('btn-play');
+    const btnReset = document.getElementById('btn-reset');
+    const btnZoomOut = document.getElementById('btn-zoom-out');
+    const btnZoomIn = document.getElementById('btn-zoom-in');
+    const btnAvg = document.getElementById('btn-avg');
+    const quantumOverlay = document.getElementById('quantum-overlay');
+    
+    const canvasCl = document.getElementById('canvas-classic');
+    const ctxCl = canvasCl.getContext('2d');
+    const canvasQu = document.getElementById('canvas-quantum');
+    const ctxQu = canvasQu.getContext('2d');
+
+    function resizeCanvas() {
+        const rectCl = canvasCl.parentElement.getBoundingClientRect();
+        canvasCl.width = rectCl.width; canvasCl.height = rectCl.height;
+        
+        const rectQu = canvasQu.parentElement.getBoundingClientRect();
+        canvasQu.width = rectQu.width; canvasQu.height = rectQu.height;
+        draw();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // Physics Coordinate System (x from -4 to 4)
+    const xMin = -4; const xMax = 4;
+    const yMax = 4; 
+    const yMin = -1.5; 
+
+    function mapX(x, width) { return (x - xMin) / (xMax - xMin) * width; }
+    function mapY(y, height) { return height - ((y - yMin) / (yMax - yMin) * height); }
+
+    // Controls Logic
+    btnPlay.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            btnPlay.textContent = "Pause";
+            btnPlay.className = "primary"; // เปลี่ยนปุ่มเป็นสีฟ้าเมื่อเล่น
+            lastTime = performance.now();
+            loop();
+        } else {
+            btnPlay.textContent = "Play";
+            btnPlay.className = ""; // คืนค่าปุ่มสีเทาเดิม
+            cancelAnimationFrame(animationId);
+        }
+    });
+
+    btnReset.addEventListener('click', () => {
+        time = 0;
+        draw();
+    });
+
+    btnZoomIn.addEventListener('click', () => {
+        if (currentScaleIdx < 3) currentScaleIdx++;
+        updateScale();
+    });
+
+    btnZoomOut.addEventListener('click', () => {
+        if (currentScaleIdx > 0) currentScaleIdx--;
+        updateScale();
+    });
+
+    btnAvg.addEventListener('click', () => {
+        showAverage = !showAverage;
+        btnAvg.className = showAverage ? "primary" : "";
+        draw();
+    });
+
+    function updateScale() {
+        scaleLabel.textContent = scales[currentScaleIdx];
+        if (currentScaleIdx === 3) {
+            quantumOverlay.style.display = 'none';
+        } else {
+            quantumOverlay.style.display = 'flex';
+        }
+        draw();
+    }
+
+    // Quantum calculations: Psi(x,t) = 1/sqrt(2)*Psi0 + i/sqrt(2)*Psi1
+    const pi_pow_neg_quarter = Math.pow(Math.PI, -0.25);
+    function psi0(x) { return pi_pow_neg_quarter * Math.exp(-0.5 * x * x); }
+    function psi1(x) { return pi_pow_neg_quarter * Math.sqrt(2) * x * Math.exp(-0.5 * x * x); }
+    function probDensity(x, t) {
+        const p0 = psi0(x);
+        const p1 = psi1(x);
+        return 0.5 * p0 * p0 + 0.5 * p1 * p1 + p0 * p1 * Math.sin(t);
+    }
+
+    // Animation Loop
+    let lastTime = 0;
+    function loop() {
+        if (!isPlaying) return;
+        const now = performance.now();
+        const dt = (now - lastTime) / 1000;
+        time += dt * 3; // speed multiplier
+        lastTime = now;
+        draw();
+        animationId = requestAnimationFrame(loop);
+    }
+
+    // Drawing functions
+    function draw() {
+        drawClassic();
+        drawQuantum();
+    }
+
+    function drawBase(ctx, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        
+        // วาดแกน X ด้านล่าง (ลูกศร) สี #444 ให้เข้ากับ Dark Theme
+        const axisY = mapY(-0.8, h);
+        ctx.strokeStyle = '#444';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(20, axisY);
+        ctx.lineTo(w - 20, axisY);
+        // หัวลูกศร
+        ctx.lineTo(w - 30, axisY - 5);
+        ctx.moveTo(w - 20, axisY);
+        ctx.lineTo(w - 30, axisY + 5);
+        ctx.stroke();
+
+        // วาดพาราโบล่าสีแดง (เส้นประ) อ้างอิงรหัสสี #E02010
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#E02010';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for(let px = xMin; px <= xMax; px += 0.1) {
+            let py = 0.5 * px * px;
+            if (py > yMax) continue; 
+            let cx = mapX(px, w);
+            let cy = mapY(py, h);
+            if (px === xMin) ctx.moveTo(cx, cy);
+            else ctx.lineTo(cx, cy);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        return axisY;
+    }
+
+    function drawClassic() {
+        const w = canvasCl.width; const h = canvasCl.height;
+        if (w === 0) return;
+        const axisY = drawBase(ctxCl, w, h);
+
+        // จัดข้อความให้อยู่กึ่งกลางแนวนอน (อ้างอิง w/2)
+        /*
+        ctxCl.textAlign = "center";
+        ctxCl.font = "24px 'Sarabun', sans-serif";
+        ctxCl.fillStyle = "#F02020"; 
+        ctxCl.shadowColor = "white";
+        ctxCl.shadowBlur = 0;
+        ctxCl.shadowOffsetX = 0;
+        ctxCl.shadowOffsetY = 0;
+        ctxCl.fillText("V(x) = ½ kx²", w / 2, 60);
+        ctxCl.shadowBlur = 0; // reset
+        */
+
+        // คำนวณตำแหน่งอนุภาค
+        const A = Math.sqrt(2);
+        const x_t = A * Math.sin(time);
+        const y_t = 0.5 * x_t * x_t;
+
+        const cx = mapX(x_t, w);
+        const cy = mapY(y_t, h);
+
+        // เส้นประ projection สีเทา
+        ctxCl.setLineDash([6, 6]);
+        ctxCl.strokeStyle = '#888';
+        ctxCl.lineWidth = 2;
+        ctxCl.beginPath();
+        ctxCl.moveTo(cx, cy);
+        ctxCl.lineTo(cx, axisY + 10); 
+        ctxCl.stroke();
+        ctxCl.setLineDash([]);
+
+        // อนุภาคสีขาวขอบเทาเข้ม
+        ctxCl.fillStyle = '#ffffff';
+        ctxCl.strokeStyle = '#222';
+        ctxCl.lineWidth = 2;
+        ctxCl.beginPath();
+        ctxCl.arc(cx, cy, 8, 0, 2*Math.PI);
+        ctxCl.fill();
+        ctxCl.stroke();
+    }
+
+    function drawQuantum() {
+        const w = canvasQu.width; const h = canvasQu.height;
+        if (w === 0) return;
+        const axisY = drawBase(ctxQu, w, h);
+
+        if (currentScaleIdx < 3) return;
+
+        // ข้อความ |Ψ|² มุมขวาบน (สีไซอัน)
+        ctxQu.textAlign = "left";
+        ctxQu.font = "bold 28px Arial, sans-serif";
+        ctxQu.fillStyle = "#00ffcc";
+        ctxQu.shadowColor = "white";
+        ctxQu.shadowBlur = 8;
+        ctxQu.fillText("|Ψ|²", w - 70, 175);
+        ctxQu.shadowBlur = 0; // reset
+
+        // วาดกราฟ |Ψ|² (เรืองแสงสีขาวตามแบบ)
+        ctxQu.shadowColor = '#ffffff';
+        ctxQu.shadowBlur = 12;
+        ctxQu.strokeStyle = '#00ffcc'; 
+        ctxQu.lineWidth = 3;
+        ctxQu.lineJoin = "round";
+
+        ctxQu.beginPath();
+        for (let x = -3; x <= 3; x += 0.05) {
+            let y = probDensity(x, time) * 3 + 0.5; 
+            let px = mapX(x, w);
+            let py = mapY(y, h);
+            if (x === -3) ctxQu.moveTo(px, py);
+            else ctxQu.lineTo(px, py);
+        }
+        ctxQu.stroke();
+        ctxQu.shadowBlur = 0; // reset
+
+        // เส้นค่าเฉลี่ย
+        if (showAverage) {
+            const x_avg = (1 / Math.sqrt(2)) * Math.sin(time);
+            const cx = mapX(x_avg, w);
+            
+            ctxQu.setLineDash([6, 6]);
+            ctxQu.strokeStyle = '#aaa';
+            ctxQu.lineWidth = 2;
+            ctxQu.beginPath();
+            ctxQu.moveTo(cx, mapY(yMax, h)); 
+            ctxQu.lineTo(cx, axisY + 10);
+            ctxQu.stroke();
+            ctxQu.setLineDash([]);
+        }
+    }
+
+    // Init
+    setTimeout(resizeCanvas, 100);
+    updateScale();
+</script>
+</body>
+</html>
