@@ -6,14 +6,12 @@
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
     gtag('config', 'G-WPF8ZSY4NQ');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 01</title>
+    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 01 Tunnelling</title>
 
     <!-- Import Thai-friendly Google Fonts: Prompt & Sarabun -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,26 +54,23 @@
             letter-spacing: 0.5px; 
             color: #ffffff; 
             text-align: center;
-            font-family: 'Sarabun', sans-serif; /* Clean modern sci-fi header look */
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2); /* Optional subtle quantum glow */
+            font-family: 'Sarabun', sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
         }
 
         .content-panel {
-            /* background: #171a21; */
-            background: #ffffff; /* Changed to solid white */
+            background: #ffffff;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7); 
-            /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Softened shadow for light box */
             max-width: 1250px;
             width: 100%;
             margin-top: 20px;
-            box-sizing: border-box; /* Ensures padding doesn't widen the box */
+            box-sizing: border-box;
             line-height: 1.6;
             font-size: 18px;
             font-family: 'Sarabun', sans-serif; 
-            /* color: #e0e0e0; */
-            color: #111111; /* Changed to almost black for high readability */
+            color: #111111;
         }
         .content-panel p {
             margin-bottom: 15px;
@@ -83,10 +78,10 @@
 
         .content-panel h2 {
             color: #0078d7; 
-            margin-top: 30px; /* Gives space if it's below a paragraph */
+            margin-top: 30px;
             margin-bottom: 15px;
-            font-weight: 600; /* Makes it nicely bold */
-            border-bottom: 2px solid #eeeeee; /* Optional: adds a clean textbook-style underline */
+            font-weight: 600;
+            border-bottom: 2px solid #eeeeee;
             padding-bottom: 8px;
         }
 
@@ -113,59 +108,123 @@
 
         /*
         .gun-container {
-            width: 60px;
-            height: 550px;
+            width: 65px;
+            min-width: 45px;
+            height: auto;
+            align-self: stretch;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 12px;
             background: #0d0f12;
             border: 1px solid #333;
             border-right: none;
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
             position: relative;
+            padding: 10px 0;
+            box-sizing: border-box;
         }
         */
 
         .gun-container {
-            width: 60px;
-            min-width: 40px;
-            height: auto; /* Changed from 550px */
-            align-self: stretch; /* Stretches to match whatever height the canvas is */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 65px;
+            min-width: 45px;
+            align-self: stretch;
             background: #0d0f12;
             border: 1px solid #333;
             border-right: none;
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
-            position: relative;
+            position: relative; /* Container anchor */
         }
 
-        
-        /* Sci-Fi Gun SVG Styling */
+        /* 1. Keeps the SVG gun locked at exact vertical center (50%) */
+        .sci-fi-gun { 
+            width: 100%; 
+            height: 120px; 
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+
+        /* Sci-Fi Gun SVG Styling
         .sci-fi-gun { width: 100%; height: 120px; }
+        */
         .gun-body { fill: #2a2d35; stroke: #4a4f5c; stroke-width: 2; }
         .gun-accent { fill: #1c1e24; }
         .gun-glow {
             fill: #00ffcc;
             filter: drop-shadow(0 0 8px #00ffcc);
             animation: pulse-glow 1.5s infinite alternate;
+            transition: all 0.3s ease;
+        }
+        .gun-glow.off {
+            fill: #3a3f4c;
+            filter: none;
+            animation: none;
         }
         @keyframes pulse-glow {
             0% { filter: drop-shadow(0 0 5px #00ffcc); opacity: 0.8; }
             100% { filter: drop-shadow(0 0 15px #00ffcc); opacity: 1.0; }
         }
 
-        /*
-        canvas {
-            background-color: #050608;
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-            border: 1px solid #333;
+        /* Sci-Fi Gun Toggle Button
+        .btn-gun {
+            width: 85%;
+            padding: 6px 2px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid #00ffcc;
+            border-radius: 4px;
+            background: #00ffcc;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+            line-height: 1.2;
+        }*/
+
+        .btn-gun {
+            flex: none; /* Overrides 'flex: 1' from generic button rule */
+            position: absolute;
+            top: calc(50% + 68px); /* Sits right under the gun barrel */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            padding: 6px 2px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid #00ffcc;
+            border-radius: 4px;
+            background: #00ffcc;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+            line-height: 1.2;
         }
-        */
+
+        .btn-gun:hover {
+            background: #33ffd6;
+            box-shadow: 0 0 12px rgba(0, 255, 204, 0.7);
+        }
+        .btn-gun.off {
+            background: #1c1e24;
+            color: #666;
+            border-color: #444;
+            box-shadow: none;
+        }
+        .btn-gun.off:hover {
+            background: #2a2d35;
+            color: #aaa;
+            border-color: #666;
+        }
 
         canvas {
             background-color: #050608;
@@ -174,12 +233,12 @@
             border: 1px solid #333;
             max-width: 100%;
             height: auto;
-            aspect-ratio: 800 / 550; /* Tells browser to keep the physics proportions */
+            aspect-ratio: 800 / 550;
         }
 
         @media (max-width: 950px) {
             .container {
-                flex-direction: column; /* Stacks the controls under the animation */
+                flex-direction: column;
                 padding: 15px;
             }
             .simulation-area {
@@ -191,11 +250,14 @@
                 box-sizing: border-box;
             }
             .gun-container {
-                width: 40px; /* Make the gun a bit thinner on phones */
-                min-width: 40px;
+                width: 45px;
+                min-width: 45px;
+            }
+            .btn-gun {
+                font-size: 8px;
+                padding: 4px 1px;
             }
             .legend {
-                /* Shrink the legend so it doesn't block the physics on small screens */
                 font-size: 11px;
                 padding: 6px;
                 top: 5px;
@@ -206,7 +268,6 @@
                 margin-right: 5px;
             }
         }
-
         
         .legend {
             position: absolute;
@@ -291,15 +352,16 @@
     <h1>เรียนควอนตัมจากสมการ Schrödinger</h1>
     <div class="container">
         <div class="simulation-area">
-            <!-- Sci-Fi Particle Gun -->
+            <!-- Sci-Fi Particle Gun with Toggle Button -->
             <div class="gun-container">
                 <svg class="sci-fi-gun" viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">
                     <path class="gun-body" d="M -10 20 L 30 20 L 45 40 L 45 80 L 30 100 L -10 100 Z" />
                     <rect class="gun-accent" x="10" y="35" width="15" height="50" rx="3" />
                     <path class="gun-body" d="M 45 45 L 55 45 L 55 75 L 45 75 Z" />
                     <!-- Glowing Emitter Surface -->
-                    <rect class="gun-glow" x="55" y="47" width="5" height="26" rx="2" />
+                    <rect class="gun-glow" id="gunEmitter" x="55" y="47" width="5" height="26" rx="2" />
                 </svg>
+                <button id="btnGun" class="btn-gun" title="Toggle Particle Beam">BEAM ON</button>
             </div>
             
             <canvas id="simCanvas" width="800" height="550"></canvas>
@@ -338,7 +400,7 @@
                 </div>
 
                 <label><span>Height</span> <span id="valVHeight">1.5</span></label>
-                <input type="range" id="inputVHeight" min="-2.0" max="5.0" step="0.1" value="1.5">
+                <input type="range" id="inputVHeight" min="-5.0" max="5.0" step="0.1" value="1.5">
                 
                 <label style="margin-top: 5px;"><span>Width (Bohr)</span> <span id="valVWidth">2.0</span></label>
                 <input type="range" id="inputVWidth" min="0.1" max="5.0" step="0.1" value="2.0">
@@ -493,6 +555,7 @@
         ในการแสดงผล ตลอดจนประพันธ์บทความและสมการ LaTex ด้วยตนเอง</p>
     </div>
 
+
     <script>
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d', { alpha: false }); 
@@ -516,6 +579,7 @@
         
         let t = 0.0;
         let isPlaying = true;
+        let isGunOn = true;
         let animationId;
 
         const inputs = {
@@ -535,6 +599,8 @@
         };
         const shapeRadios = document.querySelectorAll('input[name="potShape"]');
         const statusPsiRight = document.getElementById('statusPsiRight');
+        const btnGun = document.getElementById('btnGun');
+        const gunEmitter = document.getElementById('gunEmitter');
 
         // Event Listeners
         Object.keys(displays).forEach(key => {
@@ -544,6 +610,19 @@
             });
         });
         shapeRadios.forEach(r => r.addEventListener('change', buildPotential));
+
+        btnGun.addEventListener('click', () => {
+            isGunOn = !isGunOn;
+            if (isGunOn) {
+                btnGun.innerText = "BEAM ON";
+                btnGun.classList.remove('off');
+                gunEmitter.classList.remove('off');
+            } else {
+                btnGun.innerText = "BEAM OFF";
+                btnGun.classList.add('off');
+                gunEmitter.classList.add('off');
+            }
+        });
 
         function buildPotential() {
             const height = parseFloat(inputs.VHeight.value);
@@ -558,13 +637,10 @@
             
             for (let i = 0; i < N; i++) {
                 const x = i * dx;
-                // T.C. more accurate result than using
-                // if (x >= x_start && x <= x_end) {
                 if (x > x_start && x < x_end) {
                     if (shape === 'square') {
                         V[i] = height;
                     } else if (shape === 'triangle') {
-                        // Right angle facing right edge (0 at start, 'height' at end)
                         V[i] = height * ((x - x_start) / width);
                     }
                 } else {
@@ -580,37 +656,80 @@
             buildPotential();
         }
 
+        function wrapAngle(angle) {
+            return Math.atan2(Math.sin(angle), Math.cos(angle));
+        }
+
+
         function physicsStep() {
             const m = parseFloat(inputs.m.value);
-            const E = parseFloat(inputs.E.value);
             const dx = parseFloat(inputs.dx.value);
             const dt = parseFloat(inputs.dt.value);
             const steps = parseInt(inputs.steps.value);
 
-            const k = Math.sqrt(2 * m * E) / hbar;
-            const omega = (hbar * k * k) / (2 * m);
-            
-            const C = (hbar * dt) / (4 * m * dx * dx); 
-            const denomAlpha = 1 + (k * dx) * (k * dx);
-            const alpha_r = 1 / denomAlpha;
-            const alpha_i = (k * dx) / denomAlpha;
+            // Pre-calculate Beam constants if the gun is ON
+            let E, k_src, omega_src, denomAlpha, alpha_r, alpha_i;
+            if (isGunOn) {
+                E = parseFloat(inputs.E.value);
+                k_src = Math.sqrt(2 * m * E) / hbar;
+                omega_src = (hbar * k_src * k_src) / (2 * m);
+                denomAlpha = 1 + (k_src * dx) * (k_src * dx);
+                alpha_r = 1 / denomAlpha;
+                alpha_i = (k_src * dx) / denomAlpha;
+            }
+
+            const C = (hbar * dt) / (4 * m * dx * dx);
 
             for (let it = 0; it < steps; it++) {
                 const t_next = t + dt;
 
-                const rightTheta = k * dx - omega * dt;
-                const cosR = Math.cos(rightTheta);
-                const sinR = Math.sin(rightTheta);
-                Re2[N-1] = Re1[N-2] * cosR - Im1[N-2] * sinR;
-                Im2[N-1] = Im1[N-2] * cosR + Re1[N-2] * sinR;
+                // ---------------------------------------------------------
+                // 1. RIGHT BOUNDARY (Shared: Implicit Outgoing k)
+                // ---------------------------------------------------------
+                let rrR = Re1[N-2]*Re1[N-3] + Im1[N-2]*Im1[N-3];
+                let riR = Im1[N-2]*Re1[N-3] - Re1[N-2]*Im1[N-3];
+                let magR = Math.hypot(rrR, riR);
 
-                const num1 = 2 * k * k * dx * dx * Math.cos(omega * t_next);
-                const num2 = 2 * k * dx * Math.sin(omega * t_next);
-                const num3 = 2 * k * k * dx * dx * Math.sin(omega * t_next);
-                const num4 = 2 * k * dx * Math.cos(omega * t_next);
-                const S_r = (num1 - num2) / denomAlpha;
-                const S_i = (-num3 - num4) / denomAlpha;
+                let cR = 1, sR = 0; 
+                if (magR > 1e-12 && riR > 0) { cR = rrR/magR; sR = riR/magR; } 
+                const klocR = Math.atan2(sR, cR) / dx;
+                const omR = hbar * klocR * klocR / (2*m);
+                const thR = klocR * dx - omR * dt;
+                
+                Re2[N-1] = Re1[N-2]*Math.cos(thR) - Im1[N-2]*Math.sin(thR);
+                Im2[N-1] = Im1[N-2]*Math.cos(thR) + Re1[N-2]*Math.sin(thR);
 
+                // ---------------------------------------------------------
+                // 2. LEFT BOUNDARY PRE-CALCULATION
+                // ---------------------------------------------------------
+                let S_r = 0, S_i = 0;
+                if (isGunOn) {
+                    // Gun ON: Analytical source injection
+                    const num1 = 2 * k_src * k_src * dx * dx * Math.cos(omega_src * t_next);
+                    const num2 = 2 * k_src * dx * Math.sin(omega_src * t_next);
+                    const num3 = 2 * k_src * k_src * dx * dx * Math.sin(omega_src * t_next);
+                    const num4 = 2 * k_src * dx * Math.cos(omega_src * t_next);
+                    S_r = (num1 - num2) / denomAlpha;
+                    S_i = (-num3 - num4) / denomAlpha;
+                } else {
+                    // Gun OFF: Implicit Leftward outgoing κ
+                    let rrL = Re1[1]*Re1[2] + Im1[1]*Im1[2];
+                    let riL = Im1[1]*Re1[2] - Re1[1]*Im1[2];
+                    let magL = Math.hypot(rrL, riL);
+
+                    let cL = 1, sL = 0; 
+                    if (magL > 1e-12 && riL > 0) { cL = rrL/magL; sL = riL/magL; } 
+                    const kappa = Math.atan2(sL, cL) / dx;
+                    const omL = hbar * kappa * kappa / (2*m);
+                    const thL = kappa * dx - omL * dt;
+                    
+                    Re2[0] = Re1[1]*Math.cos(thL) - Im1[1]*Math.sin(thL);
+                    Im2[0] = Im1[1]*Math.cos(thL) + Re1[1]*Math.sin(thL);
+                }
+
+                // ---------------------------------------------------------
+                // 3. CONSTRUCT RHS VECTOR
+                // ---------------------------------------------------------
                 for (let j = 0; j < N_sys; j++) {
                     const idx = j + 1;
                     const W_idx = 2 * C + (dt / (2 * hbar)) * V[idx];
@@ -618,14 +737,28 @@
                     R_i[j] = Im1[idx] - W_idx * Re1[idx] + C * (Re1[idx-1] + Re1[idx+1]);
                 }
 
-                R_r[0] = R_r[0] - C * S_i;
-                R_i[0] = R_i[0] + C * S_r;
+                // Patch Boundaries into RHS
+                if (isGunOn) {
+                    R_r[0] = R_r[0] - C * S_i;
+                    R_i[0] = R_i[0] + C * S_r;
+                } else {
+                    R_r[0] = R_r[0] - C * Im2[0];
+                    R_i[0] = R_i[0] + C * Re2[0];
+                }
                 R_r[N_sys-1] = R_r[N_sys-1] - C * Im2[N-1];
                 R_i[N_sys-1] = R_i[N_sys-1] + C * Re2[N-1];
 
+                // ---------------------------------------------------------
+                // 4. THOMAS ALGORITHM (FORWARD SWEEP)
+                // ---------------------------------------------------------
                 const W_1 = 2 * C + (dt / (2 * hbar)) * V[1];
-                const diag0_r = 1 + C * alpha_i;
-                const diag0_i = W_1 - C * alpha_r;
+                let diag0_r = 1.0;
+                let diag0_i = W_1;
+                
+                if (isGunOn) {
+                    diag0_r = 1 + C * alpha_i;
+                    diag0_i = W_1 - C * alpha_r;
+                }
                 
                 let den = diag0_r * diag0_r + diag0_i * diag0_i;
                 Cp_r[0] = (-C * diag0_i) / den;
@@ -648,6 +781,9 @@
                     Dp_i[j] = (R_new_i * denom_r - R_new_r * denom_i) / den;
                 }
 
+                // ---------------------------------------------------------
+                // 5. BACK SUBSTITUTION
+                // ---------------------------------------------------------
                 Re2[N-2] = Dp_r[N_sys-1];
                 Im2[N-2] = Dp_i[N_sys-1];
                 
@@ -659,8 +795,14 @@
                     Im2[idx] = Dp_i[j] - sub_i;
                 }
 
-                Re2[0] = alpha_r * Re2[1] - alpha_i * Im2[1] + S_r;
-                Im2[0] = alpha_r * Im2[1] + alpha_i * Re2[1] + S_i;
+                // ---------------------------------------------------------
+                // 6. FINALIZE & FLIP BUFFERS
+                // ---------------------------------------------------------
+                // Overwrite Left Boundary if Gun is explicitly ON
+                if (isGunOn) {
+                    Re2[0] = alpha_r * Re2[1] - alpha_i * Im2[1] + S_r;
+                    Im2[0] = alpha_r * Im2[1] + alpha_i * Re2[1] + S_i;
+                }
 
                 for (let i = 0; i < N; i++) {
                     Re1[i] = Re2[i]; 
@@ -669,6 +811,7 @@
                 t = t_next;
             }
         }
+
 
         function mapX(i) { return (i / (N - 1)) * canvas.width; }
         function mapY(val) {
@@ -697,11 +840,10 @@
 
         function drawGlowingPath(dataY) {
             ctx.beginPath();
-            ctx.strokeStyle = '#00ffcc'; // Green core line
-            ctx.lineWidth = 3.0; // Thicker than the 1.5 Re/Im lines
+            ctx.strokeStyle = '#00ffcc';
+            ctx.lineWidth = 3.0;
             ctx.setLineDash([]);
             
-            // White Halo Glow
             ctx.shadowBlur = 12;
             ctx.shadowColor = '#ffffff';
 
@@ -712,7 +854,7 @@
                 else ctx.lineTo(px, py);
             }
             ctx.stroke();
-            ctx.shadowBlur = 0; // Reset
+            ctx.shadowBlur = 0;
         }
 
         function render() {
@@ -724,7 +866,6 @@
             ctx.moveTo(0, mapY(0)); ctx.lineTo(canvas.width, mapY(0)); ctx.stroke();
 
             // Render Potential
-            // color '#666' too dim
             drawPath(i => V[i] * 2, '#E02010', true, 2);
             
             // Render Wavefunctions
@@ -740,7 +881,9 @@
         }
 
         function animate() {
-            if (isPlaying) physicsStep();
+            if (isPlaying) {
+                physicsStep();
+            }
             render();
             animationId = requestAnimationFrame(animate);
         }
@@ -754,16 +897,6 @@
         document.getElementById('btnReset').addEventListener('click', resetSimulation);
         inputs.dx.addEventListener('change', resetSimulation);
         inputs.dt.addEventListener('change', resetSimulation);
-
-        /*
-        // Detect mobile/tablets by checking for touch capability or small screens
-        const isTouchScreen = (navigator.maxTouchPoints > 0) || window.matchMedia("(pointer: coarse)").matches;
-
-        if (isTouchScreen || window.innerWidth <= 950) {
-            inputs.dt.value = "0.0005"; 
-            inputs.steps.value = "100"; // Lower steps keeps the animation speed normal
-        }
-        // ------------------------------- */
 
         buildPotential();
         animate();
