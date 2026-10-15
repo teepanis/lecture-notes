@@ -17,13 +17,13 @@
 5. ตัวอย่างใช้ Wolfram Alpha ช่วยทางแคลคูลัส [ψ(x) Normalization](https://www.wolframalpha.com/input?i=integrate+sin%28n+pi+x+%2F+L%29%5E2+dx+from+0+to+L+assuming+n+is+an+integer)
 
 ## คาบ 3 - 14 ตุลาคม 2569
-1. ออกแบบโมเลกุลด้วยควอนตัม
+1. ออกแบบโมเลกุลด้วยควอนตัม [Design](https://teepanis.github.io/lecture-notes/quantum/quantum_03_molecular_design.html)
 2. Tranmission Coefficients (Tunnelling)
 3. Complex Plane Wave - [Python Code](https://github.com/teepanis/lecture-notes/blob/main/quantum/quantum_01.md)
 
 ## คาบ 4 - 15 ตุลาคม 2569
 1. Time Dependent System and Superposition
-2. Moving Particle in a Box - [Python Code](https://github.com/teepanis/lecture-notes/blob/main/quantum/quantum_03.md)
+2. Moving Particle in a Box - [Python Code](https://github.com/teepanis/lecture-notes/blob/main/quantum/quantum_04.md)
 3. Eigen State Transition with Perturbation & Fermi Golden Rule
 4. How Laser Works in Depth [PhET Simulation](https://phet.colorado.edu/en/simulations/lasers)
 
