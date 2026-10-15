@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WPF8ZSY4NQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('config', 'G-WPF8ZSY4NQ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 02 Particle in a Box</title>
+
+    <!-- Import Thai-friendly Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+
+
+    <!-- MathJax for rendering equations -->
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['[', ']']],
+            tags: 'ams'
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-panel: #131b2e;
+            --border-color: #1e293b;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /*
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }*/
+
+        h1 { 
+            margin-top: 0; 
+            margin-bottom: 15px; 
+            font-weight: 400; 
+            letter-spacing: 0.5px; 
+            color: #ffffff; 
+            text-align: center;
+            font-family: 'Sarabun', sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+
+        .content-panel {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7); 
+            max-width: 1250px;
+            width: 100%;
+            margin-top: 20px;
+            box-sizing: border-box;
+            line-height: 1.6;
+            font-size: 18px;
+            font-family: 'Sarabun', sans-serif; 
+            color: #111111;
+        }
+        .content-panel p {
+            margin-bottom: 15px;
+        }
+
+        .content-panel h2 {
+            color: #0078d7; 
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #eeeeee;
+            padding-bottom: 8px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1250px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background-color: #070913;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .overlay-eq {
+            background: rgba(19, 27, 46, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            width: 100%;
+            text-align: center;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            width: 390px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary { background-color: var(--accent-blue); color: white; flex: 1; }
+        .btn-danger { background-color: var(--accent-red); color: white; flex: 1; }
+        .btn-success { background-color: var(--accent-green); color: white; width: 100%; }
+        .btn-secondary { background-color: #374151; color: white; flex: 1; }
+        .btn-action { background-color: #1e293b; border: 1px solid var(--border-color); color: var(--text-main); flex: 1; font-size: 0.85rem; padding: 6px; }
+        .btn-action:hover { background-color: #334155; }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            width: 100%;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-blue);
+        }
+
+        .control-group input[type="number"], .control-group select {
+            background: #070913;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .radio-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .radio-row label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2px 0;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #070913;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-value {
+            font-family: monospace;
+            color: var(--accent-green);
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 3px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>อนุภาคในกล่อง − Particle in a Box</h1>
+
+    <div class="container">
+        <!-- Canvas Graphic Panel -->
+        <div class="canvas-container">
+            <div class="overlay-eq" id="equationDisplay">
+                $$\Psi(x,t) = A \psi(x) e^{-iEt/\hbar}$$
+            </div>
+            <canvas id="simCanvas" width="760" height="460"></canvas>
+            <div class="legend" id="simLegend">
+                <div class="legend-item"><div class="legend-color" style="background:var(--accent-green);"></div> $\vert{}\Psi\vert{}^2$</div>
+                <div class="legend-item"><div class="legend-color" style="background:var(--accent-blue);"></div> $\text{Re}(\Psi)$</div>
+                <div class="legend-item"><div class="legend-color" style="background:var(--accent-orange);"></div> $\text{Im}(\Psi)$</div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <!-- Simulation Play/Reset -->
+            <div class="btn-group">
+                <button id="playBtn" class="btn-primary">Pause</button>
+                <button id="resetBtn" class="btn-danger">Reset</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- System Parameters: m and L -->
+            <div style="display: flex; gap: 10px;">
+                <div class="control-group" style="flex: 1;">
+                    <div class="control-label-row"><span>Mass ($m$)</span></div>
+                    <input type="number" id="massInput" value="1.0" step="0.1" min="0.1">
+                </div>
+                <div class="control-group" style="flex: 1;">
+                    <div class="control-label-row"><span>Box Width ($L$)</span></div>
+                    <input type="number" id="lengthInput" value="2.0" step="0.5" min="1.0">
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Candidate Solutions Radio (Exclusive Selection) -->
+            <div class="control-group">
+                <div class="control-label-row"><span>Candidate Solution</span></div>
+                <div class="radio-row">
+                    <label><input type="radio" name="solType" id="radCosine"> Cosine</label>
+                    <label><input type="radio" name="solType" id="radSine" checked> Sine</label>
+                    <label><input type="radio" name="solType" id="radPlane"> Plane Wave</label>
+                </div>
+            </div>
+
+            <!-- Amplitude A Slider -->
+            <div class="control-group">
+                <div class="control-label-row">
+                    <span>Amplitude ($A$)</span>
+                    <span id="valA">1.00</span>
+                </div>
+                <input type="range" id="sliderA" min="0.1" max="2.0" step="0.01" value="1.00">
+            </div>
+
+            <!-- Wave Number k Slider -->
+            <div class="control-group">
+                <div class="control-label-row">
+                    <span>Wave Number ($k$)</span>
+                    <span id="valK">1.571</span>
+                </div>
+                <input type="range" id="sliderK" min="0.0" max="3.5" step="0.005" value="1.571">
+            </div>
+
+            <!-- Auto-k and Auto-A Action Buttons -->
+            <div class="btn-group">
+                <button id="btnAutoK" class="btn-action">Auto-$k$</button>
+                <button id="btnAutoA" class="btn-action">Auto-$A$</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Animation Speed Parameters -->
+            <div style="display: flex; gap: 10px;">
+                <div class="control-group" style="flex: 1;">
+                    <div class="control-label-row"><span>Time step ($dt$)</span></div>
+                    <input type="number" id="dtInput" value="0.0005" step="0.0001" min="0.0001">
+                </div>
+                <div class="control-group" style="flex: 1;">
+                    <div class="control-label-row"><span>Steps / Frame</span></div>
+                    <input type="number" id="stepsInput" value="100" step="1" min="1">
+                </div>
+            </div>
+
+            <!-- Eigen Only Summary Button -->
+            <button id="eigenBtn" class="btn-success">Eigen Only ($n = 1, 2, 3$)</button>
+
+            <!-- Information Box -->
+            <div class="info-box">
+                <div class="info-row">
+                    <span>Energy ($E$):</span>
+                    <span class="info-value" id="infoEnergy">0.0000 Hartree (0.00 eV)</span>
+                </div>
+                <div class="info-row">
+                    <span>Normalization ($\int_0^L \vert{}\Psi\vert{}^2 dx$):</span>
+                    <span class="info-value" id="infoNorm">1.0000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW MathJax Content Panel -->
+    <div class="content-panel">
+        <p>โดย รศ.ดร.ทีปานิส ชาชิโย − Teepanis Chachiyo &lt;teepanisc@nu.ac.th&gt;<br>
+        ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร<br>
+        🛜 Facebook: <a href="https://web.facebook.com/teepanis.chachiyo">https://web.facebook.com/teepanis.chachiyo</a>
+        </p>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Simulation State
+        let isRunning = true;
+        let eigenOnlyMode = false;
+        let t = 0.0;
+
+        // Parameters
+        let m = 1.0;
+        let L = 2.0;
+        let A = 1.0;
+        let k = Math.PI / L; // Initial n=1 sine wave
+
+        let dt = 0.0005;
+        let stepsPerFrame = 100;
+
+        // UI Elements
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const eigenBtn = document.getElementById('eigenBtn');
+        const massInput = document.getElementById('massInput');
+        const lengthInput = document.getElementById('lengthInput');
+        const sliderA = document.getElementById('sliderA');
+        const valA = document.getElementById('valA');
+        const sliderK = document.getElementById('sliderK');
+        const valK = document.getElementById('valK');
+        const radCosine = document.getElementById('radCosine');
+        const radSine = document.getElementById('radSine');
+        const radPlane = document.getElementById('radPlane');
+        const btnAutoK = document.getElementById('btnAutoK');
+        const btnAutoA = document.getElementById('btnAutoA');
+        const dtInput = document.getElementById('dtInput');
+        const stepsInput = document.getElementById('stepsInput');
+        const infoEnergy = document.getElementById('infoEnergy');
+        const infoNorm = document.getElementById('infoNorm');
+        const equationDisplay = document.getElementById('equationDisplay');
+        const simLegend = document.getElementById('simLegend');
+
+        // MathJax Equation Update Function
+        function updateEquationText() {
+            if (eigenOnlyMode) {
+                equationDisplay.innerHTML = `$$\\text{Eigenstates: } \\psi_n(x) = \\sqrt{\\frac{2}{L}} \\sin\\left(\\frac{n\\pi x}{L}\\right), \\quad E_n = \\frac{n^2 \\pi^2}{2mL^2}$$`;
+            } else {
+                let spatial = "\\sin(kx)";
+                if (radCosine.checked) spatial = "\\cos(kx)";
+                if (radPlane.checked) spatial = "e^{ikx}";
+                
+                equationDisplay.innerHTML = `$$\\Psi(x,t) = \\underbrace{A ${spatial}}_{\\psi(x)}\\, e^{-iEt/\\hbar}$$`;
+            }
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([equationDisplay]).catch(() => {});
+            }
+        }
+
+        // Event Listeners
+        playBtn.addEventListener('click', () => {
+            isRunning = !isRunning;
+            playBtn.textContent = isRunning ? 'Pause' : 'Play';
+            playBtn.className = isRunning ? 'btn-primary' : 'btn-secondary';
+        });
+
+        resetBtn.addEventListener('click', () => {
+            t = 0.0;
+            eigenOnlyMode = false;
+            eigenBtn.textContent = 'Eigen Only (n = 1, 2, 3)';
+            eigenBtn.className = 'btn-success';
+            simLegend.style.display = 'flex';
+            btnAutoK.disabled = false;
+            updateEquationText();
+        });
+
+        eigenBtn.addEventListener('click', () => {
+            eigenOnlyMode = !eigenOnlyMode;
+            if (eigenOnlyMode) {
+                eigenBtn.textContent = 'Back to Custom Wave';
+                eigenBtn.className = 'btn-primary';
+                simLegend.style.display = 'flex'; // kept flex so legend for Psi^2, Re, Im is visible
+                btnAutoK.disabled = true;
+            } else {
+                eigenBtn.textContent = 'Eigen Only (n = 1, 2, 3)';
+                eigenBtn.className = 'btn-success';
+                simLegend.style.display = 'flex';
+                btnAutoK.disabled = false;
+            }
+            updateEquationText();
+        });
+
+        massInput.addEventListener('input', (e) => {
+            m = Math.max(0.1, parseFloat(e.target.value) || 1.0);
+            updateKSliderRange();
+        });
+
+        lengthInput.addEventListener('input', (e) => {
+            L = Math.max(1.0, parseFloat(e.target.value) || 10.0);
+            updateKSliderRange();
+        });
+
+        sliderA.addEventListener('input', (e) => {
+            A = parseFloat(e.target.value);
+            valA.textContent = A.toFixed(2);
+        });
+
+        sliderK.addEventListener('input', (e) => {
+            k = parseFloat(e.target.value);
+            valK.textContent = k.toFixed(3);
+        });
+
+        btnAutoK.addEventListener('click', () => {
+            const n = Math.max(1, Math.round(k * L / Math.PI));
+            if (radCosine.checked) {
+                const nCos = Math.max(1, Math.round(k * L / Math.PI + 0.5));
+                k = (nCos - 0.5) * Math.PI / L;
+            } else if (radSine.checked) {
+                k = n * Math.PI / L;
+            }
+            sliderK.value = k;
+            valK.textContent = k.toFixed(3);
+        });
+
+        btnAutoA.addEventListener('click', () => {
+            if (radSine.checked || radCosine.checked) {
+                A = Math.sqrt(2.0 / L);
+            } else {
+                A = 1.0 / Math.sqrt(L);
+            }
+            sliderA.value = A;
+            valA.textContent = A.toFixed(2);
+        });
+
+        dtInput.addEventListener('input', (e) => {
+            dt = Math.max(0.0001, parseFloat(e.target.value) || 0.0005);
+        });
+
+        stepsInput.addEventListener('input', (e) => {
+            stepsPerFrame = Math.max(1, parseInt(e.target.value) || 100);
+        });
+
+        [radCosine, radSine, radPlane].forEach(rad => {
+            rad.addEventListener('change', () => {
+                btnAutoK.disabled = radPlane.checked;
+                updateEquationText();
+            });
+        });
+
+        function updateKSliderRange() {
+            sliderK.max = (5.0 * Math.PI / L).toFixed(2);
+        }
+
+        function getWavefunction(x, time) {
+            let re = 0;
+            let im = 0;
+            const E = (k * k) / (2.0 * m);
+            const phase = -E * time;
+            const cosPhase = Math.cos(phase);
+            const sinPhase = Math.sin(phase);
+
+            if (radCosine.checked) {
+                const psiSpatial = A * Math.cos(k * x);
+                re += psiSpatial * cosPhase;
+                im += psiSpatial * (-sinPhase);
+            } else if (radSine.checked) {
+                const psiSpatial = A * Math.sin(k * x);
+                re += psiSpatial * cosPhase;
+                im += psiSpatial * (-sinPhase);
+            } else if (radPlane.checked) {
+                const angle = k * x + phase;
+                re += A * Math.cos(angle);
+                im += A * Math.sin(angle);
+            }
+
+            return { re, im, prob: re * re + im * im, E };
+        }
+
+        // Main Animation Loop
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (eigenOnlyMode) {
+                drawEigenOnly();
+            } else {
+                drawCustomSimulation();
+            }
+
+            if (isRunning) {
+                for (let s = 0; s < stepsPerFrame; s++) {
+                    t += dt;
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        function drawCustomSimulation() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 50;
+            const plotWidth = width - 2 * margin;
+            const plotHeight = height - 2 * margin;
+            const centerY = height / 2;
+
+            const x0Pix = margin;
+            const xLPix = margin + (L / (L * 1.2)) * plotWidth;
+
+            // Potential Infinite Walls
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(x0Pix, margin); ctx.lineTo(x0Pix, height - margin);
+            ctx.moveTo(xLPix, margin); ctx.lineTo(xLPix, height - margin);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Axis
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(margin, centerY);
+            ctx.lineTo(width - margin, centerY);
+            ctx.stroke();
+
+            const numPoints = 400;
+            const dxGrid = L / numPoints;
+            const points = [];
+
+            for (let i = 0; i <= numPoints; i++) {
+                const x = i * dxGrid;
+                const wf = getWavefunction(x, t);
+                points.push({ x, ...wf });
+            }
+
+            // Fixed scaling dependent on amplitude A to prevent clipping bugs
+            const scaleY = plotHeight * 0.35 / Math.max(A, 0.2);
+
+            let normIntegral = 0;
+            for (let i = 0; i < points.length; i++) {
+                const weight = (i === 0 || i === numPoints) ? 0.5 : 1.0;
+                normIntegral += points[i].prob * dxGrid * weight;
+            }
+
+            const currentE = (k * k) / (2.0 * m);
+            const energyEV = currentE * 27.211386;
+
+            infoEnergy.textContent = `${currentE.toFixed(5)} Hartree (${energyEV.toFixed(2)} eV)`;
+            infoNorm.textContent = normIntegral.toFixed(4);
+
+            // Re(Psi) - Blue
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            points.forEach((p, idx) => {
+                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const py = centerY - p.re * scaleY;
+                if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
+
+            // Im(Psi) - Orange
+            ctx.strokeStyle = '#f97316';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            points.forEach((p, idx) => {
+                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const py = centerY - p.im * scaleY;
+                if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
+
+            // |Psi|^2 - Green with white glow
+            ctx.save();
+            ctx.shadowColor = '#10b981';
+            ctx.shadowBlur = 12;
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            points.forEach((p, idx) => {
+                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const py = centerY - p.prob * scaleY;
+                if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
+            ctx.restore();
+
+            // Labels for edges
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '12px sans-serif';
+            ctx.fillText('x = 0', x0Pix - 15, height - margin + 20);
+            ctx.fillText('x = L (' + L.toFixed(1) + ')', xLPix - 20, height - margin + 20);
+        }
+
+        function drawEigenOnly() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const plotWidth = width - 2 * margin;
+
+            infoEnergy.textContent = "Eigenstates (n = 1, 2, 3)";
+            infoNorm.textContent = "1.0000";
+
+            // States: n = 3 (top), n = 2 (middle), n = 1 (bottom)
+            const states = [3, 2, 1];
+            
+            // Proportional energy spacing based on n^2 (1, 4, 9)
+            const spanHeight = height - 80;
+
+            states.forEach((n) => {
+                let relativeOffset = 0;
+                if (n === 1) relativeOffset = 1 / 14;
+                else if (n === 2) relativeOffset = (1 + 4) / 14;
+                else if (n === 3) relativeOffset = (1 + 4 + 9) / 14;
+
+                const baseY = height - margin - relativeOffset * spanHeight;
+                const kn = (n * Math.PI) / L;
+                const En = (kn * kn) / (2.0 * m);
+                const An = Math.sqrt(2.0 / L);
+
+                // White Energy Reference Line with glow
+                ctx.save();
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(margin, baseY);
+                ctx.lineTo(width - margin, baseY);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.fillStyle = '#f3f4f6';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText(`n = ${n}  (E = ${En.toFixed(3)} Ha)`, margin, baseY - 8);
+
+                const numPoints = 300;
+                const dxGrid = L / numPoints;
+                const points = [];
+                const phase = -En * t;
+                const cosP = Math.cos(phase);
+                const sinP = Math.sin(phase);
+
+                for (let i = 0; i <= numPoints; i++) {
+                    const x = i * dxGrid;
+                    const psi = An * Math.sin(kn * x);
+                    const re = psi * cosP;
+                    const im = -psi * sinP;
+                    const prob = psi * psi;
+                    points.push({ x, re, im, prob });
+                }
+
+                const scaleY = 35;
+
+                // Re(Psi) - Blue
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                points.forEach((p, idx) => {
+                    const px = margin + (p.x / L) * plotWidth;
+                    const py = baseY - p.re * scaleY;
+                    if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+
+                // Im(Psi) - Orange
+                ctx.strokeStyle = '#f97316';
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                points.forEach((p, idx) => {
+                    const px = margin + (p.x / L) * plotWidth;
+                    const py = baseY - p.im * scaleY;
+                    if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+
+                // |Psi|^2 - Green with white glow
+                ctx.save();
+                ctx.shadowColor = '#10b981';
+                ctx.shadowBlur = 10;
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                points.forEach((p, idx) => {
+                    const px = margin + (p.x / L) * plotWidth;
+                    const py = baseY - p.prob * scaleY;
+                    if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+                ctx.restore();
+            });
+        }
+
+        // Initialize defaults
+        updateKSliderRange();
+        updateEquationText();
+        requestAnimationFrame(draw);
+    </script>
+</body>
+</html>
