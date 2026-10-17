@@ -11,6 +11,8 @@
 3. [Box](https://teepanis.github.io/lecture-notes/quantum/quantum_02_box.html) Particle in a Box นี้เป็นโจทย์ที่นักเรียนทุกคนต้องทำในวิชาควอนตัม ตัว Simulation ออกแบบให้นักเรียนเข้าใจแนวคิดของ Boundary Condition และ Normalization Condition ได้ชัดเจนขึ้น  
 4. [Design](https://teepanis.github.io/lecture-notes/quantum/quantum_03_molecular_design.html) ออกแบบโมเลกุล นี้เป็นการประยุกต์แนวคิดของ Particle in a Box มาใช้ออกแบบโมเลกุลทางเคมี การคำนวณนั้นให้ผลลัพธ์แม่นตรงกับโปรแกรมระดับงานวิจัยเช่น GAMESS หรือ Siam Quantum 2 (https://doi.org/10.1063/5.0310183) เพียงท่านบอกนักเรียนว่า ให้เลื่อนระยะ \$R\$ จนกว่าจะได้พลังงานต่ำสุด เราก็สามารถทำนายหรือออกแบบโมเลกุล $H_2$ ได้ด้วยควอนตัม 
 
+![The First Quantum Bootcamp](first_quantum_bootcamp.jpg)
+
 ## คาบ 1 - 12 ตุลาคม 2569
 บรรยายบนกระดานเป็นหลัก โดยมี animation ประกอบ
 1. ฟิสิกส์คลาสสิก กลายเป็น ควอนตัม อย่างไร? [Classic](https://teepanis.github.io/lecture-notes/quantum/quantum_01_classic.html)
