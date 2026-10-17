@@ -2,6 +2,15 @@
 
 สวัสดีครับ ติวควอนตัมเบื้องต้น เราจะเรียน 5 คาบด้วยกัน เริ่มเวลา 21:30 น. ห้อง SC5-217 ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร
 
+## รวม Simulation สำหรับห้องเรียน
+
+นี้เป็นการแก้สมการ __ออกมาโดยตรง__ ไม่ใช่ภาพเคลื่อนไหวเพื่อแสดงแนวคิดเท่านั้น ทั้งนี้เพื่อให้เรามั่นใจว่า สิ่งที่นำมาแสดง เป็นปรากฏการณ์จริง ที่เกิดขึ้นหากนักเรียนสามารถเข้าไปอยู่ในโลกของควอนตัม
+
+1. [Classic](https://teepanis.github.io/lecture-notes/quantum/quantum_01_classic.html) นำเข้าสู่เนื้อหาว่า ควอนตัม เริ่มเข้ามามีบทบาทอย่างไร 
+2. [Tunnelling](https://teepanis.github.io/lecture-notes/quantum/quantum_01_tunnelling.html) แสดงปรากฏการณ์ทะลวงผ่านของควอนตัม และนำเสนอสมการ Time Dependent Schrödinger และใหันักเรียนได้เห็นผลลัพธ์ของสมการ โดยยังไม่ต้องใช้คณิตศาสคร์แก้ออกมาด้วยตนเอง  
+3. [Box](https://teepanis.github.io/lecture-notes/quantum/quantum_02_box.html) Particle in a Box นี้เป็นโจทย์ที่นักเรียนทุกคนต้องทำในวิชาควอนตัม ตัว Simulation ออกแบบให้นักเรียนเข้าใจแนวคิดของ Boundary Condition และ Normalization Condition ได้ชัดเจนขึ้น  
+4. [Design](https://teepanis.github.io/lecture-notes/quantum/quantum_03_molecular_design.html) ออกแบบโมเลกุล นี้เป็นการประยุกต์แนวคิดของ Particle in a Box มาใช้ออกแบบโมเลกุลทางเคมี การคำนวณนั้นให้ผลลัพธ์แม่นตรงกับโปรแกรมระดับงานวิจัยเช่น GAMESS หรือ Siam Quantum 2 (https://doi.org/10.1063/5.0310183) เพียงท่านบอกนักเรียนว่า ให้เลื่อนระยะ \$R\$ จนกว่าจะได้พลังงานต่ำสุด เราก็สามารถทำนายหรือออกแบบโมเลกุล $H_2$ ได้ด้วยควอนตัม 
+
 ## คาบ 1 - 12 ตุลาคม 2569
 บรรยายบนกระดานเป็นหลัก โดยมี animation ประกอบ
 1. ฟิสิกส์คลาสสิก กลายเป็น ควอนตัม อย่างไร? [Classic](https://teepanis.github.io/lecture-notes/quantum/quantum_01_classic.html)
