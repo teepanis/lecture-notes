@@ -9,9 +9,9 @@
     gtag('config', 'G-WPF8ZSY4NQ');
     </script>
 
+    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 02 Particle in a Box</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teepanis Chachiyo: Lecture Notes -- Quantum 02 Particle in a Box</title>
 
     <!-- Import Thai-friendly Google Fonts: Prompt & Sarabun -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -141,6 +141,9 @@
         canvas {
             background-color: #070913;
             border-radius: 8px;
+            width: 100%;          /* Makes the graph panel scalable */
+            max-width: 800px;     /* Reduces the default panel width slightly (was 760px) */
+            height: auto;
             display: block;
         }
 
@@ -404,6 +407,109 @@
         🛜 Facebook: <a href="https://web.facebook.com/teepanis.chachiyo">https://web.facebook.com/teepanis.chachiyo</a>
         </p>
 
+        <h2>คำตอบของสมการ</h2>
+
+        <p>พิจารณาอนุภาคมวล $m$ อยู่ภายในบ่อศักย์สูงอนันต์ ความกว้าง $L$ ดังแสดงในภาพ &nbsp; ภายบ่อศักย์ปราศจากแรงกระทำกับอนุภาคดังนั้น ในบริเวณนี้ $V(x) = 0$
+            ดังนั้นเราเขียนสมการ Time Independent Schrödinger เพื่อหาสภาวะคงตัวของระบบ (Steady State) ได้ว่า</p>
+
+        \begin{equation}
+        -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} \psi(x) = E \psi(x)
+        \end{equation}
+
+        <p>เพื่อแก้สมการหาฟังก์ชัน $\psi(x)$ และค่าพลังงาน $E$ เราจัดรูปสมการเพื่อให้เห็นเค้าลางของผลเฉลยได้ดียิ่งขึ้น</p>
+
+        \begin{equation}
+        \frac{\partial^2}{\partial x^2} \psi(x) = -\frac{2 m E}{\hbar^2} \psi(x)
+        \end{equation}
+
+        <p>จากตรงนี้เราเห็นว่า ฟังก์ชันที่อนุพันธ์อันดับสองของมัน ยังกลับมาได้ตัวมันเอง (ติดลบ) มีคำตอบที่เป็นไปได้อยู่ 3 แบบ ก็คือ</p>
+
+        \begin{equation}
+        \text{Candidate}: \begin{cases} \psi(x) = A \cos(k x) \\  \psi(x) = A \sin(k x) \\ \psi(x) = A e^{i k x}\end{cases}
+        \end{equation}
+
+        <p>ในปุ่มตัวเลือกข้างบน เราสามารถเลือกวาดกราฟของ Candidate ทั้ง 3 นักเรียนคิดว่าฟังก์ชันใดคือตำตอบ? ในกรณีนี้</p>
+
+
+        <h2>เงื่อนไขขอบเขต</h2>
+        <p>ในการหาคำตอบของสมการอนุพันธ์ที่ใช้ในทางฟิสิกส์หรือวิศวกรรม มีสมการอย่างเดียวนั้น <u>ไม่เพียงพอ</u> จำเป็นต้องใช้สิ่งที่เรียกว่า เงื่อนไขขอบเขต
+        (Boundary Condition) เข้ามาประกอบ</p>
+
+        <p>ยกตัวอย่างเช่น การแก้สมการการเคลื่อนที่ตามกฏของนิวตัน การมีสมการ $\Sigma F = m a$ นั้น ไม่อาจทำนายการเคลื่อนที่ได้สมบูรณ์ 
+        เราต้องทราบ พิกัดเริ่มต้น $x_0$ และ ความเร็วต้น $v_0$ &nbsp; นี้เป็นเงื่อนไขเชิงเวลา เรียกว่า Initial Condition</p>
+
+        <p>ในกรณีของโจทย์ข้อนี้ เนื่องจากกำหนดไว้แต่แรกว่า บ่อศักย์สูงอนันต์ ทำให้อนุภาคไม่มีทางออกไปนอกกล่องได้ ดังนั้น ความน่าจะเป็นที่จะพบอนุภาค
+        ในบริเวณนอกกล่อง รวมทั้งขอบซ้ายขวาของกล่อง ต้องเป็นศูนย์ด้วย เราเขียนในทางคณิตศาสตร์ได้ว่า
+
+        \begin{equation}
+        \text{Boundary Condition}: \quad \psi(0) = 0, \; \psi(L) = 0
+        \end{equation}
+
+        <p>ด้วยเงื่อนไขขอบทางซ้ายมือ เราบอกได้ทันทีว่า</p>
+
+        \begin{equation}
+        \psi(x) = A \sin(k x)
+        \end{equation}
+
+        <p>เท่านั้น ที่สอดคล้องกับ Boundary Condition ณ​ ขอบกล่องทางซ้ายมือ</p>
+
+        <h2>ขอบทางขวามือ</h2>
+
+        <p>เรายังเหลือค่า $k$ ที่จะต้องคำนวณหาค่าออกมาให้ชัดเจน &nbsp; ลองเปลี่ยนค่า $k$ ช้า ๆ ในตัวเลื่อนข้างต้น นักเรียนสังเกตเส้นกราฟ
+            ด้านขวาที่เกิดขึ้น อย่างไร?</p>
+
+        <p>เมื่อค่า $k$ ไม่เหมาะสม มันจะทำให้ $\psi(x)$ ไม่ปักลง ณ​ ค่า $\psi(L) = 0$ พอดี แต่จะขาดบ้าง เกินบ้าง &nbsp; 
+            นี้เองคือเงื่อนไขที่เราจะใช้เป็นเงื่อนไขในการหาค่า $k$ ที่ทำให้ Boundary Condition ของขอบด้านขวามือเป็นจริง</p>
+
+        <p>เนื่องจาก เรากำลังพิจารณา ณ​ ตำแหน่ง $x = L$ เราสร้างเงื่อนไขได้ว่า</p>
+
+        \begin{equation}
+        \psi(L) = 0 = A \sin(k L)
+        \end{equation}
+
+        <p>เนื่องจากลักษณะของฟังก์ชัน sine มุมภายในฟังก์ชันจะเป็นศูนย์ก็ต่อเมื่อ $\theta = 0, \pi, 2 \pi, 3 \pi, \cdots, n \pi $
+        ดังนั้นเราเขียนเป็นสมการได้ว่า</p>
+
+        \begin{equation}
+            k L = n \pi \Longrightarrow k = \frac{n \pi}{L}, \; n \in \{1,2,3,\cdots \}
+        \end{equation}
+
+        <p>เมื่อทราบค่า $k$ ดังนี้แล้ว เราเขียนคำตอบให้สมบูรณ์ขึ้นได้เป็น</p>
+
+        \begin{equation}
+        \psi(x) = A \sin(\frac{n \pi x }{L})
+        \end{equation}
+
+        <h2>Normalization Condition</h2>
+
+        ยังเหลือค่าคงที่ $A$ ที่จะต้องคำนวณหาให้ชัดเจน เราอาศัยการตีความที่ว่า $|\psi(x)|^2 dx$ คือ ความน่าจะเป็น ที่จะพบอนุภาคภายในบริเวณ
+        $x \to x+ dx$ แต่ด้วยหลักการของความน่าจะเป็นแล้ว ทั้งหมดต้องมีค่าเป็น 1 ดังนั้น
+
+        \begin{equation}
+        \text{Normalization Condition:} \quad  \int_0^L |\psi(x)|^2 dx = 1
+        \end{equation}
+
+        <p>เราจะใช้เงื่อนไขตรงนี้เอง เพื่อหาค่า $A$ จากสมการข้างต้น</p>
+
+        \begin{equation}
+        \int_0^L A^2 \sin^2(\frac{n \pi x}{L}) dx = 1
+        \end{equation}
+
+        <p>หรือ</p>
+
+        \begin{equation}
+        A = \frac{1}{\sqrt{ \int_0^L \sin^2(\frac{n \pi x}{L}) dx }} = \sqrt{\frac{2}{L}}
+        \end{equation}
+
+        <p>เพราะฉะนั้น</p>
+
+        \begin{equation}
+        \boxed{
+        \psi(x) = \sqrt{\frac{2}{L}}\sin(\frac{2 \pi x}{L})
+        }
+        \end{equation}
+
+
     </div>
 
     <script>
@@ -609,7 +715,7 @@
             const centerY = height / 2;
 
             const x0Pix = margin;
-            const xLPix = margin + (L / (L * 1.2)) * plotWidth;
+            const xLPix = margin + (L / (L * 1.0)) * plotWidth;
 
             // Potential Infinite Walls
             ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
@@ -659,7 +765,7 @@
             ctx.lineWidth = 2;
             ctx.beginPath();
             points.forEach((p, idx) => {
-                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const px = margin + (p.x / (L * 1.0)) * plotWidth;
                 const py = centerY - p.re * scaleY;
                 if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
             });
@@ -670,7 +776,7 @@
             ctx.lineWidth = 2;
             ctx.beginPath();
             points.forEach((p, idx) => {
-                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const px = margin + (p.x / (L * 1.0)) * plotWidth;
                 const py = centerY - p.im * scaleY;
                 if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
             });
@@ -684,7 +790,7 @@
             ctx.lineWidth = 3;
             ctx.beginPath();
             points.forEach((p, idx) => {
-                const px = margin + (p.x / (L * 1.2)) * plotWidth;
+                const px = margin + (p.x / (L * 1.0)) * plotWidth;
                 const py = centerY - p.prob * scaleY;
                 if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
             });
