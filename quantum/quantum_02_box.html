@@ -517,9 +517,43 @@
 
         \begin{equation}
         \boxed{
-        \psi(x) = \sqrt{\frac{2}{L}}\sin(\frac{2 \pi x}{L})
+        \psi_n(x) = \sqrt{\frac{2}{L}}\sin(\frac{n \pi x}{L}) \label{eq:wavefunction}
         }
         \end{equation}
+
+        <p>ข้างต้นพบว่า ผลเฉลยมีได้หลายรูปแบบ ขึ้นอยู่กับจำนวนเต็ม $n \in \{1,2,3,\cdots\}$ &nbsp; ทางฟิสิกส์แปลว่า 
+            อนุภาคมีได้หลายสถานะ ซึ่งก็จะได้สมบัติทางฟิสิกส์ ที่แตกต่างกัน</p>
+
+        <h2>ระดับพลังงาน</h2>
+
+        <p>สมบัติทางฟิสิกส์ ที่สำคัญอันหนึ่ง คือ พลังงาน $E$ &nbsp; เพื่อคำนวณค่าตรงนี้ 
+        เราแทนผลเฉลยในสมการ (\ref{eq:wavefunction}) เข้าไปในสมการ 
+        Time Independent Schrödinger ในสมการ (\ref{eq:schrodinger})</p>
+
+        \begin{equation}
+        -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} \underbrace{ \sqrt{\frac{2}{L}} \sin(\frac{n \pi x}{L}) }_{\psi(x)}  = E \underbrace{ \sqrt{\frac{2}{L}} \sin(\frac{n \pi x}{L}) }_{\psi(x)}
+        \end{equation}
+
+        <p>เมื่อคำนวณอนุพันธ์อันดับสอง ทางซ้ายมือ จะเขียนได้ว่า</p>
+
+        \begin{equation}
+        \boxed{ 
+            E_n = \left( \frac{\hbar^2 \pi^2}{2 m L^2} \right) n^2 }
+        \end{equation}
+
+        <h2>ฟังก์ชันคลื่น</h2>
+
+        <p>เมื่อทราบ $\psi_n(x)$ และ $E_n$ เราเขียนฟังก์ชันคลื่นที่สมบูรณ์ ที่เป็นฟังก์ชันของทั้งพิกัดและเวลา คือ</p>
+
+        \begin{equation}
+            \Psi(x,t) = \psi(x) e^{-iEt/\hbar}
+        \end{equation}
+
+        <p>กราฟข้างบน แสดงภาพเคลื่อนไหวในของฟังก์ชันคลื่นใน 3 ลักษณะ คือ 1) $|\Psi|^2$ &nbsp; 
+            2) ส่วนจริง $\text{Re}(\Psi)$ &nbsp; 3) ส่วนจินตภาพ $\text{Im}(\Psi)$ &nbsp; 
+            จากกราฟจะเห็นว่า เฉพาะความน่าจะเป็น (ความหนาแน่น) เท่านั้น ที่เป็นสภาวะคงตัว 
+            และไม่เปลี่ยนแปลงกับเวลา &nbsp; ในขณะที่ฟังก์ชันคลื่น $\Psi(x,t)$ ทั้งส่วนจริงและจินตภาพ ยังคงสั่นขึ้นลง
+        ตามเวลา ด้วยความถี่ที่ควบคุมด้วย $\omega = E/\hbar$</p>
 
     </div>
 
@@ -566,7 +600,7 @@
         // MathJax Equation Update Function
         function updateEquationText() {
             if (eigenOnlyMode) {
-                equationDisplay.innerHTML = `$$\\text{Eigenstates: } \\psi_n(x) = \\sqrt{\\frac{2}{L}} \\sin\\left(\\frac{n\\pi x}{L}\\right), \\quad E_n = \\frac{n^2 \\pi^2}{2mL^2}$$`;
+                equationDisplay.innerHTML = `$$\\text{Eigenstates: } \\psi_n(x) = \\sqrt{\\frac{2}{L}} \\sin\\left(\\frac{n\\pi x}{L}\\right), \\quad E_n = \\left( \\frac{\\hbar^2 \\pi^2}{2mL^2} \\right)n^2$$`;
             } else {
                 let spatial = "\\sin(kx)";
                 if (radCosine.checked) spatial = "\\cos(kx)";
