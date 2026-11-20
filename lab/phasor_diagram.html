@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Physics Lab: Phasor Diagrams &amp; AC/DC Circuits</title>
+  <!-- Tailwind CSS for responsive layout & utility styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter for UI and JetBrains Mono for precision telemetry -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Sarabun Thai Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            labBg: '#05080f',
+            labPanel: '#0b111e',
+            labPanelInner: '#070c16',
+            labBorder: '#1e3a5f',
+            labSteel: '#1d6387',
+            labCyan: '#38bdf8',
+            labRed: '#ef4444',
+            labAmber: '#fbbf24',
+          },
+        },
+      },
+    };
+  </script>
+
+<style>
+    /* Base dark laboratory canvas aesthetic */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 20px;
+    }
+
+    html, body {
+      height: 100vh;
+      max-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-color: #05080f;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Lock main workspace and columns to the remaining screen height */
+    main {
+      flex: 1 1 0%;
+      min-height: 0;
+      max-height: 100%;
+      grid-template-rows: minmax(0, 1fr);
+      overflow: hidden;
+    }
+
+    main > section,
+    main > div {
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    /* Allow V(t) and i(t) cards and canvases to shrink proportionally */
+    main section > div,
+    main canvas {
+      min-height: 0;
+    }
+
+    /* Subtle blueprint grid background */
+    .lab-grid-bg {
+      background-color: #05080f;
+      background-image:
+        linear-gradient(to right, rgba(30, 58, 95, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 58, 95, 0.14) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Blueprint-inspired rectangular slider styling (compacted for 100vh fit) */
+    input[type='range'].blueprint-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 18px;
+      background: #060b14;
+      border: 1.5px solid #1e3a5f;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type='range'].blueprint-slider:hover {
+      border-color: #2b7bba;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+    }
+
+    input[type='range'].blueprint-slider:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+    }
+
+    /* WebKit rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 24px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+      transform: scaleY(1.05);
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+
+    /* Firefox rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-moz-range-thumb {
+      width: 13px;
+      height: 24px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-moz-range-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+    }
+
+    /* Custom subtle scrollbar for smaller viewports */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #05080f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3a5f;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2b7bba;
+    }
+
+    /* Glow accents */
+    .cyan-glow {
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+    }
+    .red-glow {
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
+    }
+  </style>
+
+</head>
+<body class="lab-grid-bg min-h-screen flex flex-col justify-between text-slate-200 selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- TOP MINIMAL HEADER BAR -->
+  <header class="w-full bg-[#080e1a]/95 backdrop-blur-md border-b border-[#1e3a5f] px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 z-20">
+    <!-- Title & Lab Icon -->
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-[#0d192e] border border-[#1e3a5f] flex items-center justify-center shadow-inner">
+        <svg class="w-5 h-5 text-[#38bdf8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9" stroke-opacity="0.45" />
+          <path d="M12 12L17.5 6.5" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M12 12L6.5 6.5" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+          <circle cx="12" cy="12" r="2" fill="#38bdf8" />
+        </svg>
+      </div>
+      <div>
+        <h1 style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="text-sm sm:text-xl tracking-tight text-slate-100 leading-tight">
+          ปฏิบัติการณ์ฟิสิกส์ มหาวิทยาลัยนเรศวร － Phasor Diagram
+        </h1>
+        <!--
+        <p class="text-[16px] text-slate-400 hidden sm:block">
+          by Department of Physics, Faculty of Science, Naresuan University
+        </p>-->
+        <ul style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="font-mono text-[14px] text-slate-100 hidden sm:block">
+        <li>1) R + DC - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) หรือ i(t)</li>
+        <li>2) R + AC - สลับโหมด Time/Phasor สังเกตความสัมพันธ์</li>
+        <li>3) C + DC - ไม่เกิดกระแส! ขยับ Voltage เกิดกระแสไหมเอ่ย?</li>
+        <li>4) C + AC - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
+        </ul>
+      
+      </div>
+    </div>
+
+    <!-- Live Phase-Relationship Summary Badge -->
+    <div id="phaseBadge" class="order-3 lg:order-2 w-full lg:w-auto flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-[#0b1526] border border-[#1e3a5f] text-xs font-mono text-sky-300 shadow-sm">
+      <span id="phaseBadgeDot" class="w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse"></span>
+      <span id="phaseBadgeText">Resistor (AC): i in phase with V (Δφ = 0°)</span>
+    </div>
+
+    <!-- Playback, Reset & Download Action Controls -->
+    <div class="order-2 lg:order-3 flex items-center gap-1.5 sm:gap-2">
+      <button id="btnPlayPause" type="button"
+        class="px-3 py-1.5 rounded-lg bg-[#122640] hover:bg-[#193558] active:scale-[0.98] border border-[#2b7bba]/70 text-xs font-semibold text-sky-200 flex items-center gap-1.5 transition cursor-pointer">
+        <svg id="iconPause" class="w-3.5 h-3.5 text-[#38bdf8]" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16" rx="1" />
+          <rect x="14" y="4" width="4" height="16" rx="1" />
+        </svg>
+        <svg id="iconPlay" class="w-3.5 h-3.5 text-emerald-400 hidden" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5,3 19,12 5,21" />
+        </svg>
+        <span id="playPauseLabel">Pause</span>
+      </button>
+
+      <button id="btnReset" type="button"
+        class="px-2.5 py-1.5 rounded-lg bg-[#0d1729] hover:bg-[#15243f] active:scale-[0.98] border border-[#1e3a5f] text-xs font-medium text-slate-300 flex items-center gap-1.5 transition cursor-pointer"
+        title="Reset simulation clock and waveforms">
+        <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        <span class="hidden sm:inline">Reset</span>
+      </button>
+      <button style="display: none;" id="btnDownload" type="button"
+        class="px-2.5 py-1.5 rounded-lg bg-[#0d1729] hover:bg-[#162947] active:scale-[0.98] border border-[#1e3a5f] hover:border-[#38bdf8]/50 text-xs font-medium text-sky-300 flex items-center gap-1.5 transition cursor-pointer"
+        title="Download standalone single-file HTML simulation">
+        <svg class="w-3.5 h-3.5 text-[#38bdf8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span>Download .html</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN 2-COLUMN WORKSPACE -->
+  <main class="flex-1 w-full max-w-[1680px] mx-auto p-2.5 sm:p-4 flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch">
+
+    <!-- =================================================================== -->
+    <!-- LEFT PANEL (~48% WIDTH): CIRCUIT ANIMATION & CONTROLS               -->
+    <!-- =================================================================== -->
+    <section class="w-full lg:w-[48%] bg-[#0b111e] border border-[#1e3a5f] rounded-xl p-3 sm:p-4 flex flex-col justify-between gap-3 shadow-2xl">
+      
+      <!-- Top Control Row: Component Selector & Supply Mode Selector -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <!-- Component Toggle: Resistor (R) vs Capacitor (C) -->
+        <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 flex items-center gap-1">
+          <button id="btnCompResistor" type="button"
+            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
+            <span class="w-2.5 h-2.5 rounded-sm bg-[#9ab8c9] inline-block"></span>
+            <span>Resistor (R)</span>
+          </button>
+          <button id="btnCompCapacitor" type="button"
+            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
+            <span class="inline-flex gap-[2px] items-center">
+              <span class="w-[2.5px] h-3 bg-current inline-block"></span>
+              <span class="w-[2.5px] h-3 bg-current inline-block"></span>
+            </span>
+            <span>Capacitor (C)</span>
+          </button>
+        </div>
+
+        <!-- Power Supply Mode Toggle: DC Supply vs AC Supply -->
+        <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 flex items-center gap-1">
+          <button id="btnModeDC" type="button"
+            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
+            <span class="font-mono text-[11px] font-bold">⎓</span>
+            <span>DC Supply</span>
+          </button>
+          <button id="btnModeAC" type="button"
+            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
+            <span class="font-mono text-sm leading-none">∿</span>
+            <span>AC Supply</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Center Circuit Animation Canvas -->
+      <div class="relative flex-1 min-h-[270px] sm:min-h-[320px] bg-[#05080f] border border-[#1e3a5f] rounded-xl overflow-hidden shadow-inner">
+        <canvas id="circuitCanvas" class="w-full h-full block"></canvas>
+
+        <!-- Subtle Legend Overlay inside Circuit Viewport -->
+        <div class="absolute bottom-2.5 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none text-[11px] font-mono text-slate-400">
+          <div class="flex items-center gap-3 bg-[#080f1d]/85 backdrop-blur-xs px-2.5 py-1 rounded-md border border-[#1e3a5f]/70">
+            <span class="flex items-center gap-1.5 text-sky-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#38bdf8] shadow-[0_0_6px_#38bdf8]"></span>
+              <span>Charge Carriers</span>
+            </span>
+            <span id="legendEField" class="hidden items-center gap-1.5 text-amber-300">
+              <span class="text-[#fbbf24] font-bold">→</span>
+              <span>Electric Field (E)</span>
+            </span>
+          </div>
+          <div id="circuitTelemetryPill" class="bg-[#080f1d]/85 backdrop-blur-xs px-2.5 py-1 rounded-md border border-[#1e3a5f]/70 text-slate-300">
+            v(t) = +0.00 V | i(t) = +0.00 A
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Sliders Panel (3 Blueprint Sliders) -->
+      <div class="bg-[#070c16] border border-[#1e3a5f] rounded-xl p-3 sm:p-3.5 flex flex-col gap-3">
+        
+        <!-- Slider 1: DC Voltage V (in DC Mode) OR Peak Voltage V0 (in AC Mode) -->
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center justify-between text-xs">
+            <label id="slider1Label" for="slider1Input" class="font-semibold text-sky-300 flex items-center gap-1.5">
+              <span>Peak Voltage (V₀)</span>
+            </label>
+            <div class="flex items-center gap-2">
+              <button id="btnZeroDC" type="button"
+                class="hidden px-2 py-0.5 rounded bg-[#11223a] hover:bg-[#193357] border border-[#2b7bba]/60 text-[10px] font-mono font-semibold text-sky-300 transition cursor-pointer"
+                title="Set DC Voltage to 0.0 V">
+                0 V
+              </button>
+              <span id="slider1Value" class="font-mono font-semibold text-sky-300 min-w-[72px] text-right">6.0 V</span>
+            </div>
+          </div>
+          <input id="slider1Input" type="range" class="blueprint-slider" min="1.0" max="10.0" step="0.1" value="6.0" />
+        </div>
+
+        <!-- Slider 2: Resistance R / Capacitance C (in DC Mode) OR Frequency f (in AC Mode) -->
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center justify-between text-xs">
+            <label id="slider2Label" for="slider2Input" class="font-semibold text-slate-200">
+              Frequency (f)
+            </label>
+            <span id="slider2Value" class="font-mono font-semibold text-slate-200 min-w-[72px] text-right">0.40 Hz</span>
+          </div>
+          <input id="slider2Input" type="range" class="blueprint-slider" min="0.10" max="1.50" step="0.05" value="0.40" />
+        </div>
+
+        <!-- Slider 3: Animation Speed (in DC Mode) OR Resistance R / Capacitance C (in AC Mode) -->
+        <div style="display: none;" class="flex flex-col gap-1">
+          <div class="flex items-center justify-between text-xs">
+            <label id="slider3Label" for="slider3Input" class="font-semibold text-slate-200">
+              Resistance (R)
+            </label>
+            <span id="slider3Value" class="font-mono font-semibold text-slate-200 min-w-[72px] text-right">2.0 Ω</span>
+          </div>
+          <input id="slider3Input" type="range" class="blueprint-slider" min="1.0" max="10.0" step="0.1" value="2.0" />
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- RIGHT PANEL (~52% WIDTH): TWO STACKED GRAPHS (VOLTAGE & CURRENT)    -->
+    <!-- =================================================================== -->
+    <section class="w-full lg:w-[52%] flex flex-col gap-3 sm:gap-4">
+
+      <!-- TOP GRAPH CARD: VOLTAGE V (Cyan-Blue #38bdf8) -->
+      <div class="flex-1 min-h-[250px] bg-[#0b111e] border border-[#1e3a5f] rounded-xl p-3 sm:p-3.5 flex flex-col gap-2.5 cyan-glow">
+        <!-- Card Header -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]"></span>
+            <h2 class="text-sm font-bold text-[#38bdf8] tracking-wide">Voltage, V(t)</h2>
+            <span id="voltageReadout" class="ml-1 px-2 py-0.5 rounded bg-[#07101f] border border-[#1e3a5f] font-mono text-[11px] text-sky-200">
+              v(t) = +0.00 V | V₀ = 6.0 V
+            </span>
+          </div>
+
+          <!-- Segmented Toggle: [ Time | Phasor ] -->
+          <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-0.5 flex items-center">
+            <button id="btnVTime" type="button"
+              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow">
+              Time
+            </button>
+            <button id="btnVPhasor" type="button"
+              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200">
+              Phasor
+            </button>
+          </div>
+        </div>
+
+        <!-- Voltage Plot Canvas Container -->
+        <div class="relative flex-1 min-h-[195px] bg-[#05080f] border border-[#1e3a5f]/90 rounded-lg overflow-hidden">
+          <canvas id="voltageCanvas" class="w-full h-full block"></canvas>
+        </div>
+      </div>
+
+      <!-- BOTTOM GRAPH CARD: CURRENT i (Bright Red #ef4444) -->
+      <div class="flex-1 min-h-[250px] bg-[#0b111e] border border-[#1e3a5f] rounded-xl p-3 sm:p-3.5 flex flex-col gap-2.5 red-glow">
+        <!-- Card Header -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#ef4444] shadow-[0_0_8px_#ef4444]"></span>
+            <h2 class="text-sm font-bold text-[#ef4444] tracking-wide">Current, i(t)</h2>
+            <span id="currentReadout" class="ml-1 px-2 py-0.5 rounded bg-[#140a0e] border border-[#3f1d24] font-mono text-[11px] text-red-200">
+              i(t) = +0.00 A | I₀ = 3.00 A
+            </span>
+          </div>
+
+          <!-- Segmented Toggle: [ Time | Phasor ] -->
+          <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-0.5 flex items-center">
+            <button id="btnITime" type="button"
+              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow">
+              Time
+            </button>
+            <button id="btnIPhasor" type="button"
+              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200">
+              Phasor
+            </button>
+          </div>
+        </div>
+
+        <!-- Current Plot Canvas Container -->
+        <div class="relative flex-1 min-h-[195px] bg-[#05080f] border border-[#1e3a5f]/90 rounded-lg overflow-hidden">
+          <canvas id="currentCanvas" class="w-full h-full block"></canvas>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- NON-INTRUSIVE TOAST NOTIFICATION (Replaces any alert() calls) -->
+  <div id="toastBanner"
+    class="fixed bottom-4 right-4 z-50 px-4 py-2.5 rounded-lg bg-[#0d192e] border border-[#38bdf8]/60 text-xs font-medium text-sky-200 shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-[#38bdf8]"></span>
+    <span id="toastText">Simulation downloaded!</span>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * PHYSICS LAB: PHASOR DIAGRAMS & AC/DC CIRCUITS
+     * Complete self-contained interactive simulation engine.
+     * ============================================================================
+     */
+
+    // Capture pristine initial HTML immediately upon DOM load for clean standalone download
+    let pristineHTMLSnapshot = '';
+    document.addEventListener('DOMContentLoaded', () => {
+      pristineHTMLSnapshot = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    });
+
+    (function () {
+      'use strict';
+
+      // --------------------------------------------------------------------------
+      // 1. SIMULATION STATE & PARAMETERS
+      // --------------------------------------------------------------------------
+      const state = {
+        // Component & Power Supply Modes
+        component: 'resistor', // 'resistor' | 'capacitor'
+        supplyMode: 'dc',      // 'dc' | 'ac'
+
+        // Graph Visual Modes
+        vView: 'time',         // 'time' | 'phasor'
+        iView: 'time',         // 'time' | 'phasor'
+
+        // Playback State
+        isPlaying: true,
+        simTime: 0,            // Elapsed simulation time in seconds
+        lastTimestamp: null,
+
+        // Parameter Values
+        dcVoltageTarget: 6.0,  // Slider target DC Voltage (-10.0 to +10.0 V)
+        dcVoltageActual: 6.0,  // Smoothed/RC-filtered voltage across component
+        acPeakVoltage: 6.0,    // AC Peak Voltage V0 (1.0 to 10.0 V)
+        acFrequency: 0.40,     // AC Frequency f (0.10 to 1.50 Hz)
+        resistance: 2.0,       // Resistance R (1.0 to 10.0 Ohm)
+        capacitance: 2.0,      // Capacitance C (0.5 to 5.0 F)
+        dcAnimSpeed: 1.0,      // DC animation time multiplier (0.2x to 2.5x)
+
+        // Instantaneous Physical Quantities
+        vInst: 0,              // Instantaneous voltage v(t) [V]
+        iInst: 0,              // Instantaneous current i(t) [A]
+        vAmp: 6.0,             // Magnitude / Peak voltage [V]
+        iAmp: 3.0,             // Magnitude / Peak current [A]
+        thetaV: 0,             // Voltage phasor angle [rad]
+        thetaI: 0,             // Current phasor angle [rad]
+        phaseDiffDeg: 0,       // Phase difference (thetaI - thetaV) in degrees
+
+        // DC Transient Rate-of-Change Tracking (for Phasor ΔV/Δi tracker & Capacitor flicker)
+        dVdt: 0,               // Rate of change of voltage [V/s]
+        dIdt: 0,               // Rate of change of current [A/s]
+        prevVInst: 6.0,
+        prevIInst: 0.0,
+        dcPhaseDeflectionV: 0, // Visual transient angle deflection on DC Voltage phasor [rad]
+        dcPhaseDeflectionI: 0, // Visual transient angle deflection on DC Current phasor [rad]
+
+        // Charge Carrier Animation State
+        chargeOffset: 0,       // Continuous loop displacement for Resistor mode [px]
+        capChargeShift: 0,     // Bounded sloshing displacement for Capacitor wires [px]
+
+        // Rolling Waveform History Buffer for Oscilloscope Time Plots
+        history: [],           // Array of { t, v, i }
+        maxHistoryDuration: 8.5, // Seconds visible on the time-domain oscilloscope
+      };
+
+      // Lab Color Palette Constants
+      const COLORS = {
+        bg: '#05080f',
+        panel: '#0b111e',
+        border: '#1e3a5f',
+        wire: '#2b7bba',
+        cyan: '#38bdf8',
+        cyanDim: 'rgba(56, 189, 248, 0.16)',
+        steel: '#1d6387',
+        steelLight: '#287ea8',
+        steelDark: '#12425c',
+        endCap: '#9ab8c9',
+        red: '#ef4444',
+        redDim: 'rgba(239, 68, 68, 0.16)',
+        amber: '#fbbf24',
+        grid: 'rgba(30, 58, 95, 0.35)',
+        axis: '#334155',
+        textMuted: '#94a3b8',
+        textBright: '#f1f5f9',
+      };
+
+      // --------------------------------------------------------------------------
+      // 2. DOM ELEMENT REFERENCES
+      // --------------------------------------------------------------------------
+      const dom = {
+        phaseBadgeDot: document.getElementById('phaseBadgeDot'),
+        phaseBadgeText: document.getElementById('phaseBadgeText'),
+        btnPlayPause: document.getElementById('btnPlayPause'),
+        iconPause: document.getElementById('iconPause'),
+        iconPlay: document.getElementById('iconPlay'),
+        playPauseLabel: document.getElementById('playPauseLabel'),
+        btnReset: document.getElementById('btnReset'),
+        btnDownload: document.getElementById('btnDownload'),
+
+        btnCompResistor: document.getElementById('btnCompResistor'),
+        btnCompCapacitor: document.getElementById('btnCompCapacitor'),
+        btnModeDC: document.getElementById('btnModeDC'),
+        btnModeAC: document.getElementById('btnModeAC'),
+
+        legendEField: document.getElementById('legendEField'),
+        circuitTelemetryPill: document.getElementById('circuitTelemetryPill'),
+
+        slider1Label: document.getElementById('slider1Label'),
+        slider1Input: document.getElementById('slider1Input'),
+        slider1Value: document.getElementById('slider1Value'),
+        btnZeroDC: document.getElementById('btnZeroDC'),
+
+        slider2Label: document.getElementById('slider2Label'),
+        slider2Input: document.getElementById('slider2Input'),
+        slider2Value: document.getElementById('slider2Value'),
+
+        slider3Label: document.getElementById('slider3Label'),
+        slider3Input: document.getElementById('slider3Input'),
+        slider3Value: document.getElementById('slider3Value'),
+
+        voltageReadout: document.getElementById('voltageReadout'),
+        currentReadout: document.getElementById('currentReadout'),
+        btnVTime: document.getElementById('btnVTime'),
+        btnVPhasor: document.getElementById('btnVPhasor'),
+        btnITime: document.getElementById('btnITime'),
+        btnIPhasor: document.getElementById('btnIPhasor'),
+
+        circuitCanvas: document.getElementById('circuitCanvas'),
+        voltageCanvas: document.getElementById('voltageCanvas'),
+        currentCanvas: document.getElementById('currentCanvas'),
+
+        toastBanner: document.getElementById('toastBanner'),
+        toastText: document.getElementById('toastText'),
+      };
+
+      const ctxCircuit = dom.circuitCanvas.getContext('2d');
+      const ctxVoltage = dom.voltageCanvas.getContext('2d');
+      const ctxCurrent = dom.currentCanvas.getContext('2d');
+
+      // --------------------------------------------------------------------------
+      // 3. RESPONSIVE HIGH-DPI CANVAS SIZING
+      // --------------------------------------------------------------------------
+      function resizeCanvasToContainer(canvas) {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        const targetW = Math.max(10, Math.floor(rect.width * dpr));
+        const targetH = Math.max(10, Math.floor(rect.height * dpr));
+        if (canvas.width !== targetW || canvas.height !== targetH) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+        }
+        return { width: rect.width, height: rect.height, dpr };
+      }
+
+      const resizeObserver = new ResizeObserver(() => {
+        resizeCanvasToContainer(dom.circuitCanvas);
+        resizeCanvasToContainer(dom.voltageCanvas);
+        resizeCanvasToContainer(dom.currentCanvas);
+      });
+
+      resizeObserver.observe(dom.circuitCanvas.parentElement);
+      resizeObserver.observe(dom.voltageCanvas.parentElement);
+      resizeObserver.observe(dom.currentCanvas.parentElement);
+
+      // --------------------------------------------------------------------------
+      // 4. UI CONFIGURATION & SLIDER SYNCHRONIZATION
+      // --------------------------------------------------------------------------
+      function showToast(message) {
+        dom.toastText.textContent = message;
+        dom.toastBanner.classList.remove('translate-y-20', 'opacity-0');
+        dom.toastBanner.classList.add('translate-y-0', 'opacity-100');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(() => {
+          dom.toastBanner.classList.remove('translate-y-0', 'opacity-100');
+          dom.toastBanner.classList.add('translate-y-20', 'opacity-0');
+        }, 2800);
+      }
+
+      function configureSlidersForMode() {
+        const isDC = state.supplyMode === 'dc';
+        const isRes = state.component === 'resistor';
+
+        if (isDC) {
+          // Slider 1: DC Voltage V (-10.0 V to +10.0 V)
+          dom.slider1Label.innerHTML = '<span>DC Voltage (V)</span>';
+          dom.slider1Input.min = '-10.0';
+          dom.slider1Input.max = '10.0';
+          dom.slider1Input.step = '0.1';
+          dom.slider1Input.value = state.dcVoltageTarget.toFixed(1);
+          dom.btnZeroDC.classList.remove('hidden');
+
+          // Slider 2: Resistance R OR Capacitance C
+          if (isRes) {
+            dom.slider2Label.textContent = 'Resistance (R)';
+            dom.slider2Input.min = '1.0';
+            dom.slider2Input.max = '10.0';
+            dom.slider2Input.step = '0.1';
+            dom.slider2Input.value = state.resistance.toFixed(1);
+          } else {
+            dom.slider2Label.textContent = 'Capacitance (C)';
+            dom.slider2Input.min = '0.5';
+            dom.slider2Input.max = '5.0';
+            dom.slider2Input.step = '0.1';
+            dom.slider2Input.value = state.capacitance.toFixed(1);
+          }
+
+          // Slider 3: Time / Animation Speed (0.2x to 2.5x)
+          dom.slider3Label.textContent = 'Time / Animation Speed';
+          dom.slider3Input.min = '0.2';
+          dom.slider3Input.max = '2.5';
+          dom.slider3Input.step = '0.1';
+          dom.slider3Input.value = state.dcAnimSpeed.toFixed(1);
+        } else {
+          // AC Mode
+          // Slider 1: Peak Voltage V0 (1.0 V to 10.0 V)
+          dom.slider1Label.innerHTML = '<span>Peak Voltage (V₀)</span>';
+          dom.slider1Input.min = '1.0';
+          dom.slider1Input.max = '10.0';
+          dom.slider1Input.step = '0.1';
+          dom.slider1Input.value = state.acPeakVoltage.toFixed(1);
+          dom.btnZeroDC.classList.add('hidden');
+
+          // Slider 2: Frequency f (0.10 Hz to 1.50 Hz)
+          dom.slider2Label.textContent = 'Frequency (f)';
+          dom.slider2Input.min = '0.10';
+          dom.slider2Input.max = '1.50';
+          dom.slider2Input.step = '0.05';
+          dom.slider2Input.value = state.acFrequency.toFixed(2);
+
+          // Slider 3: Resistance R OR Capacitance C
+          if (isRes) {
+            dom.slider3Label.textContent = 'Resistance (R)';
+            dom.slider3Input.min = '1.0';
+            dom.slider3Input.max = '10.0';
+            dom.slider3Input.step = '0.1';
+            dom.slider3Input.value = state.resistance.toFixed(1);
+          } else {
+            dom.slider3Label.textContent = 'Capacitance (C)';
+            dom.slider3Input.min = '0.5';
+            dom.slider3Input.max = '5.0';
+            dom.slider3Input.step = '0.1';
+            dom.slider3Input.value = state.capacitance.toFixed(1);
+          }
+        }
+
+        updateSliderValueLabels();
+        updateHeaderAndLegend();
+      }
+
+      function updateSliderValueLabels() {
+        const isDC = state.supplyMode === 'dc';
+        const isRes = state.component === 'resistor';
+
+        if (isDC) {
+          const sign = state.dcVoltageTarget > 0 ? '+' : '';
+          dom.slider1Value.textContent = `${sign}${state.dcVoltageTarget.toFixed(1)} V`;
+          dom.slider2Value.textContent = isRes
+            ? `${state.resistance.toFixed(1)} Ω`
+            : `${state.capacitance.toFixed(1)} F`;
+          dom.slider3Value.textContent = `${state.dcAnimSpeed.toFixed(1)}x`;
+        } else {
+          dom.slider1Value.textContent = `${state.acPeakVoltage.toFixed(1)} V`;
+          dom.slider2Value.textContent = `${state.acFrequency.toFixed(2)} Hz`;
+          dom.slider3Value.textContent = isRes
+            ? `${state.resistance.toFixed(1)} Ω`
+            : `${state.capacitance.toFixed(1)} F`;
+        }
+      }
+
+      function updateHeaderAndLegend() {
+        const isDC = state.supplyMode === 'dc';
+        const isRes = state.component === 'resistor';
+
+        // Update component toggle button styles
+        if (isRes) {
+          dom.btnCompResistor.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnCompCapacitor.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
+          dom.legendEField.classList.add('hidden');
+          dom.legendEField.classList.remove('flex');
+        } else {
+          dom.btnCompCapacitor.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnCompResistor.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
+          dom.legendEField.classList.remove('hidden');
+          dom.legendEField.classList.add('flex');
+        }
+
+        // Update supply mode toggle button styles
+        if (isDC) {
+          dom.btnModeDC.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnModeAC.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
+        } else {
+          dom.btnModeAC.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnModeDC.className =
+            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
+        }
+
+        // Update phase-relationship badge in top header
+        if (isRes && !isDC) {
+          dom.phaseBadgeText.textContent = 'Resistor (AC): i in phase with V (Δφ = 0°)';
+          dom.phaseBadgeDot.className = 'w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse';
+        } else if (!isRes && !isDC) {
+          dom.phaseBadgeText.textContent = 'Capacitor (AC): i leads V by 90° (Δφ = +90°)';
+          dom.phaseBadgeDot.className = 'w-2 h-2 rounded-full bg-[#fbbf24] animate-pulse';
+        } else if (isRes && isDC) {
+          dom.phaseBadgeText.textContent = "Resistor (DC): Steady Ohm's Law i = V / R (ω = 0)";
+          dom.phaseBadgeDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        } else {
+          dom.phaseBadgeText.textContent = 'Capacitor (DC): i = C·dV/dt';
+          dom.phaseBadgeDot.className = 'w-2 h-2 rounded-full bg-[#fbbf24]';
+        }
+      }
+
+      function updateGraphToggleStyles() {
+        // Voltage graph toggles
+        if (state.vView === 'time') {
+          dom.btnVTime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnVPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
+        } else {
+          dom.btnVPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow';
+          dom.btnVTime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
+        }
+
+        // Current graph toggles
+        if (state.iView === 'time') {
+          dom.btnITime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow';
+          dom.btnIPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
+        } else {
+          dom.btnIPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow';
+          dom.btnITime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
+        }
+      }
+
+      // --------------------------------------------------------------------------
+      // 5. EVENT LISTENERS FOR INTERACTIVE CONTROLS
+      // --------------------------------------------------------------------------
+      dom.btnCompResistor.addEventListener('click', () => {
+        if (state.component === 'resistor') return;
+        state.component = 'resistor';
+        state.dcVoltageActual = state.dcVoltageTarget;
+        configureSlidersForMode();
+      });
+
+      dom.btnCompCapacitor.addEventListener('click', () => {
+        if (state.component === 'capacitor') return;
+        state.component = 'capacitor';
+        state.dcVoltageActual = state.dcVoltageTarget;
+        state.capChargeShift = (state.dcVoltageActual / 10) * 18;
+        configureSlidersForMode();
+      });
+
+      dom.btnModeDC.addEventListener('click', () => {
+        if (state.supplyMode === 'dc') return;
+        state.supplyMode = 'dc';
+        state.dcVoltageActual = state.dcVoltageTarget;
+        state.dVdt = 0;
+        state.dIdt = 0;
+        configureSlidersForMode();
+      });
+
+      dom.btnModeAC.addEventListener('click', () => {
+        if (state.supplyMode === 'ac') return;
+        state.supplyMode = 'ac';
+        configureSlidersForMode();
+      });
+
+      // Slider 1 input handler
+      dom.slider1Input.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        if (state.supplyMode === 'dc') {
+          state.dcVoltageTarget = val;
+        } else {
+          state.acPeakVoltage = val;
+        }
+        updateSliderValueLabels();
+      });
+
+      // Quick 0 V button in DC mode
+      dom.btnZeroDC.addEventListener('click', () => {
+        state.dcVoltageTarget = 0.0;
+        dom.slider1Input.value = '0.0';
+        updateSliderValueLabels();
+      });
+
+      // Slider 2 input handler
+      dom.slider2Input.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        if (state.supplyMode === 'dc') {
+          if (state.component === 'resistor') {
+            state.resistance = val;
+          } else {
+            state.capacitance = val;
+          }
+        } else {
+          state.acFrequency = val;
+        }
+        updateSliderValueLabels();
+      });
+
+      // Slider 3 input handler
+      dom.slider3Input.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        if (state.supplyMode === 'dc') {
+          state.dcAnimSpeed = val;
+        } else {
+          if (state.component === 'resistor') {
+            state.resistance = val;
+          } else {
+            state.capacitance = val;
+          }
+        }
+        updateSliderValueLabels();
+      });
+
+      // Graph Time/Phasor toggles
+      dom.btnVTime.addEventListener('click', () => {
+        state.vView = 'time';
+        updateGraphToggleStyles();
+      });
+      dom.btnVPhasor.addEventListener('click', () => {
+        state.vView = 'phasor';
+        updateGraphToggleStyles();
+      });
+      dom.btnITime.addEventListener('click', () => {
+        state.iView = 'time';
+        updateGraphToggleStyles();
+      });
+      dom.btnIPhasor.addEventListener('click', () => {
+        state.iView = 'phasor';
+        updateGraphToggleStyles();
+      });
+
+      // Play / Pause toggle
+      dom.btnPlayPause.addEventListener('click', () => {
+        state.isPlaying = !state.isPlaying;
+        if (state.isPlaying) {
+          dom.iconPause.classList.remove('hidden');
+          dom.iconPlay.classList.add('hidden');
+          dom.playPauseLabel.textContent = 'Pause';
+          state.lastTimestamp = null;
+        } else {
+          dom.iconPause.classList.add('hidden');
+          dom.iconPlay.classList.remove('hidden');
+          dom.playPauseLabel.textContent = 'Play';
+        }
+      });
+
+      // Reset simulation button
+      dom.btnReset.addEventListener('click', () => {
+        state.simTime = 0;
+        state.history = [];
+        state.chargeOffset = 0;
+        state.dcVoltageActual = state.dcVoltageTarget;
+        state.dVdt = 0;
+        state.dIdt = 0;
+        state.dcPhaseDeflectionV = 0;
+        state.dcPhaseDeflectionI = 0;
+        seedInitialHistory();
+        showToast('Simulation timeline reset');
+      });
+
+      // Download standalone .html file
+      dom.btnDownload.addEventListener('click', () => {
+        try {
+          const content = pristineHTMLSnapshot || ('<!DOCTYPE html>\n' + document.documentElement.outerHTML);
+          const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'Phasor_Diagrams_Physics_Lab.html';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(url), 1500);
+          showToast('Downloaded Phasor_Diagrams_Physics_Lab.html');
+        } catch (err) {
+          showToast('Unable to trigger download in this preview sandbox.');
+        }
+      });
+
+      // --------------------------------------------------------------------------
+      // 6. PHYSICS ENGINE & STEP UPDATE
+      // --------------------------------------------------------------------------
+      const CAPACITIVE_SCALE = 0.22; // Calibrated lab scale so I0 = (2π f C V0)*0.22 stays clean on meters
+
+      function stepPhysics(dt) {
+        const isDC = state.supplyMode === 'dc';
+        const isRes = state.component === 'resistor';
+
+        // Effective time step (DC mode respects animation speed slider)
+        const effDt = isDC ? dt * state.dcAnimSpeed : dt;
+        state.simTime += effDt;
+
+        if (isDC) {
+          // ----------------------------------------------------------------------
+          // DC MODE PHYSICS
+          // ----------------------------------------------------------------------
+          if (isRes) {
+            // Fast 35ms response for resistor voltage changes
+            const tauR = 0.035;
+            const alphaR = 1 - Math.exp(-effDt / tauR);
+            state.dcVoltageActual += (state.dcVoltageTarget - state.dcVoltageActual) * alphaR;
+            if (Math.abs(state.dcVoltageTarget - state.dcVoltageActual) < 0.002) {
+              state.dcVoltageActual = state.dcVoltageTarget;
+            }
+
+            state.vInst = state.dcVoltageActual;
+            state.iInst = state.vInst / state.resistance;
+            state.vAmp = Math.abs(state.vInst);
+            state.iAmp = Math.abs(state.iInst);
+
+            state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
+            state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            state.phaseDiffDeg = 0;
+
+            // Continuous charge drift around loop proportional to DC current i
+            state.chargeOffset += state.iInst * 28 * effDt;
+          } else {
+            // Capacitor in DC Mode:
+            // RC charging/discharging transient with time constant tau = 0.14 * C
+            // Steady DC blocks current (i = 0); moving V slider creates a realistic current flicker i = C * dV_C/dt!
+            const tauC = Math.max(0.08, 0.14 * state.capacitance);
+            const alphaC = 1 - Math.exp(-effDt / tauC);
+            const prevVc = state.dcVoltageActual;
+            state.dcVoltageActual += (state.dcVoltageTarget - state.dcVoltageActual) * alphaC;
+
+            if (Math.abs(state.dcVoltageTarget - state.dcVoltageActual) < 0.0015) {
+              state.dcVoltageActual = state.dcVoltageTarget;
+            }
+
+            const dVcDt = effDt > 1e-6 ? (state.dcVoltageActual - prevVc) / effDt : 0;
+            state.vInst = state.dcVoltageActual;
+            // Charging/discharging current pulse (flickers while slider moves, settles to 0 when static)
+            state.iInst = 0.45 * state.capacitance * dVcDt;
+            if (Math.abs(state.iInst) < 0.005) state.iInst = 0;
+
+            state.vAmp = Math.abs(state.vInst);
+            state.iAmp = Math.abs(state.iInst);
+
+            state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
+            state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            state.phaseDiffDeg = 0;
+
+            // Charges shift along the wires proportionally to capacitor plate charge q = C * V_C
+            const targetShift = (state.vInst / 10.0) * 16;
+            state.capChargeShift += (targetShift - state.capChargeShift) * Math.min(1, effDt * 18);
+          }
+
+          // Compute smoothed rate-of-change derivatives for the DC Phasor ΔV/Δi tracker
+          const rawDV = effDt > 1e-6 ? (state.vInst - state.prevVInst) / effDt : 0;
+          const rawDI = effDt > 1e-6 ? (state.iInst - state.prevIInst) / effDt : 0;
+          const smoothDeriv = 1 - Math.exp(-effDt / 0.08);
+          state.dVdt += (rawDV - state.dVdt) * smoothDeriv;
+          state.dIdt += (rawDI - state.dIdt) * smoothDeriv;
+
+          // Deflect transient phase-rate tracker proportionally to rate of change, settling back to 0
+          const targetDeflV = Math.max(-1.15, Math.min(1.15, state.dVdt * 0.045));
+          const targetDeflI = Math.max(-1.15, Math.min(1.15, state.dIdt * 0.045));
+          state.dcPhaseDeflectionV += (targetDeflV - state.dcPhaseDeflectionV) * Math.min(1, effDt * 14);
+          state.dcPhaseDeflectionI += (targetDeflI - state.dcPhaseDeflectionI) * Math.min(1, effDt * 14);
+
+          state.prevVInst = state.vInst;
+          state.prevIInst = state.iInst;
+        } else {
+          // ----------------------------------------------------------------------
+          // AC MODE PHYSICS
+          // ----------------------------------------------------------------------
+          const omega = 2 * Math.PI * state.acFrequency;
+          const phaseV = (omega * state.simTime) % (2 * Math.PI);
+
+          state.vAmp = state.acPeakVoltage;
+          state.vInst = state.vAmp * Math.sin(phaseV);
+          state.thetaV = phaseV;
+
+          if (isRes) {
+            // Purely Resistive AC Circuit: i(t) = (V0 / R) sin(ωt), Δφ = 0°
+            state.iAmp = state.vAmp / state.resistance;
+            state.thetaI = phaseV;
+            state.iInst = state.iAmp * Math.sin(state.thetaI);
+            state.phaseDiffDeg = 0;
+
+            // Oscillatory charge position x(t) = -X0 cos(ωt) so velocity dx/dt ∝ sin(ωt) = i(t)
+            const oscAmplitude = Math.min(42, 10 + state.iAmp * 4.5);
+            state.chargeOffset = -oscAmplitude * Math.cos(phaseV);
+          } else {
+            // Purely Capacitive AC Circuit: i(t) = (ω C V0) cos(ωt) = I0 sin(ωt + π/2), Δφ = +90°
+            state.iAmp = CAPACITIVE_SCALE * omega * state.capacitance * state.vAmp;
+            state.thetaI = (phaseV + Math.PI / 2) % (2 * Math.PI);
+            state.iInst = state.iAmp * Math.sin(state.thetaI); // equals iAmp * cos(phaseV)
+            state.phaseDiffDeg = 90;
+
+            // Charges slosh back and forth along the open wires (never crossing the plates!)
+            // Velocity dx/dt ∝ i(t) = cos(ωt) => position x(t) ∝ sin(ωt)
+            const sloshAmp = Math.min(15, 4 + state.vAmp * 1.1);
+            state.capChargeShift = sloshAmp * Math.sin(phaseV);
+          }
+
+          state.dVdt = 0;
+          state.dIdt = 0;
+          state.dcPhaseDeflectionV = 0;
+          state.dcPhaseDeflectionI = 0;
+          state.prevVInst = state.vInst;
+          state.prevIInst = state.iInst;
+        }
+
+        // Append sample to rolling waveform history
+        state.history.push({
+          t: state.simTime,
+          v: state.vInst,
+          i: state.iInst,
+        });
+
+        // Trim samples older than maxHistoryDuration + buffer
+        const cutoff = state.simTime - (state.maxHistoryDuration + 0.5);
+        while (state.history.length > 2 && state.history[0].t < cutoff) {
+          state.history.shift();
+        }
+      }
+
+      function seedInitialHistory() {
+        // Pre-populate waveform buffer so Time graphs look immediately rich on load
+        const steps = 180;
+        const dt = state.maxHistoryDuration / steps;
+        const savedTime = state.simTime;
+        state.simTime = -state.maxHistoryDuration;
+        for (let k = 0; k <= steps; k++) {
+          stepPhysics(dt);
+        }
+        state.simTime = savedTime;
+      }
+
+      // --------------------------------------------------------------------------
+      // 7. TELEMETRY TEXT READOUT UPDATES
+      // --------------------------------------------------------------------------
+      function updateTelemetryReadouts() {
+        const isDC = state.supplyMode === 'dc';
+        const fmtSign = (num, dec = 2) => (num >= 0 ? `+${num.toFixed(dec)}` : num.toFixed(dec));
+
+        // Circuit overlay telemetry
+        dom.circuitTelemetryPill.textContent = `v(t) = ${fmtSign(state.vInst, 2)} V  |  i(t) = ${fmtSign(state.iInst, 2)} A`;
+
+        // Voltage graph header readout
+        const degV = Math.round(((state.thetaV * 180) / Math.PI + 360) % 360);
+        if (state.vView === 'time') {
+          const refLabel = isDC ? `V_DC = ${fmtSign(state.dcVoltageTarget, 1)} V` : `V₀ = ${state.vAmp.toFixed(1)} V`;
+          dom.voltageReadout.textContent = `v(t) = ${fmtSign(state.vInst, 2)} V  |  ${refLabel}`;
+        } else {
+          dom.voltageReadout.textContent = `|V| = ${state.vAmp.toFixed(2)} V  |  θ_V = ${degV}°`;
+        }
+
+        // Current graph header readout
+        const degI = Math.round(((state.thetaI * 180) / Math.PI + 360) % 360);
+        if (state.iView === 'time') {
+          const refLabel = isDC
+            ? (state.component === 'resistor'
+              ? `i_DC = ${fmtSign(state.dcVoltageTarget / state.resistance, 2)} A`
+              : `i_steady = 0.00 A`)
+            : `I₀ = ${state.iAmp.toFixed(2)} A`;
+          dom.currentReadout.textContent = `i(t) = ${fmtSign(state.iInst, 2)} A  |  ${refLabel}`;
+        } else {
+          const phaseSuffix = isDC ? `θ_i = ${degI}°` : `θ_i = ${degI}° (Δφ = +${state.phaseDiffDeg}°)`;
+          dom.currentReadout.textContent = `|i| = ${state.iAmp.toFixed(2)} A  |  ${phaseSuffix}`;
+        }
+      }
+
+      // --------------------------------------------------------------------------
+      // 8. LEFT PANEL RENDERER: CIRCUIT DIAGRAM, CHARGES, BATTERY/AC & E-FIELD
+      // --------------------------------------------------------------------------
+      function drawArrowHead(ctx, x, y, angle, size, color) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-size, -size * 0.55);
+        ctx.lineTo(-size * 0.72, 0);
+        ctx.lineTo(-size, size * 0.55);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function renderCircuitCanvas() {
+        const { width: w, height: h, dpr } = resizeCanvasToContainer(dom.circuitCanvas);
+        const ctx = ctxCircuit;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+
+        // Clear background
+        ctx.fillStyle = COLORS.bg;
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtle engineering dot grid inside circuit canvas
+        ctx.fillStyle = 'rgba(30, 58, 95, 0.35)';
+        const gridStep = 24;
+        for (let gx = gridStep; gx < w; gx += gridStep) {
+          for (let gy = gridStep; gy < h; gy += gridStep) {
+            ctx.fillRect(gx, gy, 1.2, 1.2);
+          }
+        }
+
+        // Circuit loop geometry (generous padding so labels and supply icons breathe nicely)
+        const leftX = Math.max(68, w * 0.18);
+        const rightX = Math.min(w - 44, w * 0.86);
+        const topY = Math.max(66, h * 0.25);
+        const bottomY = Math.min(h - 54, h * 0.76);
+        const midX = (leftX + rightX) / 2;
+        const midY = (topY + bottomY) / 2;
+
+        const isDC = state.supplyMode === 'dc';
+        const isRes = state.component === 'resistor';
+
+        // Component & supply gap dimensions
+        const supplyHalfGap = isDC ? 14 : 26;
+        const compHalfWidth = isRes ? Math.min(92, (rightX - leftX) * 0.27) : Math.min(36, (rightX - leftX) * 0.11);
+
+        // 1. Draw Rectangular Circuit Wire Loop (#2b7bba)
+        ctx.strokeStyle = COLORS.wire;
+        ctx.lineWidth = 2.4;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Top-left wire segment (from top of supply up to top-left corner, then right to component)
+        ctx.beginPath();
+        ctx.moveTo(leftX, midY - supplyHalfGap);
+        ctx.lineTo(leftX, topY);
+        ctx.lineTo(midX - compHalfWidth, topY);
+        ctx.stroke();
+
+        // Top-right -> Right -> Bottom -> Bottom-left wire segment
+        ctx.beginPath();
+        ctx.moveTo(midX + compHalfWidth, topY);
+        ctx.lineTo(rightX, topY);
+        ctx.lineTo(rightX, bottomY);
+        ctx.lineTo(leftX, bottomY);
+        ctx.lineTo(leftX, midY + supplyHalfGap);
+        ctx.stroke();
+
+        // 2. Draw Power Supply Icon on Left Vertical Branch
+        if (isDC) {
+          // DC BATTERY ICON (long plate = +, short thick plate = -)
+          const polarity = state.dcVoltageTarget >= 0 ? 1 : -1;
+          const topPlateHalf = polarity >= 0 ? 24 : 11;
+          const botPlateHalf = polarity >= 0 ? 11 : 24;
+          const topPlateWidth = polarity >= 0 ? 3.2 : 4.5;
+          const botPlateWidth = polarity >= 0 ? 4.5 : 3.2;
+
+          // Top plate
+          ctx.beginPath();
+          ctx.moveTo(leftX - topPlateHalf, midY - supplyHalfGap);
+          ctx.lineTo(leftX + topPlateHalf, midY - supplyHalfGap);
+          ctx.strokeStyle = polarity >= 0 ? COLORS.cyan : COLORS.wire;
+          ctx.lineWidth = topPlateWidth;
+          ctx.stroke();
+
+          // Bottom plate
+          ctx.beginPath();
+          ctx.moveTo(leftX - botPlateHalf, midY + supplyHalfGap);
+          ctx.lineTo(leftX + botPlateHalf, midY + supplyHalfGap);
+          ctx.strokeStyle = polarity < 0 ? COLORS.cyan : COLORS.wire;
+          ctx.lineWidth = botPlateWidth;
+          ctx.stroke();
+
+          // + and - polarity labels
+          ctx.font = '700 18px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          if (Math.abs(state.dcVoltageTarget) > 0.05) {
+            ctx.fillStyle = polarity >= 0 ? COLORS.cyan : '#64748b';
+            ctx.fillText(polarity >= 0 ? '+' : '−', leftX - 28, midY - supplyHalfGap);
+            ctx.fillStyle = polarity < 0 ? COLORS.cyan : '#64748b';
+            ctx.fillText(polarity < 0 ? '+' : '−', leftX - 28, midY + supplyHalfGap);
+          }
+
+          // DC Supply Value Label on the left
+          ctx.font = '600 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#93c5fd';
+          ctx.textAlign = 'right';
+          const signStr = state.vInst > 0.01 ? '+' : '';
+          ctx.fillText('DC', leftX - 16, midY - 29);
+          ctx.fillStyle = COLORS.cyan;
+          ctx.fillText(`${signStr}${state.vInst.toFixed(1)}V`, leftX - 14, midY + 31);
+        } else {
+          // AC GENERATOR ICON (circle with oscillating sine wave ~ and dynamic +/- terminals)
+          const rGen = supplyHalfGap;
+          const normV = state.vAmp > 0 ? state.vInst / state.vAmp : 0; // -1 to +1
+
+          // Outer glow proportional to |v(t)|
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(leftX, midY, rGen, 0, Math.PI * 2);
+          ctx.fillStyle = '#071122';
+          ctx.fill();
+          ctx.lineWidth = 2.4;
+          ctx.strokeStyle = COLORS.cyan;
+          ctx.shadowColor = COLORS.cyan;
+          ctx.shadowBlur = 6 + Math.abs(normV) * 8;
+          ctx.stroke();
+          ctx.restore();
+
+          // Sine wave (~) inside AC circle
+          ctx.beginPath();
+          const waveW = rGen * 1.15;
+          const waveH = rGen * 0.42;
+          for (let sx = -waveW / 2; sx <= waveW / 2; sx += 1.5) {
+            const normX = sx / (waveW / 2);
+            const sy = -Math.sin(normX * Math.PI) * waveH;
+            if (sx === -waveW / 2) ctx.moveTo(leftX + sx, midY + sy);
+            else ctx.lineTo(leftX + sx, midY + sy);
+          }
+          ctx.strokeStyle = COLORS.cyan;
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+
+          // Alternating + and - terminal indicators above and below AC circle
+          ctx.font = '700 18px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          if (Math.abs(normV) > 0.08) {
+            const topIsPos = normV >= 0;
+            ctx.fillStyle = topIsPos ? `rgba(56, 189, 248, ${0.35 + 0.65 * Math.abs(normV)})` : 'rgba(148, 163, 184, 0.5)';
+            ctx.fillText(topIsPos ? '+' : '−', leftX - 14, midY - rGen - 9);
+
+            ctx.fillStyle = !topIsPos ? `rgba(56, 189, 248, ${0.35 + 0.65 * Math.abs(normV)})` : 'rgba(148, 163, 184, 0.5)';
+            ctx.fillText(!topIsPos ? '+' : '−', leftX - 14, midY + rGen + 10);
+          }
+
+          // Live AC label
+          ctx.font = '600 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#93c5fd';
+          ctx.textAlign = 'right';
+          ctx.fillText('AC ~', leftX - rGen - 8, midY - 7);
+          ctx.fillStyle = COLORS.cyan;
+          const signStr = state.vInst >= 0 ? '+' : '';
+          ctx.fillText(`${signStr}${state.vInst.toFixed(1)}V`, leftX - rGen - 8, midY + 8);
+        }
+
+        // 3. Draw Charge Carriers & Component (Resistor vs Capacitor)
+        if (isRes) {
+          // ====================================================================
+          // RESISTOR MODE: 3D Cylinder + Continuous Charge Flow Across Entire Loop
+          // ====================================================================
+          const cylW = compHalfWidth * 2;
+          const cylH = 44;
+          const cylX = midX - compHalfWidth;
+          const cylY = topY - cylH / 2;
+          const capRx = 9;
+
+          // 3D Cylinder Body Gradient
+          const bodyGrad = ctx.createLinearGradient(0, cylY, 0, cylY + cylH);
+          bodyGrad.addColorStop(0, '#277da8');
+          bodyGrad.addColorStop(0.35, '#1d6387');
+          bodyGrad.addColorStop(1, '#113d54');
+
+          // Cylinder main body path (with rounded right cap)
+          ctx.beginPath();
+          ctx.moveTo(cylX, cylY);
+          ctx.lineTo(cylX + cylW, cylY);
+          ctx.ellipse(cylX + cylW, topY, capRx, cylH / 2, 0, -Math.PI / 2, Math.PI / 2);
+          ctx.lineTo(cylX, cylY + cylH);
+          ctx.closePath();
+          ctx.fillStyle = bodyGrad;
+          ctx.fill();
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = '#38bdf8';
+          ctx.stroke();
+
+          // Lighter blue-gray circular/elliptical left end-cap (#9ab8c9) matching phasor1.jpg
+          ctx.beginPath();
+          ctx.ellipse(cylX, topY, capRx, cylH / 2, 0, 0, Math.PI * 2);
+          ctx.fillStyle = COLORS.endCap;
+          ctx.fill();
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = '#38bdf8';
+          ctx.stroke();
+
+          // Component value label below cylinder
+          ctx.font = '600 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(`R = ${state.resistance.toFixed(1)} Ω`, midX, cylY + cylH + 7);
+
+          // Draw evenly spaced glowing cyan circular charges flowing ALL THE WAY around the loop
+          // (including straight across/through the resistor cylinder!)
+          const topLen = rightX - leftX;
+          const rightLen = bottomY - topY;
+          const botLen = rightX - leftX;
+          const leftLen = bottomY - topY;
+          const perimeter = topLen + rightLen + botLen + leftLen;
+
+          const numDots = 28;
+          const spacing = perimeter / numDots;
+          const offsetFromWire = 11; // Offset outside wire so dots mirror the blueprint schematic
+
+          for (let n = 0; n < numDots; n++) {
+            let s = (n * spacing + state.chargeOffset) % perimeter;
+            if (s < 0) s += perimeter;
+
+            let dx = 0;
+            let dy = 0;
+            let insideResistor = false;
+
+            if (s < topLen) {
+              // Top horizontal branch (left -> right)
+              dx = leftX + s;
+              if (dx >= cylX + 4 && dx <= cylX + cylW - 2) {
+                // Inside the resistor cylinder body, just like phasor1.jpg!
+                dy = topY - 4;
+                insideResistor = true;
+              } else {
+                dy = topY - offsetFromWire;
+              }
+            } else if (s < topLen + rightLen) {
+              // Right vertical branch (top -> bottom)
+              const seg = s - topLen;
+              dx = rightX + offsetFromWire;
+              dy = topY + seg;
+            } else if (s < topLen + rightLen + botLen) {
+              // Bottom horizontal branch (right -> left)
+              const seg = s - (topLen + rightLen);
+              dx = rightX - seg;
+              dy = bottomY + offsetFromWire;
+            } else {
+              // Left vertical branch (bottom -> top)
+              const seg = s - (topLen + rightLen + botLen);
+              dx = leftX - offsetFromWire;
+              dy = bottomY - seg;
+              // Skip drawing directly on top of battery plates
+              if (Math.abs(dy - midY) < supplyHalfGap + 4) continue;
+            }
+
+            ctx.beginPath();
+            ctx.arc(dx, dy, 4.6, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS.cyan;
+            ctx.shadowColor = COLORS.cyan;
+            ctx.shadowBlur = insideResistor ? 4 : 7;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#05080f';
+            ctx.stroke();
+          }
+        } else {
+          // ====================================================================
+          // CAPACITOR MODE: Parallel Plates + Bounded Wire Charges + E-Field Arrows
+          // ====================================================================
+          const plateW = 11;
+          const plateH = 66;
+          const leftPlateX = midX - compHalfWidth - plateW;
+          const rightPlateX = midX + compHalfWidth;
+          const plateTopY = topY - plateH / 2;
+
+          // Left Capacitor Plate (#1d6387)
+          ctx.fillStyle = COLORS.steel;
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1.4;
+          ctx.fillRect(leftPlateX, plateTopY, plateW, plateH);
+          ctx.strokeRect(leftPlateX, plateTopY, plateW, plateH);
+
+          // Right Capacitor Plate (#1d6387)
+          ctx.fillRect(rightPlateX, plateTopY, plateW, plateH);
+          ctx.strokeRect(rightPlateX, plateTopY, plateW, plateH);
+
+          // Component value label below capacitor
+          ctx.font = '600 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(`C = ${state.capacitance.toFixed(1)} F`, midX, plateTopY + plateH + 7);
+
+          // Surface charge (+ / -) indicators on inner faces of capacitor plates
+          const normCharge = Math.max(-1, Math.min(1, state.vInst / 10.0));
+          if (Math.abs(normCharge) > 0.06) {
+            const signCount = Math.max(1, Math.min(4, Math.ceil(Math.abs(normCharge) * 4)));
+            ctx.font = '700 18px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const leftSign = normCharge > 0 ? '+' : '−';
+            const rightSign = normCharge > 0 ? '−' : '+';
+
+            for (let k = 0; k < signCount; k++) {
+              const frac = (k + 0.5) / signCount;
+              const sy = plateTopY + 8 + frac * (plateH - 16);
+              ctx.fillStyle = normCharge > 0 ? '#7dd3fc' : '#fca5a5';
+              ctx.fillText(leftSign, leftPlateX + plateW / 2, sy);
+              ctx.fillStyle = normCharge > 0 ? '#fca5a5' : '#7dd3fc';
+              ctx.fillText(rightSign, rightPlateX + plateW / 2, sy);
+            }
+          }
+
+          // --------------------------------------------------------------------
+          // 6 HORIZONTAL AMBER-GOLD ELECTRIC FIELD ARROWS INSIDE CAPACITOR GAP
+          // --------------------------------------------------------------------
+          const gapInnerLeft = leftPlateX + plateW + 5;
+          const gapInnerRight = rightPlateX - 5;
+          const maxArrowLen = Math.max(12, gapInnerRight - gapInnerLeft);
+          const fieldMag = Math.min(1, Math.abs(state.vInst) / 10.0); // 0 to 1
+          const fieldDir = state.vInst >= 0 ? 1 : -1;
+
+          // Label 'E' above the gap
+          ctx.font = '700 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = COLORS.amber;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText('E', midX, plateTopY - 4);
+
+          const numFieldLines = 6;
+          for (let fIdx = 0; fIdx < numFieldLines; fIdx++) {
+            const fy = plateTopY + 9 + (fIdx / (numFieldLines - 1)) * (plateH - 18);
+
+            if (fieldMag < 0.025) {
+              // Near-zero field: draw faint neutral center dots
+              ctx.beginPath();
+              ctx.arc(midX, fy, 1.5, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(251, 191, 36, 0.25)';
+              ctx.fill();
+            } else {
+              const arrowLen = Math.max(8, fieldMag * maxArrowLen);
+              const startX = midX - (fieldDir * arrowLen) / 2;
+              const endX = midX + (fieldDir * arrowLen) / 2;
+
+              ctx.save();
+              ctx.beginPath();
+              ctx.moveTo(startX, fy);
+              ctx.lineTo(endX - fieldDir * 4.5, fy);
+              ctx.strokeStyle = COLORS.amber;
+              ctx.lineWidth = 2.2;
+              ctx.lineCap = 'round';
+              ctx.shadowColor = COLORS.amber;
+              ctx.shadowBlur = 4 * fieldMag;
+              ctx.stroke();
+
+              // Crisp arrowhead pointing right (V > 0) or left (V < 0)
+              drawArrowHead(ctx, endX, fy, fieldDir > 0 ? 0 : Math.PI, 6.2, COLORS.amber);
+              ctx.restore();
+            }
+          }
+
+          // --------------------------------------------------------------------
+          // BOUNDED CHARGE CARRIERS ALONG OPEN WIRE PATH (NEVER CROSSING GAP!)
+          // Path goes from left plate -> left -> down -> bottom -> right -> up -> right plate
+          // --------------------------------------------------------------------
+          const seg1 = leftPlateX - 8 - leftX;          // Top-left horizontal
+          const seg2 = bottomY - topY;                  // Left vertical
+          const seg3 = rightX - leftX;                  // Bottom horizontal
+          const seg4 = bottomY - topY;                  // Right vertical
+          const seg5 = rightX - (rightPlateX + plateW + 8); // Top-right horizontal
+          const openPathLen = seg1 + seg2 + seg3 + seg4 + seg5;
+
+          const numCapDots = 24;
+          const dotStep = openPathLen / (numCapDots + 1);
+          const offsetFromWire = 11;
+
+          for (let n = 1; n <= numCapDots; n++) {
+            // Shift dots gently with charge sloshing, strictly clamped inside the open wire path
+            let s = n * dotStep - state.capChargeShift;
+            s = Math.max(4, Math.min(openPathLen - 4, s));
+
+            let dx = 0;
+            let dy = 0;
+
+            if (s < seg1) {
+              // Top-left branch (right -> left)
+              dx = leftPlateX - 8 - s;
+              dy = topY - offsetFromWire;
+            } else if (s < seg1 + seg2) {
+              // Left vertical branch (top -> bottom)
+              const u = s - seg1;
+              dx = leftX - offsetFromWire;
+              dy = topY + u;
+              if (Math.abs(dy - midY) < supplyHalfGap + 4) continue;
+            } else if (s < seg1 + seg2 + seg3) {
+              // Bottom horizontal branch (left -> right)
+              const u = s - (seg1 + seg2);
+              dx = leftX + u;
+              dy = bottomY + offsetFromWire;
+            } else if (s < seg1 + seg2 + seg3 + seg4) {
+              // Right vertical branch (bottom -> top)
+              const u = s - (seg1 + seg2 + seg3);
+              dx = rightX + offsetFromWire;
+              dy = bottomY - u;
+            } else {
+              // Top-right branch (right -> left toward right plate)
+              const u = s - (seg1 + seg2 + seg3 + seg4);
+              dx = rightX - u;
+              dy = topY - offsetFromWire;
+            }
+
+            ctx.beginPath();
+            ctx.arc(dx, dy, 4.6, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS.cyan;
+            ctx.shadowColor = COLORS.cyan;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#05080f';
+            ctx.stroke();
+          }
+        }
+
+        // 4. Subtle Current Direction Indicator Arrow on Bottom Wire when |i| > 0.08 A
+        if (Math.abs(state.iInst) > 0.08) {
+          const iDir = state.iInst > 0 ? -1 : 1; // On bottom wire, clockwise current flows right-to-left (-1)
+          const arrowIntensity = Math.min(1, Math.abs(state.iInst) / 5.0);
+          ctx.save();
+          ctx.globalAlpha = 0.35 + 0.65 * arrowIntensity;
+          ctx.font = '600 18px "JetBrains Mono", monospace';
+          ctx.fillStyle = COLORS.red;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(`i ${state.iInst > 0 ? '↻' : '↺'}`, midX, bottomY - 7);
+          drawArrowHead(ctx, midX + iDir * 24, bottomY - 12, iDir > 0 ? 0 : Math.PI, 6, COLORS.red);
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      // --------------------------------------------------------------------------
+      // 9. RIGHT PANEL RENDERERS: TIME OSCILLOSCOPE & PHASOR DIAL
+      // --------------------------------------------------------------------------
+      function computeCurrentFullScale() {
+        // Dynamic clean scale for Current so Capacitor AC peaks never clip off-canvas
+        const peakCandidate = Math.max(state.iAmp, Math.abs(state.iInst), 3.0);
+        if (peakCandidate <= 10.5) return 12;
+        if (peakCandidate <= 22) return 25;
+        if (peakCandidate <= 45) return 50;
+        return 100;
+      }
+
+      function renderTimeGraph(canvas, ctx, options) {
+        const { width: w, height: h, dpr } = resizeCanvasToContainer(canvas);
+        ctx.save();
+        ctx.scale(dpr, dpr);
+
+        const {
+          valueKey,     // 'v' or 'i'
+          currentVal,   // instantaneous value
+          maxScale,     // full Y scale (e.g. 12 V or 12 A)
+          unit,         // 'V' or 'A'
+          strokeColor,  // '#38bdf8' or '#ef4444'
+          fillColor,    // translucent area fill
+        } = options;
+
+        // Background
+        ctx.fillStyle = COLORS.bg;
+        ctx.fillRect(0, 0, w, h);
+
+        const padLeft = 46;
+        const padRight = 22;
+        const padTop = 16;
+        const padBottom = 22;
+        const plotW = Math.max(20, w - padLeft - padRight);
+        const plotH = Math.max(20, h - padTop - padBottom);
+        const zeroY = padTop + plotH / 2;
+
+        // Horizontal grid lines (+100%, +50%, 0, -50%, -100% of nominal tick)
+        const tickStep = maxScale === 12 ? 5 : maxScale === 25 ? 10 : maxScale === 50 ? 20 : 40;
+        const ticks = [-tickStep * 2, -tickStep, 0, tickStep, tickStep * 2];
+
+        ctx.font = '500 18px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+
+        ticks.forEach((val) => {
+          const y = zeroY - (val / maxScale) * (plotH / 2);
+          if (y < padTop - 4 || y > padTop + plotH + 4) return;
+
+          ctx.beginPath();
+          ctx.moveTo(padLeft, y);
+          ctx.lineTo(padLeft + plotW, y);
+          if (val === 0) {
+            ctx.strokeStyle = '#3b4d6b';
+            ctx.lineWidth = 1.4;
+            ctx.setLineDash([]);
+          } else {
+            ctx.strokeStyle = 'rgba(30, 58, 95, 0.45)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+          }
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = val === 0 ? '#94a3b8' : '#64748b';
+          const prefix = val > 0 ? '+' : '';
+          ctx.fillText(`${prefix}${val}${unit}`, padLeft - 6, y);
+        });
+
+        // Vertical scrolling time grid lines (every 1.0 second)
+        const nowX = padLeft + plotW * 0.88;
+        const pxPerSec = (plotW * 0.88) / state.maxHistoryDuration;
+        const firstGridSec = Math.floor(state.simTime - state.maxHistoryDuration);
+        const lastGridSec = Math.ceil(state.simTime + 1);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        for (let sec = firstGridSec; sec <= lastGridSec; sec++) {
+          const gx = nowX - (state.simTime - sec) * pxPerSec;
+          if (gx < padLeft || gx > padLeft + plotW) continue;
+          ctx.beginPath();
+          ctx.moveTo(gx, padTop);
+          ctx.lineTo(gx, padTop + plotH);
+          ctx.strokeStyle = 'rgba(30, 58, 95, 0.35)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          if (sec >= 0) {
+            ctx.fillStyle = '#475569';
+            ctx.fillText(`${sec}s`, gx, padTop + plotH + 5);
+          }
+        }
+
+        // Clip waveform trace to plot area
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(padLeft, padTop - 2, plotW, plotH + 4);
+        ctx.clip();
+
+        // Draw waveform trace from rolling history buffer
+        if (state.history.length > 1) {
+          ctx.beginPath();
+          let firstX = null;
+          let lastX = null;
+
+          for (let idx = 0; idx < state.history.length; idx++) {
+            const sample = state.history[idx];
+            const sx = nowX - (state.simTime - sample.t) * pxPerSec;
+            const sy = zeroY - (sample[valueKey] / maxScale) * (plotH / 2);
+
+            if (idx === 0) {
+              ctx.moveTo(sx, sy);
+              firstX = sx;
+            } else {
+              ctx.lineTo(sx, sy);
+            }
+            lastX = sx;
+          }
+
+          // Glowing trace stroke
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = 2.6;
+          ctx.lineJoin = 'round';
+          ctx.shadowColor = strokeColor;
+          ctx.shadowBlur = 7;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          // Subtle translucent area fill to zero-axis
+          if (firstX !== null && lastX !== null) {
+            ctx.lineTo(lastX, zeroY);
+            ctx.lineTo(firstX, zeroY);
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+          }
+        }
+
+        // Vertical "Now" cursor line & glowing sample marker dot
+        const curY = zeroY - (currentVal / maxScale) * (plotH / 2);
+        ctx.beginPath();
+        ctx.moveTo(nowX, padTop);
+        ctx.lineTo(nowX, padTop + plotH);
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.32)';
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([4, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Glowing instantaneous point on cursor
+        ctx.beginPath();
+        ctx.arc(nowX, curY, 4.8, 0, Math.PI * 2);
+        ctx.fillStyle = strokeColor;
+        ctx.shadowColor = strokeColor;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        ctx.restore(); // End plot clip
+        ctx.restore();
+      }
+
+      function renderPhasorGraph(canvas, ctx, options) {
+        const { width: w, height: h, dpr } = resizeCanvasToContainer(canvas);
+        ctx.save();
+        ctx.scale(dpr, dpr);
+
+        const {
+          magnitude,      // |V| or |i|
+          instValue,      // v(t) or i(t)
+          theta,          // instantaneous phase angle [rad]
+          maxScale,       // full scale (e.g. 12 V or 12 A)
+          unit,           // 'V' or 'A'
+          strokeColor,    // '#38bdf8' or '#ef4444'
+          fillColor,      // translucent sector fill
+          isCurrentDial,  // true on Current dial to draw faint Voltage reference ghost vector
+          dcDeflection,   // transient angular deflection in DC mode when slider moves
+          dcDerivRate,    // dV/dt or di/dt for DC change tracker readout
+        } = options;
+
+        const isDC = state.supplyMode === 'dc';
+
+        // Background
+        ctx.fillStyle = COLORS.bg;
+        ctx.fillRect(0, 0, w, h);
+
+        // Layout: Polar Phasor Circle on left-center, Vertical Sinusoidal Projection Bar on right
+        const dialRadius = Math.max(46, Math.min(h * 0.39, w * 0.25));
+        const cx = Math.max(dialRadius + 34, w * 0.34);
+        const cy = h * 0.51;
+
+        const projBarX = Math.min(w - 58, cx + dialRadius + Math.max(44, w * 0.14));
+
+        // 1. Concentric Magnitude Rings (50% and 100%)
+        [0.5, 1.0].forEach((frac) => {
+          ctx.beginPath();
+          ctx.arc(cx, cy, dialRadius * frac, 0, Math.PI * 2);
+          ctx.strokeStyle = frac === 1.0 ? 'rgba(56, 189, 248, 0.25)' : 'rgba(30, 58, 95, 0.55)';
+          ctx.lineWidth = frac === 1.0 ? 1.3 : 1;
+          ctx.setLineDash(frac === 1.0 ? [] : [3, 3]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        });
+
+        // 2. Crosshair Axes & Degree Markings (0°, 90°, 180°, 270°)
+        ctx.strokeStyle = 'rgba(51, 65, 85, 0.65)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cx - dialRadius - 8, cy);
+        ctx.lineTo(cx + dialRadius + 8, cy);
+        ctx.moveTo(cx, cy - dialRadius - 8);
+        ctx.lineTo(cx, cy + dialRadius + 8);
+        ctx.stroke();
+
+        ctx.font = '500 18px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('0°', cx + dialRadius + 11, cy);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText('90°', cx, cy - dialRadius - 10);
+
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('180°', cx - dialRadius - 11, cy);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText('270°', cx, cy + dialRadius + 10);
+
+        // 3. On Current Phasor Dial (AC Mode): Faint Ghost Reference Arrow of Voltage Phasor
+        if (isCurrentDial && !isDC) {
+          const vNormLen = Math.min(1, state.vAmp / 12) * dialRadius;
+          const vTipX = cx + vNormLen * Math.cos(state.thetaV);
+          const vTipY = cy - vNormLen * Math.sin(state.thetaV);
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(vTipX, vTipY);
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.38)';
+          ctx.lineWidth = 1.8;
+          ctx.setLineDash([4, 3]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          drawArrowHead(ctx, vTipX, vTipY, -state.thetaV, 7, 'rgba(56, 189, 248, 0.45)');
+
+          // Draw Phase Difference Arc (Δφ) between V and i
+          if (state.phaseDiffDeg !== 0 && vNormLen > 12) {
+            const arcR = Math.min(28, dialRadius * 0.36);
+            ctx.beginPath();
+            ctx.arc(cx, cy, arcR, -state.thetaI, -state.thetaV, false);
+            ctx.strokeStyle = COLORS.amber;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            const midAngle = state.thetaV + Math.PI / 4;
+            ctx.font = '600 18px "JetBrains Mono", monospace';
+            ctx.fillStyle = COLORS.amber;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`Δφ=+${state.phaseDiffDeg}°`, cx + (arcR + 22) * Math.cos(midAngle), cy - (arcR + 16) * Math.sin(midAngle));
+          }
+          ctx.restore();
+        }
+
+        // 4. Phase Angle Sweep Arc (AC Mode) OR Dynamic DC Rate-of-Change Tracker (DC Mode)
+        const vecLen = Math.min(dialRadius, (magnitude / maxScale) * dialRadius);
+
+        if (!isDC && vecLen > 6) {
+          // Counter-clockwise phase sector from 0° to theta
+          const sectorR = Math.min(22, vecLen * 0.45);
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, sectorR, 0, -theta, true);
+          ctx.closePath();
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+        } else if (isDC) {
+          // Dynamic ΔV / Δi Change Tracker radial sweep when user drags DC Voltage slider
+          const isTracking = Math.abs(dcDeflection) > 0.025 || Math.abs(dcDerivRate) > 0.15;
+          if (isTracking) {
+            const trackerR = Math.max(26, vecLen * 0.78);
+            const baseAngle = theta; // 0 or PI
+            const sweptAngle = baseAngle + dcDeflection;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, trackerR, -baseAngle, -sweptAngle, dcDeflection > 0);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.22)';
+            ctx.fill();
+
+            // Transient rate-of-change needle
+            const nx = cx + trackerR * Math.cos(sweptAngle);
+            const ny = cy - trackerR * Math.sin(sweptAngle);
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(nx, ny);
+            ctx.strokeStyle = COLORS.amber;
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([3, 2]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+          }
+        }
+
+        // 5. Primary Rotating (or Steady DC) Phasor Arrow
+        const tipX = cx + vecLen * Math.cos(theta);
+        const tipY = cy - vecLen * Math.sin(theta);
+
+        if (vecLen > 2) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(tipX, tipY);
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = 3;
+          ctx.lineCap = 'round';
+          ctx.shadowColor = strokeColor;
+          ctx.shadowBlur = 8;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          drawArrowHead(ctx, tipX, tipY, -theta, 9.5, strokeColor);
+          ctx.restore();
+        }
+
+        // Origin pivot dot
+        ctx.beginPath();
+        ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#f8fafc';
+        ctx.fill();
+
+        // 6. Vertical Projection Axis & Dashed Projection Link (y = A sin θ)
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(projBarX, cy - dialRadius);
+        ctx.lineTo(projBarX, cy + dialRadius);
+        ctx.stroke();
+
+        // Zero tick & max/min ticks on projection axis
+        ctx.beginPath();
+        ctx.moveTo(projBarX - 6, cy);
+        ctx.lineTo(projBarX + 6, cy);
+        ctx.moveTo(projBarX - 4, cy - dialRadius);
+        ctx.lineTo(projBarX + 4, cy - dialRadius);
+        ctx.moveTo(projBarX - 4, cy + dialRadius);
+        ctx.lineTo(projBarX + 4, cy + dialRadius);
+        ctx.stroke();
+
+        // Horizontal dashed projection line from phasor tip to vertical axis
+        const projY = cy - (instValue / maxScale) * dialRadius;
+        ctx.beginPath();
+        ctx.moveTo(tipX, tipY);
+        ctx.lineTo(projBarX, projY);
+        ctx.strokeStyle = strokeColor;
+        ctx.globalAlpha = 0.55;
+        ctx.lineWidth = 1.3;
+        ctx.setLineDash([4, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+
+        // Projected instantaneous value dot on vertical axis
+        ctx.beginPath();
+        ctx.arc(projBarX, projY, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = strokeColor;
+        ctx.shadowColor = strokeColor;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 1.3;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        // Labels next to projection bar
+        ctx.font = '500 18px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`+${maxScale}${unit}`, projBarX + 8, cy - dialRadius);
+        ctx.fillText(`0`, projBarX + 8, cy);
+        ctx.fillText(`-${maxScale}${unit}`, projBarX + 8, cy + dialRadius);
+
+        // Projection formula / DC status caption at top-right of Phasor canvas
+        ctx.font = '500 18px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'top';
+        if (!isDC) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText(`y(t) = A·sin(θ)`, w - 12, 10);
+        } else {
+          const isTracking = Math.abs(dcDerivRate) > 0.15;
+          ctx.fillStyle = isTracking ? COLORS.amber : '#64748b';
+          const labelSymbol = isCurrentDial ? 'Δi/Δt' : 'ΔV/Δt';
+          ctx.fillText(
+            isTracking ? `${labelSymbol}: ${dcDerivRate >= 0 ? '+' : ''}${dcDerivRate.toFixed(1)} ${unit}/s` : 'Steady DC (ω = 0 rad/s)',
+            w - 12,
+            10
+          );
+        }
+
+        ctx.restore();
+      }
+
+      // --------------------------------------------------------------------------
+      // 10. MAIN ANIMATION LOOP
+      // --------------------------------------------------------------------------
+      function renderAll() {
+        renderCircuitCanvas();
+
+        // Render Voltage Graph (Top Right)
+        if (state.vView === 'time') {
+          renderTimeGraph(dom.voltageCanvas, ctxVoltage, {
+            valueKey: 'v',
+            currentVal: state.vInst,
+            maxScale: 12,
+            unit: 'V',
+            strokeColor: COLORS.cyan,
+            fillColor: COLORS.cyanDim,
+          });
+        } else {
+          renderPhasorGraph(dom.voltageCanvas, ctxVoltage, {
+            magnitude: state.vAmp,
+            instValue: state.vInst,
+            theta: state.thetaV,
+            maxScale: 12,
+            unit: 'V',
+            strokeColor: COLORS.cyan,
+            fillColor: COLORS.cyanDim,
+            isCurrentDial: false,
+            dcDeflection: state.dcPhaseDeflectionV,
+            dcDerivRate: state.dVdt,
+          });
+        }
+
+        // Render Current Graph (Bottom Right)
+        const iMaxScale = computeCurrentFullScale();
+        if (state.iView === 'time') {
+          renderTimeGraph(dom.currentCanvas, ctxCurrent, {
+            valueKey: 'i',
+            currentVal: state.iInst,
+            maxScale: iMaxScale,
+            unit: 'A',
+            strokeColor: COLORS.red,
+            fillColor: COLORS.redDim,
+          });
+        } else {
+          renderPhasorGraph(dom.currentCanvas, ctxCurrent, {
+            magnitude: state.iAmp,
+            instValue: state.iInst,
+            theta: state.thetaI,
+            maxScale: iMaxScale,
+            unit: 'A',
+            strokeColor: COLORS.red,
+            fillColor: COLORS.redDim,
+            isCurrentDial: true,
+            dcDeflection: state.dcPhaseDeflectionI,
+            dcDerivRate: state.dIdt,
+          });
+        }
+
+        updateTelemetryReadouts();
+      }
+
+      function animationLoop(timestamp) {
+        if (state.lastTimestamp === null) {
+          state.lastTimestamp = timestamp;
+        }
+        const rawDt = (timestamp - state.lastTimestamp) / 1000;
+        state.lastTimestamp = timestamp;
+
+        // Clamp dt to prevent huge jumps if tab was inactive
+        const dt = Math.min(rawDt, 0.05);
+
+        if (state.isPlaying) {
+          stepPhysics(dt);
+        }
+
+        renderAll();
+        requestAnimationFrame(animationLoop);
+      }
+
+      // --------------------------------------------------------------------------
+      // 11. INITIALIZATION ON WINDOW LOAD
+      // --------------------------------------------------------------------------
+      window.addEventListener('load', () => {
+        configureSlidersForMode();
+        updateGraphToggleStyles();
+        seedInitialHistory();
+        resizeCanvasToContainer(dom.circuitCanvas);
+        resizeCanvasToContainer(dom.voltageCanvas);
+        resizeCanvasToContainer(dom.currentCanvas);
+        requestAnimationFrame(animationLoop);
+      });
+    })();
+  </script>
+</body>
+</html>
