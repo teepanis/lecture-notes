@@ -40,6 +40,7 @@
     };
   </script>
 
+<!--
 <style>
     /* Base dark laboratory canvas aesthetic */
     * {
@@ -183,7 +184,215 @@
     .red-glow {
       box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
     }
-  </style>
+</style>
+-->
+
+<style>
+    /* Base dark laboratory canvas aesthetic */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 20px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #05080f;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desktop / Large Screen: Lock to single screen (100vh, no scroll) */
+    @media (min-width: 1024px) and (min-height: 620px) {
+      html, body {
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+      }
+
+      main {
+        flex: 1 1 0%;
+        min-height: 0;
+        max-height: 100%;
+        grid-template-rows: minmax(0, 1fr);
+        overflow: hidden;
+      }
+
+      main > section,
+      main > div {
+        min-height: 0;
+        max-height: 100%;
+      }
+
+      main section > div,
+      main canvas {
+        min-height: 0;
+      }
+    }
+
+    /* Mobile / Narrow / Short Screen: Allow vertical scrolling */
+    /*
+    @media (max-width: 1023px), (max-height: 619px) {
+      html, body {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+      }
+
+      main {
+        flex: none !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      main > section,
+      main > div {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      main canvas {
+        min-height: 220px;
+      }
+    }
+    */
+    @media (max-width: 1023px), (max-height: 619px) {
+      html, body {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+      }
+
+      main {
+        flex: none !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      main > section,
+      main > div {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      main canvas {
+        height: 240px !important;
+        min-height: 240px !important;
+        max-height: 240px !important;
+      }
+    }
+
+    /* Subtle blueprint grid background */
+    .lab-grid-bg {
+      background-color: #05080f;
+      background-image:
+        linear-gradient(to right, rgba(30, 58, 95, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 58, 95, 0.14) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Blueprint-inspired rectangular slider styling (compacted for 100vh fit) */
+    input[type='range'].blueprint-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 18px;
+      background: #060b14;
+      border: 1.5px solid #1e3a5f;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type='range'].blueprint-slider:hover {
+      border-color: #2b7bba;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+    }
+
+    input[type='range'].blueprint-slider:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+    }
+
+    /* WebKit rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 24px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+      transform: scaleY(1.05);
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+
+    /* Firefox rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-moz-range-thumb {
+      width: 13px;
+      height: 24px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-moz-range-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+    }
+
+    /* Custom subtle scrollbar for smaller viewports */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #05080f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3a5f;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2b7bba;
+    }
+
+    /* Glow accents */
+    .cyan-glow {
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+    }
+    .red-glow {
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
+    }
+</style>
 
 </head>
 <body class="lab-grid-bg min-h-screen flex flex-col justify-between text-slate-200 selection:bg-sky-500/30 selection:text-sky-200">
@@ -202,17 +411,17 @@
       </div>
       <div>
         <h1 style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="text-sm sm:text-xl tracking-tight text-slate-100 leading-tight">
-          ปฏิบัติการณ์ฟิสิกส์ มหาวิทยาลัยนเรศวร － Phasor Diagram
+          ปฏิบัติการณ์ฟิสิกส์ － Phasor Diagram
         </h1>
-        <!--
+        
         <p class="text-[16px] text-slate-400 hidden sm:block">
-          by Department of Physics, Faculty of Science, Naresuan University
-        </p>-->
+          โดย รศ.ดร.ทีปานิส ชาชิโย ภาควิชาฟิสิกส์ คณะวิทยาศาสตร์ มหาวิทยาลัยนเรศวร
+        </p>
         <ul style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="font-mono text-[14px] text-slate-100 hidden sm:block">
-        <li>1) R + DC - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) หรือ i(t)</li>
-        <li>2) R + AC - สลับโหมด Time/Phasor สังเกตความสัมพันธ์</li>
-        <li>3) C + DC - ไม่เกิดกระแส! ขยับ Voltage เกิดกระแสไหมเอ่ย?</li>
-        <li>4) C + AC - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
+        <li>1) R + DC ▶️ Time - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) หรือ i(t)</li>
+        <li>2) R + AC ▶️ Time - สลับโหมด Time ↔ Phasor สังเกตความสัมพันธ์</li>
+        <li>3) C + DC ▶️ Time - ไม่เกิดกระแส ! ขยับ Voltage เกิดกระแสไหมเอ่ย ?</li>
+        <li>4) C + AC ▶️ Time - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
         </ul>
       
       </div>
@@ -274,14 +483,14 @@
         <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 flex items-center gap-1">
           <button id="btnCompResistor" type="button"
             class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
-            <span class="w-2.5 h-2.5 rounded-sm bg-[#9ab8c9] inline-block"></span>
+            <!-- <span class="w-2.5 h-2.5 rounded-sm bg-[#9ab8c9] inline-block"></span> -->
             <span>Resistor (R)</span>
           </button>
           <button id="btnCompCapacitor" type="button"
             class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
-            <span class="inline-flex gap-[2px] items-center">
+            <!-- <span class="inline-flex gap-[2px] items-center">
               <span class="w-[2.5px] h-3 bg-current inline-block"></span>
-              <span class="w-[2.5px] h-3 bg-current inline-block"></span>
+              <span class="w-[2.5px] h-3 bg-current inline-block"></span> -->
             </span>
             <span>Capacitor (C)</span>
           </button>
@@ -292,12 +501,12 @@
           <button id="btnModeDC" type="button"
             class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
             <span class="font-mono text-[11px] font-bold">⎓</span>
-            <span>DC Supply</span>
+            <span>DC</span>
           </button>
           <button id="btnModeAC" type="button"
             class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
             <span class="font-mono text-sm leading-none">∿</span>
-            <span>AC Supply</span>
+            <span>AC</span>
           </button>
         </div>
       </div>
@@ -484,9 +693,9 @@
         // Parameter Values
         dcVoltageTarget: 6.0,  // Slider target DC Voltage (-10.0 to +10.0 V)
         dcVoltageActual: 6.0,  // Smoothed/RC-filtered voltage across component
-        acPeakVoltage: 6.0,    // AC Peak Voltage V0 (1.0 to 10.0 V)
+        acPeakVoltage: 8.0,    // AC Peak Voltage V0 (1.0 to 10.0 V)
         acFrequency: 0.40,     // AC Frequency f (0.10 to 1.50 Hz)
-        resistance: 2.0,       // Resistance R (1.0 to 10.0 Ohm)
+        resistance: 1.0,       // Resistance R (1.0 to 10.0 Ohm)
         capacitance: 2.0,      // Capacitance C (0.5 to 5.0 F)
         dcAnimSpeed: 1.0,      // DC animation time multiplier (0.2x to 2.5x)
 
@@ -968,8 +1177,11 @@
             state.vAmp = Math.abs(state.vInst);
             state.iAmp = Math.abs(state.iInst);
 
-            state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
-            state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            // hack
+            //state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
+            //state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            state.thetaV = 0;
+            state.thetaI = 0;
             state.phaseDiffDeg = 0;
 
             // Continuous charge drift around loop proportional to DC current i
@@ -996,8 +1208,11 @@
             state.vAmp = Math.abs(state.vInst);
             state.iAmp = Math.abs(state.iInst);
 
-            state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
-            state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            // hack
+            //state.thetaV = state.vInst >= 0 ? 0 : Math.PI;
+            //state.thetaI = state.iInst >= 0 ? 0 : Math.PI;
+            state.thetaV = 0;
+            state.thetaI = 0;
             state.phaseDiffDeg = 0;
 
             // Charges shift along the wires proportionally to capacitor plate charge q = C * V_C
@@ -1015,8 +1230,11 @@
           // Deflect transient phase-rate tracker proportionally to rate of change, settling back to 0
           const targetDeflV = Math.max(-1.15, Math.min(1.15, state.dVdt * 0.045));
           const targetDeflI = Math.max(-1.15, Math.min(1.15, state.dIdt * 0.045));
-          state.dcPhaseDeflectionV += (targetDeflV - state.dcPhaseDeflectionV) * Math.min(1, effDt * 14);
-          state.dcPhaseDeflectionI += (targetDeflI - state.dcPhaseDeflectionI) * Math.min(1, effDt * 14);
+          // hack
+          //state.dcPhaseDeflectionV += (targetDeflV - state.dcPhaseDeflectionV) * Math.min(1, effDt * 14);
+          //state.dcPhaseDeflectionI += (targetDeflI - state.dcPhaseDeflectionI) * Math.min(1, effDt * 14);
+          state.dcPhaseDeflectionV = 0;
+          state.dcPhaseDeflectionI = 0;
 
           state.prevVInst = state.vInst;
           state.prevIInst = state.iInst;
@@ -1581,10 +1799,31 @@
       // --------------------------------------------------------------------------
       // 9. RIGHT PANEL RENDERERS: TIME OSCILLOSCOPE & PHASOR DIAL
       // --------------------------------------------------------------------------
+      /*
       function computeCurrentFullScale() {
         // Dynamic clean scale for Current so Capacitor AC peaks never clip off-canvas
         const peakCandidate = Math.max(state.iAmp, Math.abs(state.iInst), 3.0);
-        if (peakCandidate <= 10.5) return 12;
+        if (peakCandidate <= 10) return 12;
+        if (peakCandidate <= 22) return 25;
+        if (peakCandidate <= 45) return 50;
+        return 100;
+      }
+      */
+
+      function computeCurrentFullScale() {
+        // Find the largest current spike still visible on the graph
+        let historyPeak = 0;
+        for (let idx = 0; idx < state.history.length; idx++) {
+          const sample = state.history[idx];
+          if (state.simTime - sample.t <= state.maxHistoryDuration) {
+            const absI = Math.abs(sample.i);
+            if (absI > historyPeak) historyPeak = absI;
+          }
+        }
+
+        // Dynamic clean scale for Current so spikes stay in range until they scroll off
+        const peakCandidate = Math.max(state.iAmp, Math.abs(state.iInst), historyPeak, 3.0);
+        if (peakCandidate <= 10) return 12;
         if (peakCandidate <= 22) return 25;
         if (peakCandidate <= 45) return 50;
         return 100;
@@ -1769,11 +2008,12 @@
         ctx.fillRect(0, 0, w, h);
 
         // Layout: Polar Phasor Circle on left-center, Vertical Sinusoidal Projection Bar on right
-        const dialRadius = Math.max(46, Math.min(h * 0.39, w * 0.25));
-        const cx = Math.max(dialRadius + 34, w * 0.34);
-        const cy = h * 0.51;
+        //const dialRadius = Math.max(46, Math.min(h * 0.39, w * 0.25));
+        const dialRadius = Math.max(34, Math.min(h * 0.50 - 32, w * 0.25));
+        const cx = Math.max(dialRadius + 56, w * 0.44);
+        const cy = h * 0.50;
 
-        const projBarX = Math.min(w - 58, cx + dialRadius + Math.max(44, w * 0.14));
+        const projBarX = Math.min(w - 72, cx + dialRadius + Math.max(48, w * 0.12));
 
         // 1. Concentric Magnitude Rings (50% and 100%)
         [0.5, 1.0].forEach((frac) => {
@@ -1851,7 +2091,7 @@
         }
 
         // 4. Phase Angle Sweep Arc (AC Mode) OR Dynamic DC Rate-of-Change Tracker (DC Mode)
-        const vecLen = Math.min(dialRadius, (magnitude / maxScale) * dialRadius);
+        const vecLen = isDC ? 0 : Math.min(dialRadius, (magnitude / maxScale) * dialRadius);
 
         if (!isDC && vecLen > 6) {
           // Counter-clockwise phase sector from 0° to theta
@@ -1862,7 +2102,7 @@
           ctx.closePath();
           ctx.fillStyle = fillColor;
           ctx.fill();
-        } else if (isDC) {
+        } /* else if (isDC) {
           // Dynamic ΔV / Δi Change Tracker radial sweep when user drags DC Voltage slider
           const isTracking = Math.abs(dcDeflection) > 0.025 || Math.abs(dcDerivRate) > 0.15;
           if (isTracking) {
@@ -1892,6 +2132,7 @@
             ctx.restore();
           }
         }
+        */
 
         // 5. Primary Rotating (or Steady DC) Phasor Arrow
         const tipX = cx + vecLen * Math.cos(theta);
@@ -1915,10 +2156,13 @@
         }
 
         // Origin pivot dot
+        if(!isDC){
         ctx.beginPath();
         ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
         ctx.fillStyle = '#f8fafc';
         ctx.fill();
+        }
+
 
         // 6. Vertical Projection Axis & Dashed Projection Link (y = A sin θ)
         ctx.strokeStyle = '#334155';
@@ -1939,7 +2183,8 @@
         ctx.stroke();
 
         // Horizontal dashed projection line from phasor tip to vertical axis
-        const projY = cy - (instValue / maxScale) * dialRadius;
+        if(!isDC){
+        const projY = isDC ? cy : cy - (instValue / maxScale) * dialRadius;
         ctx.beginPath();
         ctx.moveTo(tipX, tipY);
         ctx.lineTo(projBarX, projY);
@@ -1962,6 +2207,7 @@
         ctx.lineWidth = 1.3;
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
+        }
 
         // Labels next to projection bar
         ctx.font = '500 18px "JetBrains Mono", monospace';
@@ -1973,6 +2219,7 @@
         ctx.fillText(`-${maxScale}${unit}`, projBarX + 8, cy + dialRadius);
 
         // Projection formula / DC status caption at top-right of Phasor canvas
+        /*
         ctx.font = '500 18px "JetBrains Mono", monospace';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'top';
@@ -1989,6 +2236,7 @@
             10
           );
         }
+        */
 
         ctx.restore();
       }
