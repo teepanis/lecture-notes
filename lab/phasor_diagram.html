@@ -40,154 +40,7 @@
     };
   </script>
 
-<!--
-<style>
-    /* Base dark laboratory canvas aesthetic */
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      font-size: 20px;
-    }
-
-    html, body {
-      height: 100vh;
-      max-height: 100vh;
-      margin: 0;
-      padding: 0;
-      background-color: #05080f;
-      color: #e2e8f0;
-      font-family: 'Inter', system-ui, sans-serif;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Lock main workspace and columns to the remaining screen height */
-    main {
-      flex: 1 1 0%;
-      min-height: 0;
-      max-height: 100%;
-      grid-template-rows: minmax(0, 1fr);
-      overflow: hidden;
-    }
-
-    main > section,
-    main > div {
-      min-height: 0;
-      max-height: 100%;
-    }
-
-    /* Allow V(t) and i(t) cards and canvases to shrink proportionally */
-    main section > div,
-    main canvas {
-      min-height: 0;
-    }
-
-    /* Subtle blueprint grid background */
-    .lab-grid-bg {
-      background-color: #05080f;
-      background-image:
-        linear-gradient(to right, rgba(30, 58, 95, 0.14) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(30, 58, 95, 0.14) 1px, transparent 1px);
-      background-size: 28px 28px;
-    }
-
-    /* Blueprint-inspired rectangular slider styling (compacted for 100vh fit) */
-    input[type='range'].blueprint-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 18px;
-      background: #060b14;
-      border: 1.5px solid #1e3a5f;
-      border-radius: 3px;
-      outline: none;
-      cursor: pointer;
-      padding: 0 2px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input[type='range'].blueprint-slider:hover {
-      border-color: #2b7bba;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
-    }
-
-    input[type='range'].blueprint-slider:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
-    }
-
-    /* WebKit rectangular vertical steel-blue handle */
-    input[type='range'].blueprint-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 13px;
-      height: 24px;
-      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
-      border: 1.5px solid #38bdf8;
-      border-radius: 2px;
-      cursor: grab;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
-      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    input[type='range'].blueprint-slider::-webkit-slider-thumb:hover {
-      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
-      transform: scaleY(1.05);
-    }
-
-    input[type='range'].blueprint-slider::-webkit-slider-thumb:active {
-      cursor: grabbing;
-      transform: scale(0.98);
-    }
-
-    /* Firefox rectangular vertical steel-blue handle */
-    input[type='range'].blueprint-slider::-moz-range-thumb {
-      width: 13px;
-      height: 24px;
-      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
-      border: 1.5px solid #38bdf8;
-      border-radius: 2px;
-      cursor: grab;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
-      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    input[type='range'].blueprint-slider::-moz-range-thumb:hover {
-      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
-    }
-
-    /* Custom subtle scrollbar for smaller viewports */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #05080f;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e3a5f;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #2b7bba;
-    }
-
-    /* Glow accents */
-    .cyan-glow {
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
-    }
-    .red-glow {
-      box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
-    }
-</style>
--->
-
-<style>
+  <style>
     /* Base dark laboratory canvas aesthetic */
     * {
       box-sizing: border-box;
@@ -208,7 +61,8 @@
     }
 
     /* Desktop / Large Screen: Lock to single screen (100vh, no scroll) */
-    @media (min-width: 1024px) and (min-height: 620px) {
+    /* @media (min-width: 1024px) and (min-height: 620px) { */
+    @media (min-width: 900px) and (min-height: 600px) {
       html, body {
         height: 100vh;
         max-height: 100vh;
@@ -235,36 +89,8 @@
       }
     }
 
-    /* Mobile / Narrow / Short Screen: Allow vertical scrolling */
-    /*
-    @media (max-width: 1023px), (max-height: 619px) {
-      html, body {
-        height: auto !important;
-        max-height: none !important;
-        min-height: 100vh;
-        overflow-x: hidden;
-        overflow-y: auto !important;
-      }
-
-      main {
-        flex: none !important;
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-      }
-
-      main > section,
-      main > div {
-        max-height: none !important;
-        overflow: visible !important;
-      }
-
-      main canvas {
-        min-height: 220px;
-      }
-    }
-    */
-    @media (max-width: 1023px), (max-height: 619px) {
+    /* @media (max-width: 1023px), (max-height: 619px) { */
+    @media (max-width: 899px), (max-height: 599px) {
       html, body {
         height: auto !important;
         max-height: none !important;
@@ -417,10 +243,10 @@
         <p class="text-[14px] sm:text-[16px] text-slate-400">
           โดย รศ.ดร.ทีปานิส ชาชิโย
         <ul style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="text-[14px] sm:text-[14px] text-slate-100 mt-1">
-        <li>1) R + DC ▶️ Time - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) หรือ i(t)</li>
-        <li>2) R + AC ▶️ Time - สลับโหมด Time ↔ Phasor สังเกตความสัมพันธ์</li>
-        <li>3) C + DC ▶️ Time - ไม่เกิดกระแส ! ขยับ Voltage เกิดกระแสไหมเอ่ย ?</li>
-        <li>4) C + AC ▶️ Time - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
+        <li>1) R + DC - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) และ i(t)</li>
+        <li>2) R + AC - ลูกศร Phasor หมุน สัมพันธ์กับ V(t) และ i(t)</li>
+        <li>3) C + DC - ไม่เกิดกระแส ! ขยับ Voltage เกิดกระแสไหมเอ่ย ?</li>
+        <li>4) C + AC - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
         </ul>
         </p>
       </div>
@@ -475,39 +301,25 @@
     <!-- LEFT PANEL (~48% WIDTH): CIRCUIT ANIMATION & CONTROLS               -->
     <!-- =================================================================== -->
     <section class="w-full lg:w-[48%] bg-[#0b111e] border border-[#1e3a5f] rounded-xl p-3 sm:p-4 flex flex-col justify-between gap-3 shadow-2xl">
-      
-      <!-- Top Control Row: Component Selector & Supply Mode Selector -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <!-- Component Toggle: Resistor (R) vs Capacitor (C) -->
-        <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 flex items-center gap-1">
-          <button id="btnCompResistor" type="button"
-            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
-            <!-- <span class="w-2.5 h-2.5 rounded-sm bg-[#9ab8c9] inline-block"></span> -->
-            <span>Resistor (R)</span>
-          </button>
-          <button id="btnCompCapacitor" type="button"
-            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
-            <!-- <span class="inline-flex gap-[2px] items-center">
-              <span class="w-[2.5px] h-3 bg-current inline-block"></span>
-              <span class="w-[2.5px] h-3 bg-current inline-block"></span> -->
-            </span>
-            <span>Capacitor (C)</span>
-          </button>
-        </div>
 
-        <!-- Power Supply Mode Toggle: DC Supply vs AC Supply -->
-        <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 flex items-center gap-1">
-          <button id="btnModeDC" type="button"
-            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
-            <span class="font-mono text-[11px] font-bold">⎓</span>
-            <span>DC</span>
-          </button>
-          <button id="btnModeAC" type="button"
-            class="flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow">
-            <span class="font-mono text-sm leading-none">∿</span>
-            <span>AC</span>
-          </button>
-        </div>
+      <!-- Top Control Row: 4 Circuit Combination Presets -->
+      <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-1 grid grid-cols-2 sm:grid-cols-4 gap-1">
+        <button id="btnPresetRDC" type="button"
+          class="py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer bg-[#1d6387] text-white shadow">
+          <span>1) R + DC</span>
+        </button>
+        <button id="btnPresetRAC" type="button"
+          class="py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer text-slate-400 hover:text-slate-200">
+          <span>2) R + AC</span>
+        </button>
+        <button id="btnPresetCDC" type="button"
+          class="py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer text-slate-400 hover:text-slate-200">
+          <span>3) C + DC</span>
+        </button>
+        <button id="btnPresetCAC" type="button"
+          class="py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer text-slate-400 hover:text-slate-200">
+          <span>4) C + AC</span>
+        </button>
       </div>
 
       <!-- Center Circuit Animation Canvas -->
@@ -591,20 +403,8 @@
             <span class="w-3 h-3 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]"></span>
             <h2 class="text-sm font-bold text-[#38bdf8] tracking-wide">Voltage, V(t)</h2>
             <span id="voltageReadout" class="ml-1 px-2 py-0.5 rounded bg-[#07101f] border border-[#1e3a5f] font-mono text-[11px] text-sky-200">
-              v(t) = +0.00 V | V₀ = 6.0 V
+              v(t) = +0.00 V | V₀ = 8.0 V | θ_V = 0°
             </span>
-          </div>
-
-          <!-- Segmented Toggle: [ Time | Phasor ] -->
-          <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-0.5 flex items-center">
-            <button id="btnVTime" type="button"
-              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow">
-              Time
-            </button>
-            <button id="btnVPhasor" type="button"
-              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200">
-              Phasor
-            </button>
           </div>
         </div>
 
@@ -622,20 +422,8 @@
             <span class="w-3 h-3 rounded-full bg-[#ef4444] shadow-[0_0_8px_#ef4444]"></span>
             <h2 class="text-sm font-bold text-[#ef4444] tracking-wide">Current, i(t)</h2>
             <span id="currentReadout" class="ml-1 px-2 py-0.5 rounded bg-[#140a0e] border border-[#3f1d24] font-mono text-[11px] text-red-200">
-              i(t) = +0.00 A | I₀ = 3.00 A
+              i(t) = +0.00 A | I₀ = 8.00 A | θ_i = 0°
             </span>
-          </div>
-
-          <!-- Segmented Toggle: [ Time | Phasor ] -->
-          <div class="bg-[#070c16] border border-[#1e3a5f] rounded-lg p-0.5 flex items-center">
-            <button id="btnITime" type="button"
-              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow">
-              Time
-            </button>
-            <button id="btnIPhasor" type="button"
-              class="px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200">
-              Phasor
-            </button>
           </div>
         </div>
 
@@ -758,10 +546,15 @@
         btnReset: document.getElementById('btnReset'),
         btnDownload: document.getElementById('btnDownload'),
 
-        btnCompResistor: document.getElementById('btnCompResistor'),
-        btnCompCapacitor: document.getElementById('btnCompCapacitor'),
-        btnModeDC: document.getElementById('btnModeDC'),
-        btnModeAC: document.getElementById('btnModeAC'),
+        //btnCompResistor: document.getElementById('btnCompResistor'),
+        //btnCompCapacitor: document.getElementById('btnCompCapacitor'),
+        //btnModeDC: document.getElementById('btnModeDC'),
+        //btnModeAC: document.getElementById('btnModeAC'),
+
+        btnPresetRDC: document.getElementById('btnPresetRDC'),
+        btnPresetRAC: document.getElementById('btnPresetRAC'),
+        btnPresetCDC: document.getElementById('btnPresetCDC'),
+        btnPresetCAC: document.getElementById('btnPresetCAC'),
 
         legendEField: document.getElementById('legendEField'),
         circuitTelemetryPill: document.getElementById('circuitTelemetryPill'),
@@ -932,35 +725,29 @@
         const isDC = state.supplyMode === 'dc';
         const isRes = state.component === 'resistor';
 
-        // Update component toggle button styles
+        const activeBtnClass =
+          'py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer bg-[#1d6387] text-white shadow';
+        const inactiveBtnClass =
+          'py-2 px-2 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1 cursor-pointer text-slate-400 hover:text-slate-200';
+
+        // Highlight active preset among R+DC, R+AC, C+DC, C+AC
+        dom.btnPresetRDC.className = isRes && isDC ? activeBtnClass : inactiveBtnClass;
+        dom.btnPresetRAC.className = isRes && !isDC ? activeBtnClass : inactiveBtnClass;
+        dom.btnPresetCDC.className = !isRes && isDC ? activeBtnClass : inactiveBtnClass;
+        dom.btnPresetCAC.className = !isRes && !isDC ? activeBtnClass : inactiveBtnClass;
+
+        // Show Electric Field legend only in Capacitor mode
         if (isRes) {
-          dom.btnCompResistor.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnCompCapacitor.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
           dom.legendEField.classList.add('hidden');
           dom.legendEField.classList.remove('flex');
         } else {
-          dom.btnCompCapacitor.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnCompResistor.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
           dom.legendEField.classList.remove('hidden');
           dom.legendEField.classList.add('flex');
         }
 
-        // Update supply mode toggle button styles
-        if (isDC) {
-          dom.btnModeDC.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnModeAC.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
-        } else {
-          dom.btnModeAC.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnModeDC.className =
-            'flex-1 py-2 px-2.5 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200';
-        }
+
+
+
 
         // Update phase-relationship badge in top header
         if (isRes && !isDC) {
@@ -978,58 +765,34 @@
         }
       }
 
-      function updateGraphToggleStyles() {
-        // Voltage graph toggles
-        if (state.vView === 'time') {
-          dom.btnVTime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnVPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
-        } else {
-          dom.btnVPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#1d6387] text-white shadow';
-          dom.btnVTime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
-        }
-
-        // Current graph toggles
-        if (state.iView === 'time') {
-          dom.btnITime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow';
-          dom.btnIPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
-        } else {
-          dom.btnIPhasor.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-[#b91c1c] text-white shadow';
-          dom.btnITime.className = 'px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-400 hover:text-slate-200';
-        }
-      }
-
       // --------------------------------------------------------------------------
       // 5. EVENT LISTENERS FOR INTERACTIVE CONTROLS
       // --------------------------------------------------------------------------
-      dom.btnCompResistor.addEventListener('click', () => {
-        if (state.component === 'resistor') return;
-        state.component = 'resistor';
-        state.dcVoltageActual = state.dcVoltageTarget;
-        configureSlidersForMode();
-      });
+      function selectCircuitMode(component, supplyMode) {
+        if (state.component === component && state.supplyMode === supplyMode) return;
 
-      dom.btnCompCapacitor.addEventListener('click', () => {
-        if (state.component === 'capacitor') return;
-        state.component = 'capacitor';
+        state.component = component;
+        state.supplyMode = supplyMode;
         state.dcVoltageActual = state.dcVoltageTarget;
-        state.capChargeShift = (state.dcVoltageActual / 10) * 18;
-        configureSlidersForMode();
-      });
 
-      dom.btnModeDC.addEventListener('click', () => {
-        if (state.supplyMode === 'dc') return;
-        state.supplyMode = 'dc';
-        state.dcVoltageActual = state.dcVoltageTarget;
-        state.dVdt = 0;
-        state.dIdt = 0;
-        configureSlidersForMode();
-      });
+        if (supplyMode === 'dc') {
+          state.dVdt = 0;
+          state.dIdt = 0;
+          if (component === 'capacitor') {
+            state.capChargeShift = (state.dcVoltageActual / 10) * 18;
+          }
+        }
 
-      dom.btnModeAC.addEventListener('click', () => {
-        if (state.supplyMode === 'ac') return;
-        state.supplyMode = 'ac';
         configureSlidersForMode();
-      });
+      }
+
+      dom.btnPresetRDC.addEventListener('click', () => selectCircuitMode('resistor', 'dc'));
+      dom.btnPresetRAC.addEventListener('click', () => selectCircuitMode('resistor', 'ac'));
+      dom.btnPresetCDC.addEventListener('click', () => selectCircuitMode('capacitor', 'dc'));
+      dom.btnPresetCAC.addEventListener('click', () => selectCircuitMode('capacitor', 'ac'));
+
+
+
 
       // Slider 1 input handler
       dom.slider1Input.addEventListener('input', (e) => {
@@ -1077,24 +840,6 @@
           }
         }
         updateSliderValueLabels();
-      });
-
-      // Graph Time/Phasor toggles
-      dom.btnVTime.addEventListener('click', () => {
-        state.vView = 'time';
-        updateGraphToggleStyles();
-      });
-      dom.btnVPhasor.addEventListener('click', () => {
-        state.vView = 'phasor';
-        updateGraphToggleStyles();
-      });
-      dom.btnITime.addEventListener('click', () => {
-        state.iView = 'time';
-        updateGraphToggleStyles();
-      });
-      dom.btnIPhasor.addEventListener('click', () => {
-        state.iView = 'phasor';
-        updateGraphToggleStyles();
       });
 
       // Play / Pause toggle
@@ -1315,28 +1060,20 @@
         // Circuit overlay telemetry
         dom.circuitTelemetryPill.textContent = `v(t) = ${fmtSign(state.vInst, 2)} V  |  i(t) = ${fmtSign(state.iInst, 2)} A`;
 
-        // Voltage graph header readout
+        // Voltage graph header readout (Time + Phasor combined)
         const degV = Math.round(((state.thetaV * 180) / Math.PI + 360) % 360);
-        if (state.vView === 'time') {
-          const refLabel = isDC ? `V_DC = ${fmtSign(state.dcVoltageTarget, 1)} V` : `V₀ = ${state.vAmp.toFixed(1)} V`;
-          dom.voltageReadout.textContent = `v(t) = ${fmtSign(state.vInst, 2)} V  |  ${refLabel}`;
-        } else {
-          dom.voltageReadout.textContent = `|V| = ${state.vAmp.toFixed(2)} V  |  θ_V = ${degV}°`;
-        }
+        const vRefLabel = isDC ? `V_DC = ${fmtSign(state.dcVoltageTarget, 1)} V` : `V₀ = ${state.vAmp.toFixed(1)} V`;
+        dom.voltageReadout.textContent = `v(t) = ${fmtSign(state.vInst, 2)} V  |  ${vRefLabel}  |  θ_V = ${degV}°`;
 
-        // Current graph header readout
+        // Current graph header readout (Time + Phasor combined)
         const degI = Math.round(((state.thetaI * 180) / Math.PI + 360) % 360);
-        if (state.iView === 'time') {
-          const refLabel = isDC
-            ? (state.component === 'resistor'
-              ? `i_DC = ${fmtSign(state.dcVoltageTarget / state.resistance, 2)} A`
-              : `i_steady = 0.00 A`)
-            : `I₀ = ${state.iAmp.toFixed(2)} A`;
-          dom.currentReadout.textContent = `i(t) = ${fmtSign(state.iInst, 2)} A  |  ${refLabel}`;
-        } else {
-          const phaseSuffix = isDC ? `θ_i = ${degI}°` : `θ_i = ${degI}° (Δφ = +${state.phaseDiffDeg}°)`;
-          dom.currentReadout.textContent = `|i| = ${state.iAmp.toFixed(2)} A  |  ${phaseSuffix}`;
-        }
+        const iRefLabel = isDC
+          ? (state.component === 'resistor'
+            ? `i_DC = ${fmtSign(state.dcVoltageTarget / state.resistance, 2)} A`
+            : `i_steady = 0.00 A`)
+          : `I₀ = ${state.iAmp.toFixed(2)} A`;
+        const phaseSuffix = isDC ? `θ_i = ${degI}°` : `θ_i = ${degI}° (Δφ = +${state.phaseDiffDeg}°)`;
+        dom.currentReadout.textContent = `i(t) = ${fmtSign(state.iInst, 2)} A  |  ${iRefLabel}  |  ${phaseSuffix}`;
       }
 
       // --------------------------------------------------------------------------
@@ -1798,17 +1535,6 @@
       // --------------------------------------------------------------------------
       // 9. RIGHT PANEL RENDERERS: TIME OSCILLOSCOPE & PHASOR DIAL
       // --------------------------------------------------------------------------
-      /*
-      function computeCurrentFullScale() {
-        // Dynamic clean scale for Current so Capacitor AC peaks never clip off-canvas
-        const peakCandidate = Math.max(state.iAmp, Math.abs(state.iInst), 3.0);
-        if (peakCandidate <= 10) return 12;
-        if (peakCandidate <= 22) return 25;
-        if (peakCandidate <= 45) return 50;
-        return 100;
-      }
-      */
-
       function computeCurrentFullScale() {
         // Find the largest current spike still visible on the graph
         let historyPeak = 0;
@@ -1828,33 +1554,55 @@
         return 100;
       }
 
-      function renderTimeGraph(canvas, ctx, options) {
+
+      function renderSplitGraph(canvas, ctx, options) {
         const { width: w, height: h, dpr } = resizeCanvasToContainer(canvas);
         ctx.save();
         ctx.scale(dpr, dpr);
 
         const {
-          valueKey,     // 'v' or 'i'
-          currentVal,   // instantaneous value
-          maxScale,     // full Y scale (e.g. 12 V or 12 A)
-          unit,         // 'V' or 'A'
-          strokeColor,  // '#38bdf8' or '#ef4444'
-          fillColor,    // translucent area fill
+          valueKey,       // 'v' or 'i'
+          magnitude,      // |V| or |i|
+          instValue,      // v(t) or i(t)
+          theta,          // instantaneous phase angle [rad]
+          maxScale,       // full scale (e.g. 12 V or 12 A)
+          unit,           // 'V' or 'A'
+          strokeColor,    // '#38bdf8' or '#ef4444'
+          fillColor,      // translucent fill
+          isCurrentDial,  // true on Current dial to draw faint Voltage reference vector
         } = options;
+
+        const isDC = state.supplyMode === 'dc';
 
         // Background
         ctx.fillStyle = COLORS.bg;
         ctx.fillRect(0, 0, w, h);
 
-        const padLeft = 46;
-        const padRight = 22;
-        const padTop = 16;
-        const padBottom = 22;
-        const plotW = Math.max(20, w - padLeft - padRight);
-        const plotH = Math.max(20, h - padTop - padBottom);
+        // Horizontal split: ~2/3 left for Time plot, ~1/3 right for Phasor dial
+        const splitRatio = w < 480 ? 0.56 : 0.66;
+        const splitX = Math.round(w * splitRatio);
+        const phasorW = w - splitX;
+
+        const padLeft = 58;
+        const padTop = 26;
+        const padBottom = 24;
+        const plotH = Math.max(40, h - padTop - padBottom);
         const zeroY = padTop + plotH / 2;
 
-        // Horizontal grid lines (+100%, +50%, 0, -50%, -100% of nominal tick)
+        // Shared vertical scale so Phasor tip Y and Time plot current Y align 1:1 horizontally
+        const maxRadiusX = Math.max(28, (phasorW - 88) / 2);
+        const maxRadiusY = Math.max(28, plotH / 2);
+        const dialRadius = Math.min(maxRadiusX, maxRadiusY);
+
+        const nowX = Math.max(padLeft + 30, splitX - 14);
+        const plotW = Math.max(20, nowX - padLeft);
+
+        const cx = splitX + 48 + (phasorW - 88) / 2;
+        const cy = zeroY;
+
+        // ====================================================================
+        // LEFT 2/3: TIME-DOMAIN OSCILLOSCOPE PLOT
+        // ====================================================================
         const tickStep = maxScale === 12 ? 5 : maxScale === 25 ? 10 : maxScale === 50 ? 20 : 40;
         const ticks = [-tickStep * 2, -tickStep, 0, tickStep, tickStep * 2];
 
@@ -1863,12 +1611,12 @@
         ctx.textBaseline = 'middle';
 
         ticks.forEach((val) => {
-          const y = zeroY - (val / maxScale) * (plotH / 2);
-          if (y < padTop - 4 || y > padTop + plotH + 4) return;
+          const y = zeroY - (val / maxScale) * dialRadius;
+          if (y < padTop - 6 || y > padTop + plotH + 6) return;
 
           ctx.beginPath();
           ctx.moveTo(padLeft, y);
-          ctx.lineTo(padLeft + plotW, y);
+          ctx.lineTo(nowX, y);
           if (val === 0) {
             ctx.strokeStyle = '#3b4d6b';
             ctx.lineWidth = 1.4;
@@ -1887,16 +1635,15 @@
         });
 
         // Vertical scrolling time grid lines (every 1.0 second)
-        const nowX = padLeft + plotW * 0.88;
-        const pxPerSec = (plotW * 0.88) / state.maxHistoryDuration;
+        const pxPerSec = plotW / state.maxHistoryDuration;
         const firstGridSec = Math.floor(state.simTime - state.maxHistoryDuration);
-        const lastGridSec = Math.ceil(state.simTime + 1);
+        const lastGridSec = Math.ceil(state.simTime);
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         for (let sec = firstGridSec; sec <= lastGridSec; sec++) {
           const gx = nowX - (state.simTime - sec) * pxPerSec;
-          if (gx < padLeft || gx > padLeft + plotW) continue;
+          if (gx < padLeft || gx > nowX) continue;
           ctx.beginPath();
           ctx.moveTo(gx, padTop);
           ctx.lineTo(gx, padTop + plotH);
@@ -1910,13 +1657,12 @@
           }
         }
 
-        // Clip waveform trace to plot area
+        // Clip waveform trace to Time plot area
         ctx.save();
         ctx.beginPath();
-        ctx.rect(padLeft, padTop - 2, plotW, plotH + 4);
+        ctx.rect(padLeft, padTop - 4, plotW + 2, plotH + 8);
         ctx.clip();
 
-        // Draw waveform trace from rolling history buffer
         if (state.history.length > 1) {
           ctx.beginPath();
           let firstX = null;
@@ -1925,7 +1671,7 @@
           for (let idx = 0; idx < state.history.length; idx++) {
             const sample = state.history[idx];
             const sx = nowX - (state.simTime - sample.t) * pxPerSec;
-            const sy = zeroY - (sample[valueKey] / maxScale) * (plotH / 2);
+            const sy = zeroY - (sample[valueKey] / maxScale) * dialRadius;
 
             if (idx === 0) {
               ctx.moveTo(sx, sy);
@@ -1936,7 +1682,6 @@
             lastX = sx;
           }
 
-          // Glowing trace stroke
           ctx.strokeStyle = strokeColor;
           ctx.lineWidth = 2.6;
           ctx.lineJoin = 'round';
@@ -1945,7 +1690,6 @@
           ctx.stroke();
           ctx.shadowBlur = 0;
 
-          // Subtle translucent area fill to zero-axis
           if (firstX !== null && lastX !== null) {
             ctx.lineTo(lastX, zeroY);
             ctx.lineTo(firstX, zeroY);
@@ -1954,9 +1698,18 @@
             ctx.fill();
           }
         }
+        ctx.restore(); // End Time plot clip
 
-        // Vertical "Now" cursor line & glowing sample marker dot
-        const curY = zeroY - (currentVal / maxScale) * (plotH / 2);
+        // Subtle vertical divider between Time (2/3) and Phasor (1/3)
+        ctx.beginPath();
+        ctx.moveTo(splitX, padTop - 6);
+        ctx.lineTo(splitX, padTop + plotH + 6);
+        ctx.strokeStyle = 'rgba(30, 58, 95, 0.55)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Vertical "Now" cursor line on Time plot
+        const curY = zeroY - (instValue / maxScale) * dialRadius;
         ctx.beginPath();
         ctx.moveTo(nowX, padTop);
         ctx.lineTo(nowX, padTop + plotH);
@@ -1966,55 +1719,9 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Glowing instantaneous point on cursor
-        ctx.beginPath();
-        ctx.arc(nowX, curY, 4.8, 0, Math.PI * 2);
-        ctx.fillStyle = strokeColor;
-        ctx.shadowColor = strokeColor;
-        ctx.shadowBlur = 10;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.lineWidth = 1.5;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
-
-        ctx.restore(); // End plot clip
-        ctx.restore();
-      }
-
-      function renderPhasorGraph(canvas, ctx, options) {
-        const { width: w, height: h, dpr } = resizeCanvasToContainer(canvas);
-        ctx.save();
-        ctx.scale(dpr, dpr);
-
-        const {
-          magnitude,      // |V| or |i|
-          instValue,      // v(t) or i(t)
-          theta,          // instantaneous phase angle [rad]
-          maxScale,       // full scale (e.g. 12 V or 12 A)
-          unit,           // 'V' or 'A'
-          strokeColor,    // '#38bdf8' or '#ef4444'
-          fillColor,      // translucent sector fill
-          isCurrentDial,  // true on Current dial to draw faint Voltage reference ghost vector
-          dcDeflection,   // transient angular deflection in DC mode when slider moves
-          dcDerivRate,    // dV/dt or di/dt for DC change tracker readout
-        } = options;
-
-        const isDC = state.supplyMode === 'dc';
-
-        // Background
-        ctx.fillStyle = COLORS.bg;
-        ctx.fillRect(0, 0, w, h);
-
-        // Layout: Polar Phasor Circle on left-center, Vertical Sinusoidal Projection Bar on right
-        //const dialRadius = Math.max(46, Math.min(h * 0.39, w * 0.25));
-        const dialRadius = Math.max(34, Math.min(h * 0.50 - 32, w * 0.25));
-        const cx = Math.max(dialRadius + 56, w * 0.44);
-        const cy = h * 0.50;
-
-        const projBarX = Math.min(w - 72, cx + dialRadius + Math.max(48, w * 0.12));
-
-        // 1. Concentric Magnitude Rings (50% and 100%)
+        // ====================================================================
+        // RIGHT 1/3: PHASOR CIRCLE (Vertical bar removed)
+        // ====================================================================
         [0.5, 1.0].forEach((frac) => {
           ctx.beginPath();
           ctx.arc(cx, cy, dialRadius * frac, 0, Math.PI * 2);
@@ -2025,35 +1732,35 @@
           ctx.setLineDash([]);
         });
 
-        // 2. Crosshair Axes & Degree Markings (0°, 90°, 180°, 270°)
+        // Crosshair axes & degree labels
         ctx.strokeStyle = 'rgba(51, 65, 85, 0.65)';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(cx - dialRadius - 8, cy);
-        ctx.lineTo(cx + dialRadius + 8, cy);
-        ctx.moveTo(cx, cy - dialRadius - 8);
-        ctx.lineTo(cx, cy + dialRadius + 8);
+        ctx.moveTo(cx - dialRadius - 6, cy);
+        ctx.lineTo(cx + dialRadius + 6, cy);
+        ctx.moveTo(cx, cy - dialRadius - 6);
+        ctx.lineTo(cx, cy + dialRadius + 6);
         ctx.stroke();
 
         ctx.font = '500 18px "JetBrains Mono", monospace';
         ctx.fillStyle = '#64748b';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText('0°', cx + dialRadius + 11, cy);
+        ctx.fillText('0°', cx + dialRadius + 8, cy);
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
-        ctx.fillText('90°', cx, cy - dialRadius - 10);
+        ctx.fillText('90°', cx, cy - dialRadius - 6);
 
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
-        ctx.fillText('180°', cx - dialRadius - 11, cy);
+        ctx.fillText('180°', cx - dialRadius - 8, cy);
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText('270°', cx, cy + dialRadius + 10);
+        ctx.fillText('270°', cx, cy + dialRadius + 6);
 
-        // 3. On Current Phasor Dial (AC Mode): Faint Ghost Reference Arrow of Voltage Phasor
+        // Faint Voltage reference vector on Current Phasor dial (AC mode)
         if (isCurrentDial && !isDC) {
           const vNormLen = Math.min(1, state.vAmp / 12) * dialRadius;
           const vTipX = cx + vNormLen * Math.cos(state.thetaV);
@@ -2070,9 +1777,8 @@
           ctx.setLineDash([]);
           drawArrowHead(ctx, vTipX, vTipY, -state.thetaV, 7, 'rgba(56, 189, 248, 0.45)');
 
-          // Draw Phase Difference Arc (Δφ) between V and i
           if (state.phaseDiffDeg !== 0 && vNormLen > 12) {
-            const arcR = Math.min(28, dialRadius * 0.36);
+            const arcR = Math.min(24, dialRadius * 0.36);
             ctx.beginPath();
             ctx.arc(cx, cy, arcR, -state.thetaI, -state.thetaV, false);
             ctx.strokeStyle = COLORS.amber;
@@ -2080,62 +1786,29 @@
             ctx.stroke();
 
             const midAngle = state.thetaV + Math.PI / 4;
-            ctx.font = '600 18px "JetBrains Mono", monospace';
+            ctx.font = '600 16px "JetBrains Mono", monospace';
             ctx.fillStyle = COLORS.amber;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(`Δφ=+${state.phaseDiffDeg}°`, cx + (arcR + 22) * Math.cos(midAngle), cy - (arcR + 16) * Math.sin(midAngle));
+            ctx.fillText(`Δφ=+${state.phaseDiffDeg}°`, cx + (arcR + 20) * Math.cos(midAngle), cy - (arcR + 14) * Math.sin(midAngle));
           }
           ctx.restore();
         }
 
-        // 4. Phase Angle Sweep Arc (AC Mode) OR Dynamic DC Rate-of-Change Tracker (DC Mode)
+        // Phase sector & rotating phasor arrow (AC mode)
         const vecLen = isDC ? 0 : Math.min(dialRadius, (magnitude / maxScale) * dialRadius);
+        const tipX = cx + vecLen * Math.cos(theta);
+        const tipY = cy - vecLen * Math.sin(theta);
 
         if (!isDC && vecLen > 6) {
-          // Counter-clockwise phase sector from 0° to theta
-          const sectorR = Math.min(22, vecLen * 0.45);
+          const sectorR = Math.min(20, vecLen * 0.45);
           ctx.beginPath();
           ctx.moveTo(cx, cy);
           ctx.arc(cx, cy, sectorR, 0, -theta, true);
           ctx.closePath();
           ctx.fillStyle = fillColor;
           ctx.fill();
-        } /* else if (isDC) {
-          // Dynamic ΔV / Δi Change Tracker radial sweep when user drags DC Voltage slider
-          const isTracking = Math.abs(dcDeflection) > 0.025 || Math.abs(dcDerivRate) > 0.15;
-          if (isTracking) {
-            const trackerR = Math.max(26, vecLen * 0.78);
-            const baseAngle = theta; // 0 or PI
-            const sweptAngle = baseAngle + dcDeflection;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.arc(cx, cy, trackerR, -baseAngle, -sweptAngle, dcDeflection > 0);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.22)';
-            ctx.fill();
-
-            // Transient rate-of-change needle
-            const nx = cx + trackerR * Math.cos(sweptAngle);
-            const ny = cy - trackerR * Math.sin(sweptAngle);
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(nx, ny);
-            ctx.strokeStyle = COLORS.amber;
-            ctx.lineWidth = 1.8;
-            ctx.setLineDash([3, 2]);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            ctx.restore();
-          }
         }
-        */
-
-        // 5. Primary Rotating (or Steady DC) Phasor Arrow
-        const tipX = cx + vecLen * Math.cos(theta);
-        const tipY = cy - vecLen * Math.sin(theta);
 
         if (vecLen > 2) {
           ctx.save();
@@ -2154,88 +1827,37 @@
           ctx.restore();
         }
 
-        // Origin pivot dot
-        if(!isDC){
-        ctx.beginPath();
-        ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#f8fafc';
-        ctx.fill();
+        if (!isDC) {
+          // Origin pivot dot
+          ctx.beginPath();
+          ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#f8fafc';
+          ctx.fill();
+
+          // Horizontal dashed projection line from phasor arrow tip -> live point on Time graph
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(tipX, tipY);
+          ctx.lineTo(nowX, curY);
+          ctx.strokeStyle = strokeColor;
+          ctx.globalAlpha = 0.65;
+          ctx.lineWidth = 1.4;
+          ctx.setLineDash([5, 4]);
+          ctx.stroke();
+          ctx.restore();
         }
 
-
-        // 6. Vertical Projection Axis & Dashed Projection Link (y = A sin θ)
-        ctx.strokeStyle = '#334155';
-        ctx.lineWidth = 1.4;
+        // Glowing instantaneous point on Time graph "Now" cursor
         ctx.beginPath();
-        ctx.moveTo(projBarX, cy - dialRadius);
-        ctx.lineTo(projBarX, cy + dialRadius);
-        ctx.stroke();
-
-        // Zero tick & max/min ticks on projection axis
-        ctx.beginPath();
-        ctx.moveTo(projBarX - 6, cy);
-        ctx.lineTo(projBarX + 6, cy);
-        ctx.moveTo(projBarX - 4, cy - dialRadius);
-        ctx.lineTo(projBarX + 4, cy - dialRadius);
-        ctx.moveTo(projBarX - 4, cy + dialRadius);
-        ctx.lineTo(projBarX + 4, cy + dialRadius);
-        ctx.stroke();
-
-        // Horizontal dashed projection line from phasor tip to vertical axis
-        if(!isDC){
-        const projY = isDC ? cy : cy - (instValue / maxScale) * dialRadius;
-        ctx.beginPath();
-        ctx.moveTo(tipX, tipY);
-        ctx.lineTo(projBarX, projY);
-        ctx.strokeStyle = strokeColor;
-        ctx.globalAlpha = 0.55;
-        ctx.lineWidth = 1.3;
-        ctx.setLineDash([4, 3]);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 1;
-
-        // Projected instantaneous value dot on vertical axis
-        ctx.beginPath();
-        ctx.arc(projBarX, projY, 4.5, 0, Math.PI * 2);
+        ctx.arc(nowX, curY, 4.8, 0, Math.PI * 2);
         ctx.fillStyle = strokeColor;
         ctx.shadowColor = strokeColor;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.shadowBlur = 0;
-        ctx.lineWidth = 1.3;
+        ctx.lineWidth = 1.5;
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
-        }
-
-        // Labels next to projection bar
-        ctx.font = '500 18px "JetBrains Mono", monospace';
-        ctx.fillStyle = '#94a3b8';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(`+${maxScale}${unit}`, projBarX + 8, cy - dialRadius);
-        ctx.fillText(`0`, projBarX + 8, cy);
-        ctx.fillText(`-${maxScale}${unit}`, projBarX + 8, cy + dialRadius);
-
-        // Projection formula / DC status caption at top-right of Phasor canvas
-        /*
-        ctx.font = '500 18px "JetBrains Mono", monospace';
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'top';
-        if (!isDC) {
-          ctx.fillStyle = '#94a3b8';
-          ctx.fillText(`y(t) = A·sin(θ)`, w - 12, 10);
-        } else {
-          const isTracking = Math.abs(dcDerivRate) > 0.15;
-          ctx.fillStyle = isTracking ? COLORS.amber : '#64748b';
-          const labelSymbol = isCurrentDial ? 'Δi/Δt' : 'ΔV/Δt';
-          ctx.fillText(
-            isTracking ? `${labelSymbol}: ${dcDerivRate >= 0 ? '+' : ''}${dcDerivRate.toFixed(1)} ${unit}/s` : 'Steady DC (ω = 0 rad/s)',
-            w - 12,
-            10
-          );
-        }
-        */
 
         ctx.restore();
       }
@@ -2246,56 +1868,32 @@
       function renderAll() {
         renderCircuitCanvas();
 
-        // Render Voltage Graph (Top Right)
-        if (state.vView === 'time') {
-          renderTimeGraph(dom.voltageCanvas, ctxVoltage, {
-            valueKey: 'v',
-            currentVal: state.vInst,
-            maxScale: 12,
-            unit: 'V',
-            strokeColor: COLORS.cyan,
-            fillColor: COLORS.cyanDim,
-          });
-        } else {
-          renderPhasorGraph(dom.voltageCanvas, ctxVoltage, {
-            magnitude: state.vAmp,
-            instValue: state.vInst,
-            theta: state.thetaV,
-            maxScale: 12,
-            unit: 'V',
-            strokeColor: COLORS.cyan,
-            fillColor: COLORS.cyanDim,
-            isCurrentDial: false,
-            dcDeflection: state.dcPhaseDeflectionV,
-            dcDerivRate: state.dVdt,
-          });
-        }
+        // Render Voltage Split Graph (Top Right)
+        renderSplitGraph(dom.voltageCanvas, ctxVoltage, {
+          valueKey: 'v',
+          magnitude: state.vAmp,
+          instValue: state.vInst,
+          theta: state.thetaV,
+          maxScale: 12,
+          unit: 'V',
+          strokeColor: COLORS.cyan,
+          fillColor: COLORS.cyanDim,
+          isCurrentDial: false,
+        });
 
-        // Render Current Graph (Bottom Right)
+        // Render Current Split Graph (Bottom Right)
         const iMaxScale = computeCurrentFullScale();
-        if (state.iView === 'time') {
-          renderTimeGraph(dom.currentCanvas, ctxCurrent, {
-            valueKey: 'i',
-            currentVal: state.iInst,
-            maxScale: iMaxScale,
-            unit: 'A',
-            strokeColor: COLORS.red,
-            fillColor: COLORS.redDim,
-          });
-        } else {
-          renderPhasorGraph(dom.currentCanvas, ctxCurrent, {
-            magnitude: state.iAmp,
-            instValue: state.iInst,
-            theta: state.thetaI,
-            maxScale: iMaxScale,
-            unit: 'A',
-            strokeColor: COLORS.red,
-            fillColor: COLORS.redDim,
-            isCurrentDial: true,
-            dcDeflection: state.dcPhaseDeflectionI,
-            dcDerivRate: state.dIdt,
-          });
-        }
+        renderSplitGraph(dom.currentCanvas, ctxCurrent, {
+          valueKey: 'i',
+          magnitude: state.iAmp,
+          instValue: state.iInst,
+          theta: state.thetaI,
+          maxScale: iMaxScale,
+          unit: 'A',
+          strokeColor: COLORS.red,
+          fillColor: COLORS.redDim,
+          isCurrentDial: true,
+        });
 
         updateTelemetryReadouts();
       }
@@ -2323,7 +1921,6 @@
       // --------------------------------------------------------------------------
       window.addEventListener('load', () => {
         configureSlidersForMode();
-        updateGraphToggleStyles();
         seedInitialHistory();
         resizeCanvasToContainer(dom.circuitCanvas);
         resizeCanvasToContainer(dom.voltageCanvas);
