@@ -40,6 +40,7 @@
     };
   </script>
 
+<!--
   <style>
     /* Base dark laboratory canvas aesthetic */
     * {
@@ -60,37 +61,7 @@
       flex-direction: column;
     }
 
-    /* Desktop / Large Screen: Lock to single screen (100vh, no scroll) */
-    /* @media (min-width: 1024px) and (min-height: 620px) { */
-    @media (min-width: 900px) and (min-height: 600px) {
-      html, body {
-        height: 100vh;
-        max-height: 100vh;
-        overflow: hidden;
-      }
-
-      main {
-        flex: 1 1 0%;
-        min-height: 0;
-        max-height: 100%;
-        grid-template-rows: minmax(0, 1fr);
-        overflow: hidden;
-      }
-
-      main > section,
-      main > div {
-        min-height: 0;
-        max-height: 100%;
-      }
-
-      main section > div,
-      main canvas {
-        min-height: 0;
-      }
-    }
-
-    /* @media (max-width: 1023px), (max-height: 619px) { */
-    @media (max-width: 899px), (max-height: 599px) {
+    @media (max-width: 1023px), (max-height: 619px) {
       html, body {
         height: auto !important;
         max-height: none !important;
@@ -107,15 +78,34 @@
       }
 
       main > section,
-      main > div {
+      main > div,
+      main section > div,
+      main section > div > div {
+        min-height: 0 !important;
         max-height: none !important;
         overflow: visible !important;
       }
 
-      main canvas {
-        height: 200px !important;
-        min-height: 200px !important;
-        max-height: 200px !important;
+      #circuitCanvas {
+        height: 230px !important;
+        min-height: 230px !important;
+        max-height: 230px !important;
+      }
+
+      #voltageCanvas,
+      #currentCanvas {
+        height: 175px !important;
+        min-height: 175px !important;
+        max-height: 175px !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      #voltageCanvas,
+      #currentCanvas {
+        height: 155px !important;
+        min-height: 155px !important;
+        max-height: 155px !important;
       }
     }
 
@@ -219,6 +209,233 @@
       box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
     }
 </style>
+-->
+
+<style>
+    /* Base dark laboratory canvas aesthetic */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 18px; /* Slightly tighter base so 100% zoom fits laptop screens cleanly */
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #05080f;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desktop / Laptop: Lock to single screen at 100% zoom (no scroll) */
+    @media (min-width: 1024px) and (min-height: 480px) {
+      html, body {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+
+      header {
+        padding: 0.35rem 0.9rem !important;
+        flex-wrap: nowrap !important;
+      }
+
+      header ul {
+        line-height: 1.25 !important;
+        margin-top: 0.15rem !important;
+      }
+
+      main {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        padding: 0.4rem 0.75rem !important;
+        gap: 0.55rem !important;
+        overflow: hidden !important;
+      }
+
+      main > section {
+        min-height: 0 !important;
+        max-height: 100% !important;
+        gap: 0.45rem !important;
+      }
+
+      /* Override Tailwind min-h-[320px], min-h-[250px], min-h-[195px] so panels fit 100vh */
+      main > section,
+      main > div,
+      main section > div,
+      main section > div > div,
+      main canvas {
+        min-height: 0 !important;
+      }
+
+      /* Compact card & slider box padding */
+      main > section:first-child,
+      main > section:last-child > div {
+        padding: 0.45rem 0.65rem !important;
+        gap: 0.35rem !important;
+      }
+
+      main > section:first-child > div:last-child {
+        padding: 0.4rem 0.65rem !important;
+        gap: 0.35rem !important;
+      }
+    }
+
+    /* Mobile / Narrow / Very Short Screen: Allow vertical scrolling */
+    @media (max-width: 1023px), (max-height: 479px) {
+      html, body {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+      }
+
+      main {
+        flex: none !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      main > section,
+      main > div,
+      main section > div,
+      main section > div > div {
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      #circuitCanvas {
+        height: 230px !important;
+        min-height: 230px !important;
+        max-height: 230px !important;
+      }
+
+      #voltageCanvas,
+      #currentCanvas {
+        height: 175px !important;
+        min-height: 175px !important;
+        max-height: 175px !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      #voltageCanvas,
+      #currentCanvas {
+        height: 155px !important;
+        min-height: 155px !important;
+        max-height: 155px !important;
+      }
+    }
+
+    /* Subtle blueprint grid background */
+    .lab-grid-bg {
+      background-color: #05080f;
+      background-image:
+        linear-gradient(to right, rgba(30, 58, 95, 0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 58, 95, 0.14) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Blueprint-inspired rectangular slider styling */
+    input[type='range'].blueprint-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 16px;
+      background: #060b14;
+      border: 1.5px solid #1e3a5f;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type='range'].blueprint-slider:hover {
+      border-color: #2b7bba;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.18);
+    }
+
+    input[type='range'].blueprint-slider:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+    }
+
+    /* WebKit rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 22px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+      transform: scaleY(1.05);
+    }
+
+    input[type='range'].blueprint-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+
+    /* Firefox rectangular vertical steel-blue handle */
+    input[type='range'].blueprint-slider::-moz-range-thumb {
+      width: 12px;
+      height: 22px;
+      background: linear-gradient(180deg, #277da8 0%, #1d6387 55%, #154b68 100%);
+      border: 1.5px solid #38bdf8;
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+      transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type='range'].blueprint-slider::-moz-range-thumb:hover {
+      background: linear-gradient(180deg, #3294c4 0%, #22739c 55%, #185778 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+    }
+
+    /* Custom subtle scrollbar for smaller viewports */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #05080f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3a5f;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2b7bba;
+    }
+
+    /* Glow accents */
+    .cyan-glow {
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+    }
+    .red-glow {
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.14);
+    }
+  </style>
 
 </head>
 <body class="lab-grid-bg min-h-screen flex flex-col justify-between text-slate-200 selection:bg-sky-500/30 selection:text-sky-200">
@@ -245,7 +462,7 @@
         <ul style="font-family: 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;" class="text-[13px] sm:text-[14px] text-slate-100 mt-1">
         <li>1) R + DC - ปรับ Voltage ขึ้นลงแล้วสังเกต V(t) และ i(t)</li>
         <li>2) R + AC - ลูกศร Phasor หมุน สัมพันธ์กับ V(t) และ i(t)</li>
-        <li>3) C + DC - ไม่เกิดกระแส ! ขยับ Voltage เกิดกระแสไหมเอ่ย ?</li>
+        <li>3) C + DC - ไม่เกิดกระแส ! ขยับ Voltage เกิดกระแส ?</li>
         <li>4) C + AC - เกิดกระแส แต่ V(t) และ i(t) เฟส ไม่ตรงกัน </li>
         </ul>
         </p>
