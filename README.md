@@ -5,4 +5,5 @@ Over the years I have taught many physics courses. These are the course material
 2. Electronic Structure Theory
 3. [Quantum Mechanics](quantum)
 4. Statistical Mechanics
+5. [Intro. Physics Lab](lab)
 
